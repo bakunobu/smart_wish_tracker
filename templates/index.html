@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub-Style Contributions Grid</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -24,6 +24,10 @@
             <span>More</span>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script>
+        // Pass the contribution data from Flask to JavaScript
+        const contributions = {{ contributions|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
