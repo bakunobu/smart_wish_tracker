@@ -32,7 +32,7 @@ def main():
 
     # Save to file
     with open("contribution_grid.html", "w", encoding="utf-8") as f:
-        f.write(f"<h3>🏦 Self Banksta Contribution Grid (Last 35 Days)</h3>{html}")
+        f.write(f"<h3>Contribution Grid (Last 35 Days)</h3>{html}")
 
     print("✅ Grid generated and saved to contribution_grid.html")
 
