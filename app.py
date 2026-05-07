@@ -1,9 +1,13 @@
 from flask import Flask, render_template
 import random
 from datetime import datetime, timedelta
+from database import Database
 
 def create_app():
     app = Flask(__name__)
+    
+    # Initialize the database
+    db = Database()
     
     # Generate random contribution data
     def generate_contributions():

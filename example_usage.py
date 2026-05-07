@@ -1,41 +1,64 @@
 # example_usage.py
+"""
+Example usage of the project, event, and task classes with database integration.
+"""
 
-from grid_manager import (
-    init_db,
-    add_contribution,
-    ensure_today_exists,
-    get_recent_contributions,
-    generate_weekly_grid_html,
+from datetime import datetime
+from project import Project
+from task import Task
+from database import Database
+
+# Initialize the database
+db = Database()
+
+# Create a new project
+print("Creating a new project...")
+project = Project(
+    name="Learn Python",
+    description="Learn Python programming language and build projects"
 )
+print(f"Created project: {project}")
 
+# Add events to the project
+print("\nAdding events to the project...")
+event1 = project.add_event("Learn Python Basics", 60)
+event2 = project.add_event("Build a Web Application", 120)
+event3 = project.add_event("Study Data Structures", 90)
+print(f"Added events: {event1}, {event2}, {event3}")
 
-def main():
-    # Initialize DB and ensure today is included
-    init_db()
-    ensure_today_exists()
+# List all events in the project
+print("\nListing all events in the project...")
+events = project.get_events()
+for event in events:
+    print(f"- {event}")
 
-    # Add sample contributions (date, amount)
-    sample_data = [
-        ("2025-04-01", 100.0),
-        ("2025-04-02", 50.0),
-        ("2025-04-03", 200.0),  # High value → darker color
-        ("2025-04-04", 0.0),
-        ("2025-04-05", 75.0),
-    ]
+# Create a task associated with the project
+print("\nCreating a task...")
+task = Task(
+    name="Complete Python Course",
+    estimated_time=180,
+    project_id=project.project_id
+)
+print(f"Created task: {task}")
 
-    for date_str, amount in sample_data:
-        add_contribution(date_str, amount)
+# Add a contribution for the task
+print("\nAdding a contribution for the task...")
+task.add_contribution(amount=1.5)
+print("Contribution added.")
 
-    # Fetch recent data and generate HTML grid
-    data = get_recent_contributions(days=35)
-    html = generate_weekly_grid_html(data)
+# Complete the task
+print("\nCompleting the task...")
+task.complete(effectiveness=0.9)
+print("Task completed.")
 
-    # Save to file
-    with open("contribution_grid.html", "w", encoding="utf-8") as f:
-        f.write(f"<h3>Contribution Grid (Last 35 Days)</h3>{html}")
+# List all projects
+print("\nListing all projects...")
+all_projects = Project.list_all()
+for p in all_projects:
+    print(f"- {p}")
+    # List events for each project
+    project_events = p.get_events()
+    for event in project_events:
+        print(f"  - {event}")
 
-    print("✅ Grid generated and saved to contribution_grid.html")
-
-
-if __name__ == "__main__":
-    main()
+print("\nExample usage completed.")

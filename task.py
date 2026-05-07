@@ -7,6 +7,7 @@ from typing import Optional
 
 # Import the Event class from event.py
 from event import Event
+from database import Database
 import grid_manager
 
 class Task:
@@ -14,7 +15,8 @@ class Task:
     A class to represent a task with a name, estimated time, and contribution tracking.
     """
     
-    def __init__(self, name: str, estimated_time: int, event_topic: Optional[str] = None):
+    def __init__(self, name: str, estimated_time: int, event_topic: Optional[str] = None, 
+                 db: Database = None, project_id: int = None, task_id: int = None):
         """
         Initialize a Task instance.
         
@@ -22,11 +24,21 @@ class Task:
             name (str): The name of the task
             estimated_time (int): Estimated time to complete the task in minutes
             event_topic (str, optional): Topic for the associated Event. If None, uses task name.
+            db (Database): Database instance for persistence
+            project_id (int): ID of the parent project
+            task_id (int): ID of the task in the database (if loading existing)
         """
         self.name = name
         self.estimated_time = estimated_time
         self.event_topic = event_topic or name
-        self.event = Event(self.event_topic, self.estimated_time)
+        self.project_id = project_id
+        self.task_id = task_id
+        self.db = db or Database()
+        
+        # Create an event for this task
+        # If we have a project_id but no event_id, create a new event
+        if project_id is not None and hasattr(self, 'event') and self.event.event_id is None:
+            self.event.event_id = self.db.create_event(project_id, self.event_topic, estimated_time)
         
     def add_contribution(self, amount: float = 1.0, include_task_label: bool = True) -> None:
         """
@@ -46,7 +58,8 @@ class Task:
         grid_manager.add_contribution(today_str, amount)
         
         # Also trigger the event's contribution mechanism
-        self.event.add_contribution(amount)
+        if hasattr(self, 'event'):
+            self.event.add_contribution(amount)
         
     def complete(self, effectiveness: float = 1.0) -> None:
         """
@@ -65,7 +78,9 @@ class Task:
         
     def __str__(self) -> str:
         """String representation of the task."""
-        return f"Task(name='{self.name}', estimated_time={self.estimated_time}min)"
+        task_id_str = f"id={self.task_id}, " if self.task_id else ""
+        project_str = f"project_id={self.project_id}, " if self.project_id else ""
+        return f"Task({task_id_str}{project_str}name='{self.name}', estimated_time={self.estimated_time}min)"
         
     def __repr__(self) -> str:
         """String representation for debugging."""
