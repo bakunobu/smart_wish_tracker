@@ -93,7 +93,19 @@ def get_recent_contributions(days: int = 35) -> List[Tuple[str, float, str]]:
     Returns:
         List of (date, value, hex_color)
     """
-    start_date = datetime.now() - timedelta(days=days)
+    # Generate all dates in the requested range
+    today = datetime.now()
+    start_date = today - timedelta(days=days)
+    
+    # Create a dictionary with all dates in the range initialized to 0
+    date_values = {}
+    current_date = start_date
+    while current_date <= today:
+        date_str = current_date.strftime("%Y-%m-%d")
+        date_values[date_str] = 0.0  # Default to 0 if no record
+        current_date += timedelta(days=1)
+    
+    # Get actual values from the database
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute("""
@@ -102,9 +114,15 @@ def get_recent_contributions(days: int = 35) -> List[Tuple[str, float, str]]:
             ORDER BY date
         """, (start_date.strftime("%Y-%m-%d"),))
         rows = cursor.fetchall()
-
-    result = []
+    
+    # Update the dictionary with actual values from the database
     for date_str, val in rows:
+        date_values[date_str] = val or 0.0
+    
+    # Convert to the required format
+    result = []
+    for date_str in sorted(date_values.keys()):
+        val = date_values[date_str]
         color = value_to_color(val)
         result.append((date_str, val, color))
 
