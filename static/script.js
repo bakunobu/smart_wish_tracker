@@ -1,14 +1,4 @@
-// Function to generate a random contribution level (0-4)
-function getRandomLevel() {
-    const num = Math.random();
-    if (num < 0.6) return 0; // 60% chance for no contribution
-    if (num < 0.8) return 1; // 20% chance for low contribution
-    if (num < 0.9) return 2; // 10% chance for medium contribution
-    if (num < 0.97) return 3; // 7% chance for high contribution
-    return 4; // 3% chance for very high contribution
-}
-
-// Function to create the contribution grid
+// Function to create the contribution grid using data from Flask
 function createGrid() {
     const grid = document.getElementById('grid');
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -23,12 +13,19 @@ function createGrid() {
         grid.appendChild(dayLabel);
     }
 
+    // Start date (one year ago from today)
+    const today = new Date();
+    const oneYearAgo = new Date(today);
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
+    
     // Create the actual grid (53 weeks x 7 days)
+    let currentDate = new Date(oneYearAgo);
+    
     for (let week = 0; week < 53; week++) {
         // Add month label at the start of each row (first week of the month)
         if (week % 4 === 0 && week < 52) { // Approximate: every 4 weeks = 1 month
             const monthLabel = document.createElement('div');
-            monthLabel.textContent = months[Math.floor(week / 4)];
+            monthLabel.textContent = months[currentDate.getMonth()];
             monthLabel.className = 'month-label';
             grid.appendChild(monthLabel);
         } else {
@@ -40,15 +37,23 @@ function createGrid() {
         
         // Create cells for each day of the week
         for (let day = 0; day < 7; day++) {
-            const cell = document.createElement('div');
-            cell.className = `contribution-day level-${getRandomLevel()}`;
+            // Format date as YYYY-MM-DD to match the Python data
+            const dateStr = currentDate.toISOString().split('T')[0];
             
-            // Add tooltip with date and contribution count (simulated)
-            const contributionCount = Math.floor(Math.random() * 5); // 0-4 contributions
-            const date = `2023-01-01 + ${week * 7 + day} days`; // Simulated date
-            cell.title = `${contributionCount} contribution(s) on ${date}`;
+            // Get contribution count for this date from the Flask-provided data
+            const count = contributions[dateStr] || 0;
+            
+            // Create cell with appropriate level based on contribution count
+            const cell = document.createElement('div');
+            cell.className = `contribution-day level-${count}`;
+            
+            // Add tooltip with date and contribution count
+            cell.title = `${count} contribution(s) on ${dateStr}`;
             
             grid.appendChild(cell);
+            
+            // Move to next day
+            currentDate.setDate(currentDate.getDate() + 1);
         }
     }
 }
