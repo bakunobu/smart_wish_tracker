@@ -1,41 +1,46 @@
 // Function to create the contribution grid using data from Flask
 function createGrid() {
     const grid = document.getElementById('grid');
+    const weekLabels = document.getElementById('week-labels');
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
-    // Create days of the week labels (left side)
-    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    for (let i = 0; i < weekDays.length; i++) {
-        const dayLabel = document.createElement('div');
-        dayLabel.textContent = weekDays[i];
-        dayLabel.className = 'day-label';
-        grid.appendChild(dayLabel);
-    }
-
     // Start date (one year ago from today)
     const today = new Date();
     const oneYearAgo = new Date(today);
     oneYearAgo.setFullYear(today.getFullYear() - 1);
     
-    // Create the actual grid (53 weeks x 7 days)
+    // Set to the first Sunday before or on oneYearAgo
+    const dayOfWeek = oneYearAgo.getDay();
+    oneYearAgo.setDate(oneYearAgo.getDate() - dayOfWeek);
+    
+    // Store the starting date for reference
     let currentDate = new Date(oneYearAgo);
     
+    // Create week labels (month indicators at the start of each month)
     for (let week = 0; week < 53; week++) {
-        // Add month label at the start of each row (first week of the month)
-        if (week % 4 === 0 && week < 52) { // Approximate: every 4 weeks = 1 month
-            const monthLabel = document.createElement('div');
-            monthLabel.textContent = months[currentDate.getMonth()];
-            monthLabel.className = 'month-label';
-            grid.appendChild(monthLabel);
+        // Create a new Date object for this week
+        const weekDate = new Date(currentDate);
+        weekDate.setDate(weekDate.getDate() + (week * 7));
+        
+        const weekLabel = document.createElement('span');
+        
+        // Check if this is the first week of a month by looking at the day of the month
+        // If the date is in the first 7 days of the month, it's the first week
+        if (weekDate.getDate() <= 7) {
+            weekLabel.textContent = months[weekDate.getMonth()].substring(0, 3);
         } else {
-            // Empty cell for alignment
-            const emptyCell = document.createElement('div');
-            emptyCell.className = 'placeholder';
-            grid.appendChild(emptyCell);
+            weekLabel.textContent = '';
         }
         
-        // Create cells for each day of the week
+        weekLabels.appendChild(weekLabel);
+    }
+    
+    // Reset date for grid creation
+    currentDate = new Date(oneYearAgo);
+    
+    // Create the actual grid (53 weeks x 7 days)
+    for (let week = 0; week < 53; week++) {
         for (let day = 0; day < 7; day++) {
             // Format date as YYYY-MM-DD to match the Python data
             const dateStr = currentDate.toISOString().split('T')[0];
