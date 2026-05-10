@@ -63,5 +63,163 @@ function createGrid() {
     }
 }
 
+// Time Tracker Functionality
+let timerInterval = null;
+let seconds = 0;
+let isRunning = false;
+
+function updateTimerDisplay() {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    document.querySelector('.timer-display').textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function startTimer() {
+    if (!isRunning) {
+        isRunning = true;
+        document.getElementById('start-stop-btn').textContent = 'Stop';
+        document.getElementById('start-stop-btn').classList.remove('start');
+        document.getElementById('start-stop-btn').classList.add('stop');
+        
+        timerInterval = setInterval(() => {
+            seconds++;
+            updateTimerDisplay();
+        }, 1000);
+    } else {
+        isRunning = false;
+        document.getElementById('start-stop-btn').textContent = 'Start';
+        document.getElementById('start-stop-btn').classList.remove('stop');
+        document.getElementById('start-stop-btn').classList.add('start');
+        
+        clearInterval(timerInterval);
+    }
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    seconds = 0;
+    isRunning = false;
+    updateTimerDisplay();
+    document.getElementById('start-stop-btn').textContent = 'Start';
+    document.getElementById('start-stop-btn').classList.remove('stop');
+    document.getElementById('start-stop-btn').classList.add('start');
+}
+
+// Problem Adder/Selector Functionality
+async function loadProjects() {
+    try {
+        // In a real implementation, this would fetch projects from the server
+        // For now, we'll simulate with some sample data
+        const projectSelect = document.getElementById('project-select');
+        
+        // Clear existing options except the first
+        while (projectSelect.options.length > 1) {
+            projectSelect.remove(1);
+        }
+        
+        // Add sample projects
+        const sampleProjects = [
+            { id: 1, name: 'Learn Python' },
+            { id: 2, name: 'Web Development' },
+            { id: 3, name: 'Data Science' }
+        ];
+        
+        sampleProjects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name;
+            projectSelect.appendChild(option);
+        });
+        
+        // Load events when a project is selected
+        projectSelect.addEventListener('change', loadEvents);
+        
+    } catch (error) {
+        console.error('Error loading projects:', error);
+    }
+}
+
+async function loadEvents() {
+    const projectSelect = document.getElementById('project-select');
+    const eventSelect = document.getElementById('event-select');
+    
+    // Clear existing options except the first
+    while (eventSelect.options.length > 1) {
+        eventSelect.remove(1);
+    }
+    
+    const projectId = projectSelect.value;
+    
+    if (!projectId) {
+        return;
+    }
+    
+    try {
+        // In a real implementation, this would fetch events for the selected project from the server
+        // For now, we'll simulate with some sample data
+        const sampleEvents = {
+            '1': [
+                { id: 1, topic: 'Learn Python Basics', duration: 60 },
+                { id: 2, topic: 'Build a Web Application', duration: 120 },
+                { id: 3, topic: 'Study Data Structures', duration: 90 }
+            ],
+            '2': [
+                { id: 4, topic: 'Learn HTML/CSS', duration: 45 },
+                { id: 5, topic: 'Study JavaScript', duration: 75 },
+                { id: 6, topic: 'Build a Portfolio Site', duration: 180 }
+            ],
+            '3': [
+                { id: 7, topic: 'Learn Pandas', duration: 60 },
+                { id: 8, topic: 'Study Machine Learning', duration: 150 },
+                { id: 9, topic: 'Work on Data Visualization', duration: 90 }
+            ]
+        };
+        
+        const events = sampleEvents[projectId] || [];
+        
+        events.forEach(event => {
+            const option = document.createElement('option');
+            option.value = event.id;
+            option.textContent = `${event.topic} (${event.duration}min)`;
+            eventSelect.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
+}
+
+async function addProblem(event) {
+    event.preventDefault();
+    
+    const newProjectName = document.getElementById('new-project-name').value;
+    const newProjectDesc = document.getElementById('new-project-desc').value;
+    const newEventTopic = document.getElementById('new-event-topic').value;
+    const eventDuration = document.getElementById('event-duration').value;
+    
+    // In a real implementation, this would send the data to the server to create a new project and event
+    // For now, we'll just show an alert
+    alert(`New problem added:\nProject: ${newProjectName}\nDescription: ${newProjectDesc}\nEvent: ${newEventTopic}\nDuration: ${eventDuration} minutes`);
+    
+    // Reset the form
+    document.getElementById('problem-form').reset();
+}
+
 // Initialize the grid when page loads
-window.addEventListener('load', createGrid);
+window.addEventListener('load', () => {
+    createGrid();
+    updateTimerDisplay();
+    
+    // Set up timer controls
+    document.getElementById('start-stop-btn').addEventListener('click', startTimer);
+    document.getElementById('reset-btn').addEventListener('click', resetTimer);
+    
+    // Set up problem form
+    document.getElementById('problem-form').addEventListener('submit', addProblem);
+    
+    // Load projects and events
+    loadProjects();
+});

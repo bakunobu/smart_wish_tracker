@@ -9,6 +9,63 @@
 <body>
     <div class="container">
         <h1>Contribution Calendar</h1>
+        
+        <!-- Time Tracker Section -->
+        <div class="time-tracker">
+            <h2>Time Tracker</h2>
+            <div class="timer-display">00:00:00</div>
+            <div class="timer-controls">
+                <button id="start-stop-btn" class="timer-btn start">Start</button>
+                <button id="reset-btn" class="timer-btn reset">Reset</button>
+            </div>
+        </div>
+        
+        <!-- Problem Adder/Selector Section -->
+        <div class="problem-manager">
+            <h2>Problem Selector & Adder</h2>
+            <div class="problem-selector">
+                <label for="project-select">Select Project:</label>
+                <select id="project-select" name="project">
+                    <option value="">-- Select a Project --</option>
+                    <!-- Project options will be populated by JavaScript -->
+                </select>
+                
+                <label for="event-select">Select Event:</label>
+                <select id="event-select" name="event">
+                    <option value="">-- Select an Event --</option>
+                    <!-- Event options will be populated by JavaScript -->
+                </select>
+            </div>
+            
+            <div class="problem-adder">
+                <h3>Add New Problem</h3>
+                <form id="problem-form">
+                    <div class="form-group">
+                        <label for="new-project-name">Project Name:</label>
+                        <input type="text" id="new-project-name" name="project_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-project-desc">Description:</label>
+                        <textarea id="new-project-desc" name="description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-event-topic">Event Topic:</label>
+                        <input type="text" id="new-event-topic" name="event_topic" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-duration">Duration (minutes):</label>
+                        <input type="number" id="event-duration" name="duration" value="15" min="1" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Add Problem</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Calendar Section -->
         <div class="calendar-container">
             <!-- Day of week labels (vertical) -->
             <div class="day-labels">
