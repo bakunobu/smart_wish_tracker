@@ -4,6 +4,7 @@ Event class for managing events with topics, durations, and contributions.
 """
 
 from datetime import datetime
+from typing import List, Optional
 import grid_manager
 from database import Database
 
@@ -13,7 +14,7 @@ class Event:
     A class to represent an event with a topic, duration, and contribution tracking.
     """
 
-    def __init__(self, topic: str, duration: int = 15, db: Database = None, project_id: int = None, event_id: int = None):
+    def __init__(self, topic: str, duration: int = 15, db: Optional[Database] = None, project_id: Optional[int] = None, event_id: Optional[int] = None):
         """
         Initialize an Event instance.
 
@@ -46,7 +47,7 @@ class Event:
         today_str = datetime.now().strftime("%Y-%m-%d")
         grid_manager.add_contribution(today_str, amount)
 
-    def update(self, topic: str = None, duration: int = None) -> bool:
+    def update(self, topic: Optional[str] = None, duration: Optional[int] = None) -> bool:
         """
         Update the event in the database.
         
@@ -88,7 +89,7 @@ class Event:
         return self.__str__()
         
     @classmethod
-    def from_db(cls, event_id: int, db: Database = None) -> 'Event':
+    def from_db(cls, event_id: int, db: Optional[Database] = None) -> 'Event':
         """
         Create an Event instance from the database.
         
@@ -113,7 +114,7 @@ class Event:
         )
         
     @classmethod
-    def list_all(cls, db: Database = None, project_id: int = None) -> List['Event']:
+    def list_all(cls, db: Optional[Database] = None, project_id: Optional[int] = None) -> List['Event']:
         """
         List all events, optionally filtered by project.
         

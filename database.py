@@ -38,15 +38,55 @@ class Database:
     def init_db(self):
         """Initialize the database with required tables."""
         with self.get_connection() as conn:
-            # Create projects table
+            # Create problems table
             conn.execute("""
-                CREATE TABLE IF NOT EXISTS projects (
+                CREATE TABLE IF NOT EXISTS problems (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
                     description TEXT,
                     created_date TEXT NOT NULL,
                     updated_date TEXT NOT NULL,
                     status TEXT DEFAULT 'active'
+                )
+            """)
+            
+            # Create projects table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS projects (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    description TEXT,
+                    problem_id INTEGER,
+                    created_date TEXT NOT NULL,
+                    updated_date TEXT NOT NULL,
+                    status TEXT DEFAULT 'active',
+                    FOREIGN KEY (problem_id) REFERENCES problems (id)
+                )
+            """)
+            
+            # Create project_problem link table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS problem_projects (
+                    problem_id INTEGER,
+                    project_id INTEGER,
+                    PRIMARY KEY (problem_id, project_id),
+                    FOREIGN KEY (problem_id) REFERENCES problems (id) ON DELETE CASCADE,
+                    FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
+                )
+            """)
+            
+            # Create tasks table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS tasks (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    description TEXT,
+                    project_id INTEGER,
+                    expected_duration INTEGER,
+                    status TEXT DEFAULT 'active',
+                    created_date TEXT NOT NULL,
+                    updated_date TEXT NOT NULL,
+                    FOREIGN KEY (project_id) REFERENCES projects (id)
                 )
             """)
             
@@ -63,16 +103,39 @@ class Database:
                 )
             """)
             
-            # Create index on project_id for better performance
+            # Create indexes for better performance
             conn.execute("CREATE INDEX IF NOT EXISTS idx_events_project_id ON events (project_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_projects_problem_id ON projects (problem_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_project_id ON tasks (project_id)")
     
-    def create_project(self, name: str, description: str = "") -> int:
+    def create_problem(self, name: str, description: str = "") -> int:
+        """
+        Create a new problem.
+        
+        Args:
+            name (str): Name of the problem
+            description (str): Description of the problem
+            
+        Returns:
+            int: ID of the created problem
+        """
+        current_time = datetime.now().isoformat()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO problems (name, description, created_date, updated_date) VALUES (?, ?, ?, ?)",
+                (name, description, current_time, current_time)
+            )
+            return cursor.lastrowid
+            
+    def create_project(self, name: str, description: str = "", problem_id: int = None) -> int:
         """
         Create a new project.
         
         Args:
             name (str): Name of the project
             description (str): Description of the project
+            problem_id (int): ID of the parent problem
             
         Returns:
             int: ID of the created project
@@ -81,11 +144,52 @@ class Database:
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO projects (name, description, created_date, updated_date) VALUES (?, ?, ?, ?)",
-                (name, description, current_time, current_time)
+                "INSERT INTO projects (name, description, problem_id, created_date, updated_date) VALUES (?, ?, ?, ?, ?)",
+                (name, description, problem_id, current_time, current_time)
+            )
+            return cursor.lastrowid
+            
+    def create_task(self, name: str, description: str = "", project_id: int = None, expected_duration: int = None) -> int:
+        """
+        Create a new task.
+        
+        Args:
+            name (str): Name of the task
+            description (str): Description of the task
+            project_id (int): ID of the parent project
+            expected_duration (int): Expected duration in minutes
+            
+        Returns:
+            int: ID of the created task
+        """
+        current_time = datetime.now().isoformat()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO tasks (name, description, project_id, expected_duration, created_date, updated_date) VALUES (?, ?, ?, ?, ?, ?)",
+                (name, description, project_id, expected_duration, current_time, current_time)
             )
             return cursor.lastrowid
     
+    def get_problem(self, problem_id: int) -> Optional[Dict[str, Any]]:
+        """
+        Get a problem by ID.
+        
+        Args:
+            problem_id (int): ID of the problem
+            
+        Returns:
+            Dict or None: Problem data if found, None otherwise
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM problems WHERE id = ?", (problem_id,))
+            row = cursor.fetchone()
+            if row:
+                return dict(row)
+            return None
+            
     def get_project(self, project_id: int) -> Optional[Dict[str, Any]]:
         """
         Get a project by ID.
@@ -99,22 +203,51 @@ class Database:
         with self.get_connection() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM projects WHERE id = ?", (project_id,))
+            cursor.execute("""
+                SELECT p.*, pr.name as problem_name, pr.id as problem_id 
+                FROM projects p 
+                LEFT JOIN problems pr ON p.problem_id = pr.id 
+                WHERE p.id = ?
+            """, (project_id,))
+            row = cursor.fetchone()
+            if row:
+                return dict(row)
+            return None
+            
+    def get_task(self, task_id: int) -> Optional[Dict[str, Any]]:
+        """
+        Get a task by ID.
+        
+        Args:
+            task_id (int): ID of the task
+            
+        Returns:
+            Dict or None: Task data if found, None otherwise
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT t.*, p.name as project_name, p.id as project_id 
+                FROM tasks t 
+                LEFT JOIN projects p ON t.project_id = p.id 
+                WHERE t.id = ?
+            """, (task_id,))
             row = cursor.fetchone()
             if row:
                 return dict(row)
             return None
     
-    def update_project(self, project_id: int, name: Optional[str] = None, 
+    def update_problem(self, problem_id: int, name: Optional[str] = None, 
                       description: Optional[str] = None, status: Optional[str] = None) -> bool:
         """
-        Update a project.
+        Update a problem.
         
         Args:
-            project_id (int): ID of the project to update
-            name (str, optional): New name for the project
-            description (str, optional): New description for the project
-            status (str, optional): New status for the project
+            problem_id (int): ID of the problem to update
+            name (str, optional): New name for the problem
+            description (str, optional): New description for the problem
+            status (str, optional): New status for the problem
             
         Returns:
             bool: True if update was successful, False otherwise
@@ -141,6 +274,55 @@ class Database:
         if not updates:
             return False
         
+        params.append(problem_id)
+        query = f"UPDATE problems SET {', '.join(updates)} WHERE id = ?"
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            return cursor.rowcount > 0
+            
+    def update_project(self, project_id: int, name: Optional[str] = None, 
+                      description: Optional[str] = None, status: Optional[str] = None, problem_id: Optional[int] = None) -> bool:
+        """
+        Update a project.
+        
+        Args:
+            project_id (int): ID of the project to update
+            name (str, optional): New name for the project
+            description (str, optional): New description for the project
+            status (str, optional): New status for the project
+            problem_id (int, optional): ID of the parent problem
+            
+        Returns:
+            bool: True if update was successful, False otherwise
+        """
+        updates = []
+        params = []
+        
+        if name is not None:
+            updates.append("name = ?")
+            params.append(name)
+        
+        if description is not None:
+            updates.append("description = ?")
+            params.append(description)
+        
+        if status is not None:
+            updates.append("status = ?")
+            params.append(status)
+        
+        if problem_id is not None:
+            updates.append("problem_id = ?")
+            params.append(problem_id)
+        
+        # Always update the updated_date
+        updates.append("updated_date = ?")
+        params.append(datetime.now().isoformat())
+        
+        if not updates:
+            return False
+        
         params.append(project_id)
         query = f"UPDATE projects SET {', '.join(updates)} WHERE id = ?"
         
@@ -148,10 +330,85 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(query, params)
             return cursor.rowcount > 0
+            
+    def update_task(self, task_id: int, name: Optional[str] = None, 
+                   description: Optional[str] = None, status: Optional[str] = None, 
+                   project_id: Optional[int] = None, expected_duration: Optional[int] = None) -> bool:
+        """
+        Update a task.
+        
+        Args:
+            task_id (int): ID of the task to update
+            name (str, optional): New name for the task
+            description (str, optional): New description for the task
+            status (str, optional): New status for the task
+            project_id (int, optional): ID of the parent project
+            expected_duration (int, optional): New expected duration in minutes
+            
+        Returns:
+            bool: True if update was successful, False otherwise
+        """
+        updates = []
+        params = []
+        
+        if name is not None:
+            updates.append("name = ?")
+            params.append(name)
+        
+        if description is not None:
+            updates.append("description = ?")
+            params.append(description)
+        
+        if status is not None:
+            updates.append("status = ?")
+            params.append(status)
+        
+        if project_id is not None:
+            updates.append("project_id = ?")
+            params.append(project_id)
+        
+        if expected_duration is not None:
+            updates.append("expected_duration = ?")
+            params.append(expected_duration)
+        
+        # Always update the updated_date
+        updates.append("updated_date = ?")
+        params.append(datetime.now().isoformat())
+        
+        if not updates:
+            return False
+        
+        params.append(task_id)
+        query = f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?"
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            return cursor.rowcount > 0
     
+    def delete_problem(self, problem_id: int) -> bool:
+        """
+        Delete a problem and its associated projects and tasks.
+        
+        Args:
+            problem_id (int): ID of the problem to delete
+            
+        Returns:
+            bool: True if deletion was successful, False otherwise
+        """
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            # Delete associated tasks first
+            cursor.execute("DELETE FROM tasks WHERE project_id IN (SELECT id FROM projects WHERE problem_id = ?)", (problem_id,))
+            # Then delete associated projects
+            cursor.execute("DELETE FROM projects WHERE problem_id = ?", (problem_id,))
+            # Then delete the problem
+            cursor.execute("DELETE FROM problems WHERE id = ?", (problem_id,))
+            return cursor.rowcount > 0
+            
     def delete_project(self, project_id: int) -> bool:
         """
-        Delete a project and its associated events.
+        Delete a project and its associated tasks and events.
         
         Args:
             project_id (int): ID of the project to delete
@@ -161,18 +418,57 @@ class Database:
         """
         with self.get_connection() as conn:
             cursor = conn.cursor()
+            # Delete associated tasks first
+            cursor.execute("DELETE FROM tasks WHERE project_id = ?", (project_id,))
             # Delete associated events first (due to foreign key constraint)
             cursor.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
             # Then delete the project
             cursor.execute("DELETE FROM projects WHERE id = ?", (project_id,))
             return cursor.rowcount > 0
-    
-    def list_projects(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+            
+    def delete_task(self, task_id: int) -> bool:
         """
-        List all projects, optionally filtered by status.
+        Delete a task.
+        
+        Args:
+            task_id (int): ID of the task to delete
+            
+        Returns:
+            bool: True if deletion was successful, False otherwise
+        """
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+            return cursor.rowcount > 0
+    
+    def list_problems(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        List all problems, optionally filtered by status.
+        
+        Args:
+            status (str, optional): Filter problems by status
+            
+        Returns:
+            List of problem dictionaries
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            if status:
+                cursor.execute("SELECT * FROM problems WHERE status = ? ORDER BY updated_date DESC", (status,))
+            else:
+                cursor.execute("SELECT * FROM problems ORDER BY updated_date DESC")
+            
+            return [dict(row) for row in cursor.fetchall()]
+            
+    def list_projects(self, status: Optional[str] = None, problem_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        List all projects, optionally filtered by status and problem.
         
         Args:
             status (str, optional): Filter projects by status
+            problem_id (int, optional): Filter projects by parent problem
             
         Returns:
             List of project dictionaries
@@ -181,11 +477,59 @@ class Database:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
-            if status:
-                cursor.execute("SELECT * FROM projects WHERE status = ? ORDER BY updated_date DESC", (status,))
-            else:
-                cursor.execute("SELECT * FROM projects ORDER BY updated_date DESC")
+            query = "SELECT p.*, pr.name as problem_name, pr.id as problem_id FROM projects p LEFT JOIN problems pr ON p.problem_id = pr.id"
+            conditions = []
+            params = []
             
+            if status:
+                conditions.append("p.status = ?")
+                params.append(status)
+            
+            if problem_id:
+                conditions.append("p.problem_id = ?")
+                params.append(problem_id)
+            
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+            
+            query += " ORDER BY p.updated_date DESC"
+            
+            cursor.execute(query, params)
+            return [dict(row) for row in cursor.fetchall()]
+            
+    def list_tasks(self, status: Optional[str] = None, project_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        List all tasks, optionally filtered by status and project.
+        
+        Args:
+            status (str, optional): Filter tasks by status
+            project_id (int, optional): Filter tasks by parent project
+            
+        Returns:
+            List of task dictionaries
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            query = "SELECT t.*, p.name as project_name, p.id as project_id FROM tasks t LEFT JOIN projects p ON t.project_id = p.id"
+            conditions = []
+            params = []
+            
+            if status:
+                conditions.append("t.status = ?")
+                params.append(status)
+            
+            if project_id:
+                conditions.append("t.project_id = ?")
+                params.append(project_id)
+            
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+            
+            query += " ORDER BY t.updated_date DESC"
+            
+            cursor.execute(query, params)
             return [dict(row) for row in cursor.fetchall()]
     
     def create_event(self, project_id: int, topic: str, duration: int = 15) -> int:
@@ -317,4 +661,90 @@ class Database:
                     ORDER BY e.updated_date DESC
                 """)
             
+            return [dict(row) for row in cursor.fetchall()]
+    
+    def add_problem_project(self, problem_id: int, project_id: int) -> bool:
+        """
+        Associate a project with a problem (many-to-many relationship).
+        
+        Args:
+            problem_id (int): ID of the problem
+            project_id (int): ID of the project
+            
+        Returns:
+            bool: True if association was successful, False otherwise
+        """
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    "INSERT OR IGNORE INTO problem_projects (problem_id, project_id) VALUES (?, ?)",
+                    (problem_id, project_id)
+                )
+                return cursor.rowcount > 0
+            except Exception:
+                return False
+    
+    def remove_problem_project(self, problem_id: int, project_id: int) -> bool:
+        """
+        Remove association between a problem and project.
+        
+        Args:
+            problem_id (int): ID of the problem
+            project_id (int): ID of the project
+            
+        Returns:
+            bool: True if removal was successful, False otherwise
+        """
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM problem_projects WHERE problem_id = ? AND project_id = ?",
+                (problem_id, project_id)
+            )
+            return cursor.rowcount > 0
+    
+    def get_projects_by_problem(self, problem_id: int) -> List[Dict[str, Any]]:
+        """
+        Get all projects associated with a specific problem.
+        
+        Args:
+            problem_id (int): ID of the problem
+            
+        Returns:
+            List of project dictionaries
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT p.*, pr.name as problem_name, pr.id as problem_id
+                FROM projects p
+                INNER JOIN problem_projects pp ON p.id = pp.project_id
+                LEFT JOIN problems pr ON pp.problem_id = pr.id
+                WHERE pp.problem_id = ?
+                ORDER BY p.updated_date DESC
+            """, (problem_id,))
+            return [dict(row) for row in cursor.fetchall()]
+    
+    def get_problems_by_project(self, project_id: int) -> List[Dict[str, Any]]:
+        """
+        Get all problems associated with a specific project.
+        
+        Args:
+            project_id (int): ID of the project
+            
+        Returns:
+            List of problem dictionaries
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT pr.*
+                FROM problems pr
+                INNER JOIN problem_projects pp ON pr.id = pp.problem_id
+                WHERE pp.project_id = ?
+                ORDER BY pr.updated_date DESC
+            """, (project_id,))
             return [dict(row) for row in cursor.fetchall()]
