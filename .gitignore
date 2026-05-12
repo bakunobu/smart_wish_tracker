@@ -216,3 +216,32 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# datafiles
+./data/*
+
+# Linting and Code Quality Tools (Smart Wish Tracker specific)
+bandit-report.json
+.bandit
+.flake8_cache/
+.mypy_cache/
+.pydocstyle_cache/
+
+# Pre-commit
+.pre-commit-cache/
+
+# Development Environment
+.venv/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Project Specific Test Files
+test_hierarchy.db
+*.db-journal
+*.sqlite3-journal
+
+# Development Helper Scripts Output
+dev-commands.sh

@@ -25,28 +25,242 @@ h1 {
     color: #1f2328;
 }
 
+/* Time Tracker Styles */
+.time-tracker {
+    background-color: white;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.time-tracker h2 {
+    margin-bottom: 15px;
+    color: #1f2328;
+    font-size: 1.5em;
+}
+
+.timer-display {
+    font-family: 'Courier New', monospace;
+    font-size: 2.5em;
+    margin: 15px 0;
+    color: #24292e;
+    font-weight: bold;
+}
+
+.timer-controls {
+    margin-top: 15px;
+}
+
+.timer-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.timer-btn.start {
+    background-color: #28a745;
+    color: white;
+}
+
+.timer-btn.start:hover {
+    background-color: #22863a;
+}
+
+.timer-btn.reset {
+    background-color: #d73a49;
+    color: white;
+}
+
+.timer-btn.reset:hover {
+    background-color: #cb2431;
+}
+
+/* Problem Manager Styles */
+.problem-manager {
+    background-color: white;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.problem-manager h2 {
+    margin-bottom: 20px;
+    color: #1f2328;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.problem-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+}
+
+.problem-selector label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #586069;
+    font-size: 0.9em;
+}
+
+.problem-selector select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    font-size: 0.9em;
+    background-color: white;
+    min-width: 200px;
+}
+
+.problem-adder {
+    text-align: center;
+}
+
+.problem-adder h3 {
+    margin-bottom: 15px;
+    color: #1f2328;
+    font-size: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #586069;
+    font-size: 0.9em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    background-color: #2188ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #1876e0;
+}
+
+/* Calendar container - flex layout for labels and grid */
+.calendar-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+/* Day labels (vertical) */
+.day-labels {
+    display: flex;
+    flex-direction: column;
+    margin-right: 8px;
+    font-size: 11px;
+    color: #586069;
+    width: 20px;
+    /* Add offset to align with grid - increased by half position (7.5px) to 18.5px */
+    margin-top: 15.5px;
+}
+
+.day-labels div {
+    height: 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-right: 2px;
+    font-variant: tabular-nums;
+    /* Ensure crisp edges and proper alignment */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grid container */
+.grid-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Week labels (horizontal) */
+.week-labels {
+    display: grid;
+    grid-template-columns: repeat(53, 12px);
+    gap: 3px;
+    margin-bottom: 3px;
+    font-size: 11px;
+    color: #586069;
+    height: 15px;
+}
+
+.week-labels span {
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-variant: tabular-nums;
+    /* Ensure crisp edges and proper alignment */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 /* Contribution grid */
 .contribution-grid {
     display: grid;
-    grid-template-columns: repeat(53, 12px); /* 53 weeks in a year */
-    grid-template-rows: repeat(7, 12px); /* 7 days per week */
+    grid-template-columns: repeat(53, 12px);
+    grid-template-rows: repeat(7, 12px);
     gap: 3px;
-    justify-content: center;
-    margin-bottom: 20px;
 }
 
 .contribution-day {
     width: 12px;
     height: 12px;
-    background-color: #ebedf0; /* Default light color */
+    background-color: #ebedf0;
     border-radius: 2px;
     transition: transform 0.2s ease;
 }
 
 .contribution-day:hover {
-    transform: scale(1.2);
+    transform: scale(1.5);
     z-index: 1;
     position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Color levels based on activity (GitHub style) */
