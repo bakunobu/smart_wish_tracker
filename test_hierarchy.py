@@ -8,7 +8,6 @@ Test script to verify the three-level entity hierarchy:
 
 import os
 import sys
-from datetime import datetime
 
 # Add the parent directory to the path to import our modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -75,22 +74,40 @@ def test_hierarchy():
         print("\n4. Creating Tasks (Level 3)...")
         
         # Tasks for Task Management System
-        task1 = project1.add_task("Design Database Schema", 
-                                "Create tables for problems, projects, and tasks", 60)
-        task2 = project1.add_task("Implement Entity Classes", 
-                                "Build Problem, Project, and Task classes", 90)
-        task3 = project1.add_task("Create Web Interface", 
-                                "Build HTML/CSS/JS frontend", 120)
+        task1 = project1.add_task(
+            "Design Database Schema", 
+            "Create tables for problems, projects, and tasks",
+            60
+            )
+        task2 = project1.add_task(
+            "Implement Entity Classes", 
+            "Build Problem, Project, and Task classes",
+            90
+            )
+        task3 = project1.add_task(
+            "Create Web Interface", 
+            "Build HTML/CSS/JS frontend",
+            120
+            )
         
         # Tasks for Python Learning Path
-        task4 = project2.add_task("Study Python Basics", 
-                                "Variables, functions, control structures", 180)
-        task5 = project2.add_task("Learn Advanced Features", 
-                                "Decorators, generators, context managers", 240)
+        task4 = project2.add_task(
+            "Study Python Basics", 
+            "Variables, functions, control structures",
+            180
+            )
+        task5 = project2.add_task(
+            "Learn Advanced Features", 
+            "Decorators, generators, context managers",
+            240
+            )
         
         # Tasks for Time Tracking Tools
-        task6 = project3.add_task("Research Existing Tools", 
-                                "Evaluate current market solutions", 45)
+        task6 = project3.add_task(
+            "Research Existing Tools", 
+            "Evaluate current market solutions",
+            45
+            )
         
         print(f"   ✓ Created: {task1}")
         print(f"   ✓ Created: {task2}")
