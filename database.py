@@ -103,6 +103,24 @@ class Database:
                 )
             """)
             
+            # Create launches table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS launches (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id INTEGER NOT NULL,
+                    project_id INTEGER NOT NULL,
+                    start_time DATETIME NOT NULL,
+                    end_time DATETIME,
+                    paused_duration INTEGER DEFAULT 0,
+                    status TEXT CHECK(status IN ('running', 'paused', 'aborted', 'completed')),
+                    adjusted_time INTEGER,
+                    created_date TEXT NOT NULL,
+                    updated_date TEXT NOT NULL,
+                    FOREIGN KEY (task_id) REFERENCES tasks (id),
+                    FOREIGN KEY (project_id) REFERENCES projects (id)
+                )
+            """)
+            
             # Create indexes for better performance
             conn.execute("CREATE INDEX IF NOT EXISTS idx_events_project_id ON events (project_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_projects_problem_id ON projects (problem_id)")
@@ -528,6 +546,160 @@ class Database:
                 query += " WHERE " + " AND ".join(conditions)
             
             query += " ORDER BY t.updated_date DESC"
+            
+            cursor.execute(query, params)
+            return [dict(row) for row in cursor.fetchall()]
+            
+    # Launch CRUD operations
+    def create_launch(self, task_id: int, project_id: int, start_time: datetime) -> int:
+        """
+        Create a new launch.
+        
+        Args:
+            task_id (int): ID of the associated task
+            project_id (int): ID of the associated project
+            start_time (datetime): Start time of the launch
+            
+        Returns:
+            int: ID of the created launch
+        """
+        current_time = datetime.now().isoformat()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO launches (task_id, project_id, start_time, status, created_date, updated_date)
+                VALUES (?, ?, ?, 'running', ?, ?)
+                """,
+                (task_id, project_id, start_time.isoformat(), current_time, current_time)
+            )
+            return cursor.lastrowid
+            
+    def update_launch(self, launch_id: int, end_time: Optional[datetime] = None,
+                     paused_duration: Optional[int] = None, status: Optional[str] = None,
+                     duration: Optional[int] = None, adjusted_time: Optional[int] = None) -> bool:
+        """
+        Update a launch.
+        
+        Args:
+            launch_id (int): ID of the launch to update
+            end_time (datetime, optional): End time of the launch
+            paused_duration (int, optional): Total paused duration in seconds
+            status (str, optional): New status of the launch
+            adjusted_time (int, optional): Manually adjusted time in minutes
+            
+        Returns:
+            bool: True if update was successful, False otherwise
+        """
+        updates = []
+        params = []
+        
+        if end_time is not None:
+            updates.append("end_time = ?")
+            params.append(end_time.isoformat())
+        
+        if paused_duration is not None:
+            updates.append("paused_duration = ?")
+            params.append(paused_duration)
+            
+        if status is not None:
+            updates.append("status = ?")
+            params.append(status)
+            
+        if duration is not None:
+            updates.append("duration = ?")
+            params.append(duration)
+            
+        if adjusted_time is not None:
+            updates.append("adjusted_time = ?")
+            params.append(adjusted_time)
+            
+        # Always update the updated_date
+        updates.append("updated_date = ?")
+        params.append(datetime.now().isoformat())
+        
+        if not updates:
+            return False
+            
+        params.append(launch_id)
+        query = f"UPDATE launches SET {', '.join(updates)} WHERE id = ?"
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, params)
+            return cursor.rowcount > 0
+            
+    def get_launch(self, launch_id: int) -> Optional[Dict[str, Any]]:
+        """
+        Get a launch by ID.
+        
+        Args:
+            launch_id (int): ID of the launch
+            
+        Returns:
+            Dict or None: Launch data if found, None otherwise
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT l.*, t.name as task_name, p.name as project_name
+                FROM launches l
+                JOIN tasks t ON l.task_id = t.id
+                JOIN projects p ON l.project_id = p.id
+                WHERE l.id = ?
+            """, (launch_id,))
+            row = cursor.fetchone()
+            if row:
+                return dict(row)
+            return None
+            
+    def list_launches(self, task_id: Optional[int] = None, project_id: Optional[int] = None,
+                     status: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        List launches with optional filters.
+        
+        Args:
+            task_id (int, optional): Filter by task ID
+            project_id (int, optional): Filter by project ID
+            status (str, optional): Filter by status
+            
+        Returns:
+            List of launch dictionaries
+        """
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            query = """
+                SELECT l.*, t.name as task_name, p.name as project_name
+                FROM launches l
+                JOIN tasks t ON l.task_id = t.id
+                JOIN projects p ON l.project_id = p.id
+            """
+            conditions = []
+            params = []
+            
+            if task_id is not None:
+                conditions.append("l.task_id = ?")
+                params.append(task_id)
+                
+            if project_id is not None:
+                conditions.append("l.project_id = ?")
+                params.append(project_id)
+                
+            if status is not None:
+                conditions.append("l.status = ?")
+                params.append(status)
+                
+        if limit is not None:
+            query += " LIMIT ?"
+            params.append(limit)
+                
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+                
+            query += " ORDER BY l.start_time DESC"
             
             cursor.execute(query, params)
             return [dict(row) for row in cursor.fetchall()]

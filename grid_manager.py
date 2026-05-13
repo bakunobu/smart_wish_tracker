@@ -2,7 +2,7 @@
 import sqlite3
 import os
 from datetime import datetime, timedelta
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict, Any
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 DB_PATH = os.path.join(DATA_DIR, "contributions.db")
@@ -35,6 +35,15 @@ def init_db():
                 value REAL DEFAULT 0.0
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS launch_contributions (
+                id INTEGER PRIMARY KEY,
+                date TEXT,
+                task_id INTEGER,
+                minutes REAL,
+                FOREIGN KEY (task_id) REFERENCES tasks(id)
+            )
+        """)
     ensure_today_exists()
 
 
@@ -48,20 +57,29 @@ def ensure_today_exists():
             conn.execute("INSERT INTO contributions (date, value) VALUES (?, 0.0)", (today_str,))
 
 
-def add_contribution(date_str: str, amount: float):
+def add_contribution(date_str: str, amount: float, task_id: Optional[int] = None):
     """
     Add or update contribution for a given date.
     
     Args:
         date_str: Date in 'YYYY-MM-DD' format
         amount: Numeric value (e.g., deposit, interest earned)
+        task_id: Optional task ID associated with the contribution
     """
     with sqlite3.connect(DB_PATH) as conn:
+        # Add to main contributions table
         conn.execute("""
             INSERT INTO contributions (date, value)
             VALUES (?, ?)
-            ON CONFLICT(date) DO UPDATE SET value = excluded.value
+            ON CONFLICT(date) DO UPDATE SET value = excluded.value + value
         """, (date_str, amount))
+        
+        # If task_id is provided, record in launch_contributions
+        if task_id:
+            conn.execute("""
+                INSERT INTO launch_contributions (date, task_id, minutes)
+                VALUES (?, ?, ?)
+            """, (date_str, task_id, amount * 60))  # Convert to minutes
 
 
 def get_min_max_value() -> Tuple[float, float]:
@@ -127,6 +145,30 @@ def get_recent_contributions(days: int = 35) -> List[Tuple[str, float, str]]:
         result.append((date_str, val, color))
 
     return result
+
+
+from typing import Dict, Any
+
+def get_launch_history(days: int = 35) -> List[Dict[str, Any]]:
+    """
+    Get launch history for recent days.
+    
+    Returns:
+        List of launch records with task names
+    """
+    start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+    
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT lc.date, lc.minutes, t.name as task_name
+            FROM launch_contributions lc
+            JOIN tasks t ON lc.task_id = t.id
+            WHERE lc.date >= ?
+            ORDER BY lc.date DESC
+        """, (start_date,))
+        return [dict(row) for row in cursor.fetchall()]
 
 
 def generate_weekly_grid_html(data: List[Tuple[str, float, str]]) -> str:

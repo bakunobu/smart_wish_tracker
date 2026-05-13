@@ -10,14 +10,41 @@
     <div class="container">
         <h1>Contribution Calendar</h1>
         
-        <!-- Time Tracker Section -->
-        <div class="time-tracker">
-            <h2>Time Tracker</h2>
-            <div class="timer-display">00:00:00</div>
-            <div class="timer-controls">
-                <button id="start-stop-btn" class="timer-btn start">Start</button>
-                <button id="reset-btn" class="timer-btn reset">Reset</button>
+        <!-- Timer Launch Section -->
+        <div class="timer-launch">
+            <h2>Task Timer</h2>
+            <div class="task-selector">
+                <label for="task-select">Select Task:</label>
+                <select id="task-select">
+                    <option value="">-- Select a Task --</option>
+                    <!-- Tasks will be populated by JavaScript -->
+                </select>
+                <button id="new-task-btn">New Task</button>
             </div>
+            <div class="timer-display" id="timer-display">00:00:00</div>
+            <div class="timer-controls">
+                <button id="start-pause-btn" class="timer-btn">Start</button>
+                <button id="abort-btn" class="timer-btn">Abort</button>
+                <button id="finish-btn" class="timer-btn">Finish</button>
+            </div>
+        </div>
+
+        <!-- Launch History Section -->
+        <div class="launch-history">
+            <h2>Recent Launches</h2>
+            <table id="launch-history-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
         
         <!-- Problem Adder/Selector Section -->

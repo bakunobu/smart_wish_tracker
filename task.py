@@ -8,6 +8,7 @@ from typing import Optional, List, TYPE_CHECKING
 # Import the Event class from event.py
 from event import Event
 from database import Database
+from launch import Launch
 import grid_manager
 
 if TYPE_CHECKING:
@@ -70,6 +71,49 @@ class Task:
         # Also trigger the event's contribution mechanism
         if self.event:
             self.event.add_contribution(amount)
+            
+    def launch_timer(self) -> Launch:
+        """
+        Start a new timer launch for this task.
+        
+        Returns:
+            Launch instance
+        """
+        if not self.task_id or not self.project_id:
+            raise ValueError("Cannot launch timer for task without ID or project ID")
+        
+        return Launch(self.task_id, self.project_id, db=self.db)
+        
+    def get_active_launch(self) -> Optional[Launch]:
+        """
+        Get the currently active (running or paused) launch for this task.
+        
+        Returns:
+            Launch instance if found, None otherwise
+        """
+        if not self.task_id:
+            return None
+            
+        launches = self.db.list_launches(task_id=self.task_id, status='running')
+        if not launches:
+            launches = self.db.list_launches(task_id=self.task_id, status='paused')
+            
+        if launches:
+            return Launch.from_db(launches[0]['id'], db=self.db)
+        return None
+        
+    def abort_active_launch(self) -> bool:
+        """
+        Abort the active launch for this task.
+        
+        Returns:
+            True if aborted successfully, False otherwise
+        """
+        active_launch = self.get_active_launch()
+        if active_launch:
+            active_launch.abort()
+            return True
+        return False
         
     def complete(self, effectiveness: float = 1.0) -> None:
         """
@@ -78,9 +122,12 @@ class Task:
         Args:
             effectiveness (float): How effectively the task was completed (0.0 to 1.0)
         """
-        # Calculate contribution amount based on estimated time and effectiveness
-        # For example, a 60-minute task with 100% effectiveness = 1.0 contribution
-        # A 30-minute task with 100% effectiveness = 0.5 contribution
+        # First, complete any active launch
+        active_launch = self.get_active_launch()
+        if active_launch:
+            active_launch.complete()
+        
+        # Then add the standard contribution
         base_amount = self.estimated_time / 60.0
         final_amount = base_amount * effectiveness
         
