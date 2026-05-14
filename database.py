@@ -1,6 +1,6 @@
 # database.py
 """
-Database module for storing projects and events in SQLite.
+Database module with custom ORM-like implementation.
 """
 
 import sqlite3
@@ -16,18 +16,125 @@ DB_PATH = os.path.join(DATA_DIR, "projects.db")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 
+class ORM:
+    """
+    Base class for ORM-like functionality.
+    """
+    TABLE_NAME = None
+    COLUMNS = []
+    
+    @classmethod
+    def create_table(cls, conn):
+        """Create table for model if not exists."""
+        columns = ",\n    ".join(cls.COLUMNS)
+        conn.execute(f"""
+            CREATE TABLE IF NOT EXISTS {cls.TABLE_NAME} (
+                {columns}
+            )
+        """)
+    
+    @classmethod
+    def from_dict(cls, data):
+        """Create instance from dictionary."""
+        instance = cls()
+        for key, value in data.items():
+            setattr(instance, key, value)
+        return instance
+    
+    def to_dict(self):
+        """Convert instance to dictionary."""
+        return {col: getattr(self, col) for col in self.COLUMNS if hasattr(self, col)}
+
+
+class Problem(ORM):
+    TABLE_NAME = 'problems'
+    COLUMNS = [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'name TEXT NOT NULL',
+        'description TEXT',
+        'created_date TEXT NOT NULL',
+        'updated_date TEXT NOT NULL',
+        "status TEXT DEFAULT 'active'"
+    ]
+
+
+class Project(ORM):
+    TABLE_NAME = 'projects'
+    COLUMNS = [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'name TEXT NOT NULL',
+        'description TEXT',
+        'problem_id INTEGER',
+        'created_date TEXT NOT NULL',
+        'updated_date TEXT NOT NULL',
+        "status TEXT DEFAULT 'active'",
+        'FOREIGN KEY (problem_id) REFERENCES problems (id)'
+    ]
+
+
+class Task(ORM):
+    TABLE_NAME = 'tasks'
+    COLUMNS = [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'name TEXT NOT NULL',
+        'description TEXT',
+        'project_id INTEGER',
+        'expected_duration INTEGER',
+        "status TEXT DEFAULT 'active'",
+        'created_date TEXT NOT NULL',
+        'updated_date TEXT NOT NULL',
+        'FOREIGN KEY (project_id) REFERENCES projects (id)'
+    ]
+
+
+class Event(ORM):
+    TABLE_NAME = 'events'
+    COLUMNS = [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'project_id INTEGER',
+        'topic TEXT NOT NULL',
+        'duration INTEGER DEFAULT 15',
+        'created_date TEXT NOT NULL',
+        'updated_date TEXT NOT NULL',
+        'FOREIGN KEY (project_id) REFERENCES projects (id)'
+    ]
+
+
+class Launch(ORM):
+    TABLE_NAME = 'launches'
+    COLUMNS = [
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        'task_id INTEGER NOT NULL',
+        'project_id INTEGER NOT NULL',
+        'start_time DATETIME NOT NULL',
+        'end_time DATETIME',
+        'paused_duration INTEGER DEFAULT 0',
+        "status TEXT CHECK(status IN ('running', 'paused', 'aborted', 'completed'))",
+        'adjusted_time INTEGER',
+        'created_date TEXT NOT NULL',
+        'updated_date TEXT NOT NULL',
+        'FOREIGN KEY (task_id) REFERENCES tasks (id)',
+        'FOREIGN KEY (project_id) REFERENCES projects (id)'
+    ]
+
+
+class ProblemProject(ORM):
+    TABLE_NAME = 'problem_projects'
+    COLUMNS = [
+        'problem_id INTEGER',
+        'project_id INTEGER',
+        'PRIMARY KEY (problem_id, project_id)',
+        'FOREIGN KEY (problem_id) REFERENCES problems (id) ON DELETE CASCADE',
+        'FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE'
+    ]
+
+
 class Database:
     """
-    Database class to handle SQLite operations for projects and events.
+    Database class with ORM-like CRUD operations.
     """
     
     def __init__(self, db_path: str = DB_PATH):
-        """
-        Initialize the Database instance.
-        
-        Args:
-            db_path (str): Path to the SQLite database file
-        """
         self.db_path = db_path
         self.init_db()
     
@@ -37,94 +144,51 @@ class Database:
     
     def init_db(self):
         """Initialize the database with required tables."""
+        models = [Problem, Project, Task, Event, Launch, ProblemProject]
         with self.get_connection() as conn:
-            # Create problems table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS problems (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    created_date TEXT NOT NULL,
-                    updated_date TEXT NOT NULL,
-                    status TEXT DEFAULT 'active'
-                )
-            """)
+            for model in models:
+                model.create_table(conn)
             
-            # Create projects table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS projects (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    problem_id INTEGER,
-                    created_date TEXT NOT NULL,
-                    updated_date TEXT NOT NULL,
-                    status TEXT DEFAULT 'active',
-                    FOREIGN KEY (problem_id) REFERENCES problems (id)
-                )
-            """)
-            
-            # Create project_problem link table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS problem_projects (
-                    problem_id INTEGER,
-                    project_id INTEGER,
-                    PRIMARY KEY (problem_id, project_id),
-                    FOREIGN KEY (problem_id) REFERENCES problems (id) ON DELETE CASCADE,
-                    FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
-                )
-            """)
-            
-            # Create tasks table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS tasks (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    project_id INTEGER,
-                    expected_duration INTEGER,
-                    status TEXT DEFAULT 'active',
-                    created_date TEXT NOT NULL,
-                    updated_date TEXT NOT NULL,
-                    FOREIGN KEY (project_id) REFERENCES projects (id)
-                )
-            """)
-            
-            # Create events table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS events (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    project_id INTEGER,
-                    topic TEXT NOT NULL,
-                    duration INTEGER DEFAULT 15,
-                    created_date TEXT NOT NULL,
-                    updated_date TEXT NOT NULL,
-                    FOREIGN KEY (project_id) REFERENCES projects (id)
-                )
-            """)
-            
-            # Create launches table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS launches (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    task_id INTEGER NOT NULL,
-                    project_id INTEGER NOT NULL,
-                    start_time DATETIME NOT NULL,
-                    end_time DATETIME,
-                    paused_duration INTEGER DEFAULT 0,
-                    status TEXT CHECK(status IN ('running', 'paused', 'aborted', 'completed')),
-                    adjusted_time INTEGER,
-                    created_date TEXT NOT NULL,
-                    updated_date TEXT NOT NULL,
-                    FOREIGN KEY (task_id) REFERENCES tasks (id),
-                    FOREIGN KEY (project_id) REFERENCES projects (id)
-                )
-            """)
-            
-            # Create indexes for better performance
+            # Create indexes
             conn.execute("CREATE INDEX IF NOT EXISTS idx_events_project_id ON events (project_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_projects_problem_id ON projects (problem_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_project_id ON tasks (project_id)")
+    
+    def _create(self, model, data):
+        """Generic create method for ORM models."""
+        current_time = datetime.now().isoformat()
+        data['created_date'] = current_time
+        data['updated_date'] = current_time
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            columns = ', '.join(data.keys())
+            placeholders = ', '.join(['?'] * len(data))
+            query = f"INSERT INTO {model.TABLE_NAME} ({columns}) VALUES ({placeholders})"
+            cursor.execute(query, tuple(data.values()))
+            return cursor.lastrowid
+    
+    def _get(self, model, item_id):
+        """Generic get method for ORM models."""
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT * FROM {model.TABLE_NAME} WHERE id = ?", (item_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+    
+    # Implement similar generic methods for update, delete, list
+    # ...
+    
+    # Problem CRUD
+    def create_problem(self, name: str, description: str = "") -> int:
+        return self._create(Problem, {"name": name, "description": description})
+    
+    def get_problem(self, problem_id: int) -> Optional[Dict[str, Any]]:
+        return self._get(Problem, problem_id)
+    
+    # Implement other CRUD methods using the generic pattern
+    # ...
     
     def create_problem(self, name: str, description: str = "") -> int:
         """

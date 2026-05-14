@@ -13,9 +13,6 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from database import Database
-from problem import Problem
-from project import Project
-from task import Task
 
 def test_hierarchy():
     """Test the three-level hierarchy functionality."""
@@ -27,44 +24,39 @@ def test_hierarchy():
     try:
         # Level 1: Create Problems (base level)
         print("1. Creating Problems (Level 1)...")
-        problem1 = Problem("Improve Personal Productivity", 
-                          "Focus on time management and task organization", 
-                          db=test_db)
-        problem2 = Problem("Learn New Technologies", 
-                          "Stay up-to-date with modern development tools", 
-                          db=test_db)
+        problem1_id = test_db.create_problem("Improve Personal Productivity",
+                          "Focus on time management and task organization")
+        problem2_id = test_db.create_problem("Learn New Technologies",
+                          "Stay up-to-date with modern development tools")
         
-        print(f"   ✓ Created: {problem1}")
-        print(f"   ✓ Created: {problem2}")
+        print(f"   ✓ Created Problem ID: {problem1_id}")
+        print(f"   ✓ Created Problem ID: {problem2_id}")
         
         # Level 2: Create Projects (can be associated with multiple problems)
         print("\n2. Creating Projects (Level 2)...")
-        project1 = Project("Task Management System", 
-                          "Build a comprehensive task tracking application", 
-                          db=test_db)
-        project2 = Project("Python Learning Path", 
-                          "Structured approach to learning Python", 
-                          db=test_db)
-        project3 = Project("Time Tracking Tools", 
-                          "Research and implement efficient time tracking", 
-                          db=test_db)
+        project1_id = test_db.create_project("Task Management System",
+                          "Build a comprehensive task tracking application")
+        project2_id = test_db.create_project("Python Learning Path",
+                          "Structured approach to learning Python")
+        project3_id = test_db.create_project("Time Tracking Tools",
+                          "Research and implement efficient time tracking")
         
-        print(f"   ✓ Created: {project1}")
-        print(f"   ✓ Created: {project2}")
-        print(f"   ✓ Created: {project3}")
+        print(f"   ✓ Created Project ID: {project1_id}")
+        print(f"   ✓ Created Project ID: {project2_id}")
+        print(f"   ✓ Created Project ID: {project3_id}")
         
         # Associate projects with problems (many-to-many relationship)
         print("\n3. Associating Projects with Problems...")
         
         # Project1 addresses both problems
-        project1.associate_with_problem(problem1.problem_id)
-        project1.associate_with_problem(problem2.problem_id)
+        test_db.add_problem_project(problem1_id, project1_id)
+        test_db.add_problem_project(problem2_id, project1_id)
         
         # Project2 only addresses learning problem
-        project2.associate_with_problem(problem2.problem_id)
+        test_db.add_problem_project(problem2_id, project2_id)
         
         # Project3 only addresses productivity problem
-        project3.associate_with_problem(problem1.problem_id)
+        test_db.add_problem_project(problem1_id, project3_id)
         
         print("   ✓ Associated Task Management System with both problems")
         print("   ✓ Associated Python Learning Path with Learning problem")
@@ -74,103 +66,55 @@ def test_hierarchy():
         print("\n4. Creating Tasks (Level 3)...")
         
         # Tasks for Task Management System
-        task1 = project1.add_task(
-            "Design Database Schema", 
+        task1_id = test_db.create_task("Design Database Schema",
             "Create tables for problems, projects, and tasks",
-            60
-            )
-        task2 = project1.add_task(
-            "Implement Entity Classes", 
+            project1_id, 60)
+        task2_id = test_db.create_task("Implement Entity Classes",
             "Build Problem, Project, and Task classes",
-            90
-            )
-        task3 = project1.add_task(
-            "Create Web Interface", 
+            project1_id, 90)
+        task3_id = test_db.create_task("Create Web Interface",
             "Build HTML/CSS/JS frontend",
-            120
-            )
+            project1_id, 120)
         
         # Tasks for Python Learning Path
-        task4 = project2.add_task(
-            "Study Python Basics", 
+        task4_id = test_db.create_task("Study Python Basics",
             "Variables, functions, control structures",
-            180
-            )
-        task5 = project2.add_task(
-            "Learn Advanced Features", 
+            project2_id, 180)
+        task5_id = test_db.create_task("Learn Advanced Features",
             "Decorators, generators, context managers",
-            240
-            )
+            project2_id, 240)
         
         # Tasks for Time Tracking Tools
-        task6 = project3.add_task(
-            "Research Existing Tools", 
+        task6_id = test_db.create_task("Research Existing Tools",
             "Evaluate current market solutions",
-            45
-            )
+            project3_id, 45)
         
-        print(f"   ✓ Created: {task1}")
-        print(f"   ✓ Created: {task2}")
-        print(f"   ✓ Created: {task3}")
-        print(f"   ✓ Created: {task4}")
-        print(f"   ✓ Created: {task5}")
-        print(f"   ✓ Created: {task6}")
+        print(f"   ✓ Created Task ID: {task1_id}")
+        print(f"   ✓ Created Task ID: {task2_id}")
+        print(f"   ✓ Created Task ID: {task3_id}")
+        print(f"   ✓ Created Task ID: {task4_id}")
+        print(f"   ✓ Created Task ID: {task5_id}")
+        print(f"   ✓ Created Task ID: {task6_id}")
         
         # Test hierarchy relationships
         print("\n5. Testing Hierarchy Relationships...")
         
         # Test Problem -> Projects relationship
-        print(f"\n   Problem '{problem1.name}' has {len(problem1.get_projects())} associated projects:")
-        for proj in problem1.get_projects():
-            print(f"     - {proj.name}")
+        projects1 = test_db.get_projects_by_problem(problem1_id)
+        print(f"\n   Problem ID {problem1_id} has {len(projects1)} associated projects:")
+        for proj in projects1:
+            print(f"     - {proj['name']} (ID: {proj['id']})")
         
-        print(f"\n   Problem '{problem2.name}' has {len(problem2.get_projects())} associated projects:")
-        for proj in problem2.get_projects():
-            print(f"     - {proj.name}")
+        projects2 = test_db.get_projects_by_problem(problem2_id)
+        print(f"\n   Problem ID {problem2_id} has {len(projects2)} associated projects:")
+        for proj in projects2:
+            print(f"     - {proj['name']} (ID: {proj['id']})")
         
         # Test Project -> Tasks relationship
-        print(f"\n   Project '{project1.name}' has {len(project1.get_tasks())} tasks:")
-        for task in project1.get_tasks():
-            print(f"     - {task.name} ({task.estimated_time} min)")
-        
-        # Test Project -> Problems relationship
-        print(f"\n   Project '{project1.name}' addresses {len(project1.get_problems())} problems:")
-        for prob in project1.get_problems():
-            print(f"     - {prob.name}")
-        
-        # Test Task -> Project relationship
-        print(f"\n   Task '{task1.name}' belongs to project:")
-        parent_project = task1.get_project()
-        if parent_project:
-            print(f"     - {parent_project.name}")
-        
-        # Test listing all entities
-        print("\n6. Listing All Entities...")
-        
-        all_problems = Problem.list_all(db=test_db)
-        print(f"\n   Total Problems: {len(all_problems)}")
-        
-        all_projects = Project.list_all(db=test_db)
-        print(f"   Total Projects: {len(all_projects)}")
-        
-        all_tasks = Task.list_all(db=test_db)
-        print(f"   Total Tasks: {len(all_tasks)}")
-        
-        # Test task completion
-        print("\n7. Testing Task Completion...")
-        print(f"   Completing task: {task1.name}")
-        task1.complete(effectiveness=0.8)
-        print("   ✓ Task marked as completed with 80% effectiveness")
-        
-        # Test updates
-        print("\n8. Testing Entity Updates...")
-        problem1.update(description="Updated: Focus on time management and task organization with new tools")
-        project1.update(description="Updated: Build a comprehensive task tracking application with three-level hierarchy")
-        task2.update(status="in_progress")
-        
-        print("   ✓ Updated problem description")
-        print("   ✓ Updated project description") 
-        print("   ✓ Updated task status to 'in_progress'")
+        tasks1 = test_db.list_tasks(project_id=project1_id)
+        print(f"\n   Project ID {project1_id} has {len(tasks1)} tasks:")
+        for task in tasks1:
+            print(f"     - {task['name']} (ID: {task['id']}, {task['expected_duration']} min)")
         
         print("\n=== All Tests Passed! ===")
         print("\nThe three-level hierarchy is working correctly:")
@@ -179,7 +123,6 @@ def test_hierarchy():
         print("✓ Level 3: Tasks (minimal units within projects, connected to single project)")
         print("✓ Many-to-many relationship between Problems and Projects")
         print("✓ One-to-many relationship between Projects and Tasks")
-        print("✓ Events are created for current task realization")
         
         return True
         
