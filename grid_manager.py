@@ -40,8 +40,8 @@ def init_db():
                 id INTEGER PRIMARY KEY,
                 date TEXT,
                 task_id INTEGER,
-                minutes REAL,
-                FOREIGN KEY (task_id) REFERENCES tasks(id)
+                task_name TEXT,
+                minutes REAL
             )
         """)
     ensure_today_exists()
@@ -76,10 +76,25 @@ def add_contribution(date_str: str, amount: float, task_id: Optional[int] = None
         
         # If task_id is provided, record in launch_contributions
         if task_id:
+            # Try to get task name if possible
+            task_name = "Task " + str(task_id)
+            
+            # Check if tasks table exists in the main database
+            try:
+                with sqlite3.connect(os.path.join(DATA_DIR, "projects.db")) as main_db:
+                    main_db.row_factory = sqlite3.Row
+                    cursor = main_db.cursor()
+                    cursor.execute("SELECT name FROM tasks WHERE id = ?", (task_id,))
+                    task_row = cursor.fetchone()
+                    if task_row:
+                        task_name = task_row["name"]
+            except sqlite3.OperationalError:
+                pass  # Tasks table may not exist yet
+                
             conn.execute("""
-                INSERT INTO launch_contributions (date, task_id, minutes)
-                VALUES (?, ?, ?)
-            """, (date_str, task_id, amount * 60))  # Convert to minutes
+                INSERT INTO launch_contributions (date, task_id, task_name, minutes)
+                VALUES (?, ?, ?, ?)
+            """, (date_str, task_id, task_name, amount * 60))
 
 
 def get_min_max_value() -> Tuple[float, float]:
@@ -161,13 +176,28 @@ def get_launch_history(days: int = 35) -> List[Dict[str, Any]]:
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT lc.date, lc.minutes, t.name as task_name
-            FROM launch_contributions lc
-            JOIN tasks t ON lc.task_id = t.id
-            WHERE lc.date >= ?
-            ORDER BY lc.date DESC
-        """, (start_date,))
+        
+        # Check if tasks table exists
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'")
+        tasks_table_exists = cursor.fetchone() is not None
+        
+        if tasks_table_exists:
+            cursor.execute("""
+                SELECT lc.date, lc.minutes, t.name as task_name
+                FROM launch_contributions lc
+                JOIN tasks t ON lc.task_id = t.id
+                WHERE lc.date >= ?
+                ORDER BY lc.date DESC
+            """, (start_date,))
+        else:
+            # Fallback if tasks table doesn't exist yet
+            cursor.execute("""
+                SELECT date, minutes, task_id as task_name
+                FROM launch_contributions
+                WHERE date >= ?
+                ORDER BY date DESC
+            """, (start_date,))
+            
         return [dict(row) for row in cursor.fetchall()]
 
 

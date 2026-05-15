@@ -1,3 +1,4 @@
+import random
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 from database import Database
@@ -9,6 +10,7 @@ import grid_manager
 def create_app():
     app = Flask(__name__)
     db = Database()
+    grid_manager.init_db()  # Initialize contributions database
 
     # Generate random contribution data
     def generate_contributions():
