@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        #countdown-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        #timer {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button#stop {
+            background-color: #f44336;
+        }
+        
+        button#stop:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown-container">
+        <h1>Task Countdown</h1>
+        <div id="timer">15:00</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+            <button id="stop">Stop</button>
+        </div>
+    </div>
+
+    <script>
+        let countdown;
+        let totalSeconds = 15 * 60; // 15 minutes
+        let remainingSeconds = totalSeconds;
+        let isRunning = false;
+        
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('progress');
+        const startButton = document.getElementById('start');
+        const pauseButton = document.getElementById('pause');
+        const resetButton = document.getElementById('reset');
+        const stopButton = document.getElementById('stop');
+        
+        function updateDisplay() {
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update progress bar
+            const progressPercentage = (remainingSeconds / totalSeconds) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            // Change color based on time remaining
+            if (progressPercentage < 20) {
+                progressBar.style.backgroundColor = '#f44336';
+            } else if (progressPercentage < 50) {
+                progressBar.style.backgroundColor = '#FFC107';
+            } else {
+                progressBar.style.backgroundColor = '#4CAF50';
+            }
+        }
+        
+        function startTimer() {
+            if (isRunning || remainingSeconds <= 0) return;
+            
+            isRunning = true;
+            countdown = setInterval(() => {
+                remainingSeconds--;
+                updateDisplay();
+                
+                if (remainingSeconds <= 0) {
+                    clearInterval(countdown);
+                    isRunning = false;
+                    timerDisplay.style.color = '#f44336';
+                    
+                    // Play sound when timer completes
+                    const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU');
+                    audio.play();
+                }
+            }, 1000);
+        }
+        
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(countdown);
+                isRunning = false;
+            }
+        }
+        
+        function resetTimer() {
+            pauseTimer();
+            remainingSeconds = totalSeconds;
+            timerDisplay.style.color = '#333';
+            updateDisplay();
+        }
+        
+        function stopTimer() {
+            pauseTimer();
+            window.close(); // Close the window when stop is pressed
+        }
+        
+        // Event listeners
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+        stopButton.addEventListener('click', stopTimer);
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
