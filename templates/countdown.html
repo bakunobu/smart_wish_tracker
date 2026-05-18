@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+        }
+        
+        .timer-container {
+            text-align: center;
+            background-color: #0f3460;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .clock {
+            font-size: 5rem;
+            color: white;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .task-container {
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .task-name {
+            font-size: 1.25rem;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .add-task {
+            font-size: 1.25rem;
+            color: #4cc9f0;
+            cursor: pointer;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #start-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #pause-btn {
+            background-color: #FFC107;
+            color: black;
+        }
+        
+        #stop-btn {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .progress-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-circle {
+            fill: none;
+            stroke: #4cc9f0;
+            stroke-width: 8;
+            stroke-dasharray: 879.2;
+            stroke-dashoffset: 0;
+        }
+        
+        .progress-point {
+            fill: #f72585;
+            r: 10;
+            transition: transform 0.5s linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <div class="progress-container">
+            <svg class="progress-ring" width="300" height="300">
+                <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
+                <circle class="progress-point" cx="150" cy="10" r="10"></circle>
+            </svg>
+        </div>
+        
+        <div class="clock" id="clock">00:15:00</div>
+        
+        <div class="task-container" id="task-container">
+            <div class="add-task" id="add-task">+ Add Task</div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn">Pause</button>
+            <button id="stop-btn">Stop</button>
+        </div>
+    </div>
+
+<script>
+    // DOM elements
+    const clockEl = document.getElementById('clock');
+    const taskContainerEl = document.getElementById('task-container');
+    const addTaskEl = document.getElementById('add-task');
+    const startBtn = document.getElementById('start-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const progressPoint = document.querySelector('.progress-point');
+    
+    // Timer state
+    let totalSeconds = 900; // 15 minutes
+    let timerInterval = null;
+    let isRunning = false;
+    let isPaused = false;
+    let currentTask = '';
+    
+    // Initialize timer display
+    updateClockDisplay();
+    
+    // Clock click handler for setting time
+    clockEl.addEventListener('click', () => {
+        if (!isRunning) {
+            const digits = prompt('Enter time digits (max 6 digits):');
+            if (digits && digits.length <= 6) {
+                setTimeFromDigits(digits);
+            } else if (digits && digits.length > 6) {
+                resetToDefault();
+            }
+        }
+    });
+    
+    // Add task handler
+    addTaskEl.addEventListener('click', () => {
+        const taskName = prompt('Enter task name:');
+        if (taskName) {
+            currentTask = taskName;
+            taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${taskName}</div>`;
+            document.getElementById('task-name').addEventListener('click', editTask);
+        }
+    });
+    
+    // Edit task handler
+    function editTask() {
+        const newName = prompt('Edit task name:', currentTask);
+        if (newName) {
+            currentTask = newName;
+            this.textContent = newName;
+        }
+    }
+    
+    // Timer controls
+    startBtn.addEventListener('click', startTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    stopBtn.addEventListener('click', stopTimer);
+    
+    // Timer functions
+    function startTimer() {
+        if (currentTask && !isRunning) {
+            isRunning = true;
+            isPaused = false;
+            
+            timerInterval = setInterval(() => {
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                    updateClockDisplay();
+                    updateProgress();
+                } else {
+                    timerComplete();
+                }
+            }, 1000);
+        }
+    }
+    
+    function pauseTimer() {
+        if (isRunning && !isPaused) {
+            clearInterval(timerInterval);
+            isPaused = true;
+        } else if (isRunning && isPaused) {
+            startTimer();
+        }
+    }
+    
+    function stopTimer() {
+        clearInterval(timerInterval);
+        resetToDefault();
+    }
+    
+    function timerComplete() {
+        clearInterval(timerInterval);
+        alert('Timer completed!');
+        resetToDefault();
+    }
+    
+    // Helper functions
+    function setTimeFromDigits(digits) {
+        // Pad with zeros to make 6 digits
+        const padded = digits.padStart(6, '0');
+        const hours = parseInt(padded.slice(0, 2));
+        const minutes = parseInt(padded.slice(2, 4));
+        const seconds = parseInt(padded.slice(4, 6));
+        
+        totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        updateClockDisplay();
+    }
+    
+    function resetToDefault() {
+        clearInterval(timerInterval);
+        totalSeconds = 900;
+        currentTask = '';
+        isRunning = false;
+        isPaused = false;
+        taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
+        document.getElementById('add-task').addEventListener('click', addTaskHandler);
+        updateClockDisplay();
+        resetProgress();
+    }
+    
+    function updateClockDisplay() {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        
+        clockEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    function updateProgress() {
+        const progress = 1 - (totalSeconds / 900);
+        const angle = progress * 360;
+        const rad = (angle * Math.PI) / 180;
+        const cx = 150 + 140 * Math.sin(rad);
+        const cy = 150 - 140 * Math.cos(rad);
+        
+        progressPoint.setAttribute('cx', cx);
+        progressPoint.setAttribute('cy', cy);
+    }
+    
+    function resetProgress() {
+        progressPoint.setAttribute('cx', 150);
+        progressPoint.setAttribute('cy', 10);
+    }
+</script>
+</body>
+</html>
