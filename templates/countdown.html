@@ -24,15 +24,15 @@
         }
         
         .clock {
-            font-size: 5rem;
+            font-size: 4rem;
             color: white;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             cursor: pointer;
         }
         
         .task-container {
             position: relative;
-            margin: 30px 0;
+            margin: 10px 0;
         }
         
         .task-name {
@@ -85,16 +85,36 @@
             margin: 0 auto 30px;
         }
         
-        .progress-ring {
-            transform: rotate(-90deg);
+        .circle-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
+        
         
         .progress-circle {
             fill: none;
-            stroke: #4cc9f0;
+            stroke: rgba(76, 201, 240, 0.3); /* Semi-transparent background */
             stroke-width: 8;
             stroke-dasharray: 879.2;
             stroke-dashoffset: 0;
+        }
+        
+        .progress-arc {
+            fill: none;
+            stroke: #4cc9f0; /* Solid progress */
+            stroke-width: 8;
+            stroke-dasharray: 879.2;
+            stroke-dashoffset: 879.2;
+            transform: rotate(-90deg);
+            transform-origin: center;
         }
         
         .progress-point {
@@ -109,14 +129,17 @@
         <div class="progress-container">
             <svg class="progress-ring" width="300" height="300">
                 <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
+                <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
                 <circle class="progress-point" cx="150" cy="10" r="10"></circle>
             </svg>
-        </div>
-        
-        <div class="clock" id="clock">00:15:00</div>
-        
-        <div class="task-container" id="task-container">
-            <div class="add-task" id="add-task">+ Add Task</div>
+            
+            <!-- Timer and task centered inside circle -->
+            <div class="circle-content">
+                <div class="clock" id="clock">00:15:00</div>
+                <div class="task-container" id="task-container">
+                    <div class="add-task" id="add-task">+ Add Task</div>
+                </div>
+            </div>
         </div>
         
         <div class="controls">
@@ -256,11 +279,26 @@
         const progress = 1 - (totalSeconds / 900);
         const angle = progress * 360;
         const rad = (angle * Math.PI) / 180;
-        const cx = 150 + 140 * Math.sin(rad);
-        const cy = 150 - 140 * Math.cos(rad);
+        
+        // Calculate point position counterclockwise from top
+        const cx = 150 + 140 * Math.sin(-rad);
+        const cy = 150 - 140 * Math.cos(-rad);
         
         progressPoint.setAttribute('cx', cx);
         progressPoint.setAttribute('cy', cy);
+        
+        // Update progress arc
+        const circumference = 879.2;
+        const progressArc = document.querySelector('.progress-arc');
+        progressArc.style.strokeDashoffset = progress * circumference;
+    }
+    
+    function resetProgress() {
+        progressPoint.setAttribute('cx', 150);
+        progressPoint.setAttribute('cy', 10);
+        
+        const progressArc = document.querySelector('.progress-arc');
+        progressArc.style.strokeDashoffset = 0;
     }
     
     function resetProgress() {
