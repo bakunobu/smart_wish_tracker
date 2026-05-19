@@ -303,6 +303,196 @@
             color: white;
         }
         
+        /* Task Statistics Styles */
+        .task-stats {
+            margin: 5px 0;
+            font-size: 0.8em;
+        }
+        
+        .stats-line {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+        }
+        
+        .success-rate, .total-time {
+            font-weight: 500;
+        }
+        
+        .success-rate {
+            color: #28a745;
+        }
+        
+        .total-time {
+            color: #6f42c1;
+        }
+        
+        /* Statistics Modal Styles */
+        .stats-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .stats-modal-content {
+            background: #2a2a2e;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .stats-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .stats-modal-header h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.5em;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            color: #dc3545;
+        }
+        
+        .stats-modal-body {
+            padding: 20px;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #3a3a3e;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .recent-sessions h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .session-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #3a3a3e;
+            border-radius: 8px;
+            border-left: 4px solid #666;
+        }
+        
+        .session-item.completed {
+            border-left-color: #28a745;
+        }
+        
+        .session-item.stopped {
+            border-left-color: #dc3545;
+        }
+        
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .session-status {
+            font-size: 1.2em;
+        }
+        
+        .session-date, .session-time {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .session-duration {
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .stats-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .stats-actions button {
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .stats-actions button:hover {
+            background: #5a2d91;
+        }
+        
+        .stats-actions button:last-child {
+            background: #dc3545;
+        }
+        
+        .stats-actions button:last-child:hover {
+            background: #c82333;
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
@@ -311,6 +501,15 @@
             
             .task-panel {
                 width: 280px;
+            }
+            
+            .stats-modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -493,6 +692,193 @@
     
     const storage = new TaskStorage();
     
+    // Timer Session Management Class
+    class TimerSession {
+        constructor(taskName, creationSource = 'manual') {
+            this.taskName = taskName;
+            this.sessionId = this.generateSessionId();
+            this.creationSource = creationSource;
+            this.startTime = null;
+            this.endTime = null;
+            this.plannedDuration = null;
+            this.actualDuration = null;
+            this.status = 'inactive';
+            this.dbId = null;
+        }
+        
+        generateSessionId() {
+            return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        }
+        
+        async start(plannedSeconds) {
+            try {
+                this.plannedDuration = plannedSeconds;
+                this.startTime = new Date();
+                this.status = 'active';
+                
+                const response = await fetch('/api/timer/start', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        task_name: this.taskName,
+                        session_id: this.sessionId,
+                        planned_duration: plannedSeconds,
+                        creation_source: this.creationSource
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.dbId = data.session_id;
+                    console.log(`Timer session started: ${this.taskName}`);
+                    return true;
+                } else {
+                    console.error('Failed to start session:', data.error);
+                    return false;
+                }
+            } catch (error) {
+                console.warn('Timer session start failed, continuing offline:', error);
+                return true; // Continue offline
+            }
+        }
+        
+        async stop() {
+            try {
+                this.endTime = new Date();
+                this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
+                this.status = 'stopped';
+                
+                const response = await fetch('/api/timer/stop', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: this.sessionId,
+                        actual_duration: this.actualDuration
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    console.log(`Timer session stopped: ${this.taskName}, ${this.actualDuration}s`);
+                } else {
+                    console.error('Failed to stop session:', data.error);
+                }
+                
+                return this.actualDuration;
+            } catch (error) {
+                console.warn('Timer session stop failed:', error);
+                this.actualDuration = Math.floor((new Date() - this.startTime) / 1000);
+                return this.actualDuration;
+            }
+        }
+        
+        async complete() {
+            try {
+                this.endTime = new Date();
+                this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
+                this.status = 'completed';
+                
+                const response = await fetch('/api/timer/complete', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: this.sessionId,
+                        actual_duration: this.actualDuration
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    console.log(`Timer session completed: ${this.taskName}, ${this.actualDuration}s`);
+                } else {
+                    console.error('Failed to complete session:', data.error);
+                }
+                
+                return this.actualDuration;
+            } catch (error) {
+                console.warn('Timer session complete failed:', error);
+                this.actualDuration = Math.floor((new Date() - this.startTime) / 1000);
+                return this.actualDuration;
+            }
+        }
+    }
+    
+    // Session management state
+    let currentSession = null;
+    
+    // Task Statistics Class
+    class TaskStatistics {
+        constructor() {
+            this.statsCache = new Map();
+            this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+        }
+        
+        async getTaskStats(taskName) {
+            const cached = this.statsCache.get(taskName);
+            if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+                return cached.data;
+            }
+            
+            try {
+                const response = await fetch(`/api/timer/stats?task=${encodeURIComponent(taskName)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.statsCache.set(taskName, {
+                        data: data.stats,
+                        timestamp: Date.now()
+                    });
+                    return data.stats;
+                }
+            } catch (error) {
+                console.warn('Stats API failed:', error);
+            }
+            
+            return null;
+        }
+        
+        async getAllStats() {
+            try {
+                const response = await fetch('/api/timer/stats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update cache for all tasks
+                    data.stats.forEach(stat => {
+                        this.statsCache.set(stat.task_name, {
+                            data: stat,
+                            timestamp: Date.now()
+                        });
+                    });
+                    return data.stats;
+                }
+            } catch (error) {
+                console.warn('Stats API failed:', error);
+            }
+            
+            return [];
+        }
+        
+        clearCache() {
+            this.statsCache.clear();
+        }
+        
+        formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+                return `${minutes}m`;
+            } else {
+                return `${seconds}s`;
+            }
+        }
+    }
+    
+    const taskStats = new TaskStatistics();
+    
     // Initialize
     async function init() {
         tasks = await storage.loadTasks();
@@ -504,8 +890,48 @@
         autocompleteCache = tasks.map(t => t.name);
     }
     
+    // Refresh statistics for task slots
+    async function refreshTaskSlotStats() {
+        const allStats = await taskStats.getAllStats();
+        
+        // Update each task slot with statistics
+        const taskSlots = document.querySelectorAll('.task-slot.filled');
+        taskSlots.forEach(async (slotEl, index) => {
+            const task = tasks[index];
+            if (!task) return;
+            
+            const stats = allStats.find(s => s.task_name === task.name);
+            if (stats) {
+                updateTaskSlotStats(slotEl, stats);
+            }
+        });
+    }
+    
+    function updateTaskSlotStats(slotEl, stats) {
+        let statsEl = slotEl.querySelector('.task-stats');
+        if (!statsEl) {
+            // Create stats element if it doesn't exist
+            statsEl = document.createElement('div');
+            statsEl.className = 'task-stats';
+            const taskContent = slotEl.querySelector('.task-content');
+            taskContent.insertBefore(statsEl, taskContent.querySelector('.task-actions'));
+        }
+        
+        const successRate = stats.success_rate || 0;
+        const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
+        const attempts = stats.total_attempts || 0;
+        const successes = stats.successful_runs || 0;
+        
+        statsEl.innerHTML = `
+            <div class="stats-line">
+                <span class="success-rate">✅ ${successes}/${attempts} sessions</span>
+                <span class="total-time">⏱️ ${totalTime}</span>
+            </div>
+        `;
+    }
+    
     // Task slot rendering
-    function renderTaskSlots() {
+    async function renderTaskSlots() {
         taskSlotsEl.innerHTML = '';
         
         for (let i = 0; i < MAX_TASKS; i++) {
@@ -517,12 +943,25 @@
                 slotEl.innerHTML = `
                     <div class="task-content">
                         <span class="task-text">${task.name}</span>
+                        <div class="task-stats">
+                            <div class="stats-line">
+                                <span class="success-rate">✅ 0/0 sessions</span>
+                                <span class="total-time">⏱️ 0s</span>
+                            </div>
+                        </div>
                         <div class="task-actions">
                             <button onclick="runTask('${task.name}')" title="Run Timer">🏃</button>
                             <button onclick="editTask(${i})" title="Edit Task">✏️</button>
+                            <button onclick="showTaskStats('${task.name}')" title="View Statistics">📊</button>
                             <button onclick="deleteTask(${task.id || i})" title="Delete Task">🗑️</button>
                         </div>
                     </div>`;
+                
+                // Load and update statistics for this task
+                const stats = await taskStats.getTaskStats(task.name);
+                if (stats) {
+                    updateTaskSlotStats(slotEl, stats);
+                }
             } else {
                 slotEl.innerHTML = `
                     <div class="add-task-slot" onclick="addTask(${i})">
@@ -755,14 +1194,21 @@
     }
     
     // Enhanced stop timer
-    function stopTimer() {
+    async function stopTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         isRunning = false;
         isPaused = false;
         
+        // End timer session (unsuccessful completion)
+        if (currentSession && currentSession.status === 'active') {
+            await currentSession.stop();
+            console.log(`Session stopped: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
+        }
+        
         const wasRunningTask = currentTask;
         currentTask = '';
+        currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
         
         // Reset UI
@@ -770,6 +1216,10 @@
         attachAddTaskListener();
         updateClockDisplay();
         resetProgress();
+        
+        // Clear stats cache to show updated data
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
         
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
@@ -803,9 +1253,19 @@
     pauseBtn.addEventListener('click', pauseTimer);
     stopBtn.addEventListener('click', stopTimer);
 
-    function startTimer() {
+    async function startTimer() {
         if (!currentTask) return;
         if (timerInterval) clearInterval(timerInterval);
+
+        // Create new timer session
+        const creationSource = tasks.find(t => t.name === currentTask) ? 'task_slot' : 'timer_center';
+        currentSession = new TimerSession(currentTask, creationSource);
+        
+        // Start session tracking
+        const sessionStarted = await currentSession.start(totalSeconds);
+        if (!sessionStarted) {
+            console.warn('Session tracking failed, continuing without history');
+        }
 
         isRunning = true;
         isPaused = false;
@@ -830,13 +1290,175 @@
         }
     }
 
-    function timerComplete() {
+    async function timerComplete() {
         clearInterval(timerInterval);
         timerInterval = null;
         isRunning = false;
         isPaused = false;
+        
+        // Complete timer session (successful completion)
+        if (currentSession && currentSession.status === 'active') {
+            await currentSession.complete();
+            console.log(`Session completed: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
+        }
+        
         alert('⏰ Timer completed! Great job! 🎉');
-        stopTimer();
+        
+        const wasRunningTask = currentTask;
+        currentTask = '';
+        currentSession = null;
+        totalSeconds = DEFAULT_SECONDS;
+        
+        // Reset UI
+        taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
+        attachAddTaskListener();
+        updateClockDisplay();
+        resetProgress();
+        
+        // Clear stats cache and refresh task slot stats
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
+        
+        // Offer to save if task not in slots
+        if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
+            setTimeout(() => {
+                if (confirm(`Save "${wasRunningTask}" to your task list?`)) {
+                    storage.saveTask(wasRunningTask).then(() => {
+                        renderTaskSlots();
+                    });
+                }
+            }, 100);
+        }
+    }
+
+    // Task Statistics Modal
+    async function showTaskStats(taskName) {
+        try {
+            const [stats, history] = await Promise.all([
+                taskStats.getTaskStats(taskName),
+                fetch(`/api/timer/history?task=${encodeURIComponent(taskName)}&limit=10`).then(r => r.json())
+            ]);
+            
+            if (!stats) {
+                alert('No statistics available for this task yet.');
+                return;
+            }
+            
+            const modal = createStatsModal(taskName, stats, history.success ? history.sessions : []);
+            document.body.appendChild(modal);
+            
+            // Add close handlers
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+            
+        } catch (error) {
+            console.error('Failed to load task statistics:', error);
+            alert('Failed to load statistics. Please try again.');
+        }
+    }
+    
+    function createStatsModal(taskName, stats, sessions) {
+        const modal = document.createElement('div');
+        modal.className = 'stats-modal';
+        
+        const successRate = Math.round(stats.success_rate || 0);
+        const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
+        const avgSessionTime = stats.total_attempts > 0 ?
+            taskStats.formatDuration(Math.round(stats.total_seconds_spent / stats.total_attempts)) : '0s';
+        
+        modal.innerHTML = `
+            <div class="stats-modal-content">
+                <div class="stats-modal-header">
+                    <h2>📊 Statistics: ${taskName}</h2>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="stats-modal-body">
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.total_attempts || 0}</div>
+                            <div class="stat-label">Total Attempts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.successful_runs || 0}</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${successRate}%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${totalTime}</div>
+                            <div class="stat-label">Total Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${avgSessionTime}</div>
+                            <div class="stat-label">Avg Session</div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-sessions">
+                        <h3>Recent Sessions</h3>
+                        <div class="session-list">
+                            ${sessions.length > 0 ? sessions.map(session => `
+                                <div class="session-item ${session.status}">
+                                    <div class="session-info">
+                                        <span class="session-status">${session.status === 'completed' ? '✅' : '⏹️'}</span>
+                                        <span class="session-date">${new Date(session.started_at).toLocaleDateString()}</span>
+                                        <span class="session-time">${new Date(session.started_at).toLocaleTimeString()}</span>
+                                    </div>
+                                    <div class="session-duration">
+                                        ${taskStats.formatDuration(session.actual_duration || 0)}
+                                    </div>
+                                </div>
+                            `).join('') : '<p>No sessions recorded yet.</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="stats-actions">
+                        <button onclick="exportTaskData('${taskName}')">📥 Export Data</button>
+                        <button onclick="clearTaskHistory('${taskName}')">🗑️ Clear History</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        return modal;
+    }
+    
+    async function exportTaskData(taskName) {
+        try {
+            const response = await fetch(`/api/timer/export?format=json`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${taskName}_timer_data.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Export failed. Please try again.');
+        }
+    }
+    
+    async function clearTaskHistory(taskName) {
+        if (confirm(`Are you sure you want to clear all history for "${taskName}"? This cannot be undone.`)) {
+            try {
+                // This would need a specific API endpoint to clear task history
+                alert('Clear history feature will be implemented in a future update.');
+            } catch (error) {
+                console.error('Clear history failed:', error);
+            }
+        }
     }
 
     function setTimeFromDigits(digits) {
