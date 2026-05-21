@@ -593,5 +593,113 @@ def recalculate_task_statistics(conn, task_name):
             WHERE task_name = ?
         ''', (row[0], row[1], row[2], row[3], row[4], task_name))
 
+
+@app.route('/api/daily-stats')
+def get_daily_stats():
+    """Get daily statistics for today with mood indicator based on 2-week rolling performance"""
+    try:
+        with get_db() as conn:
+            # Get today's statistics
+            today_cursor = conn.execute('''
+                SELECT
+                    COUNT(CASE WHEN status = 'completed' THEN 1 END) as finished_tasks,
+                    COUNT(*) as total_sessions,
+                    SUM(CASE WHEN status IN ('completed', 'stopped') THEN COALESCE(actual_duration, 0) ELSE 0 END) as total_time_seconds,
+                    CASE
+                        WHEN COUNT(*) > 0 THEN
+                            ROUND(COUNT(CASE WHEN status = 'completed' THEN 1 END) * 100.0 / COUNT(*), 1)
+                        ELSE 0
+                    END as completion_percentage
+                FROM timer_sessions
+                WHERE date(started_at) = date('now')
+            ''')
+            
+            today_stats = today_cursor.fetchone()
+            
+            # Get 14-day rolling data for percentile calculation
+            rolling_cursor = conn.execute('''
+                SELECT
+                    date(started_at) as session_date,
+                    SUM(COALESCE(actual_duration, 0)) as daily_time_seconds
+                FROM timer_sessions
+                WHERE date(started_at) >= date('now', '-13 days')
+                  AND date(started_at) <= date('now')
+                  AND status IN ('completed', 'stopped')
+                GROUP BY date(started_at)
+                ORDER BY daily_time_seconds
+            ''')
+            
+            rolling_data = [row['daily_time_seconds'] for row in rolling_cursor.fetchall()]
+            
+            # Calculate percentiles and mood emoji
+            mood_emoji = '😊'  # Default neutral
+            percentile_25 = 0
+            percentile_75 = 0
+            current_rank = 'middle'
+            
+            if rolling_data:
+                rolling_data.sort()
+                data_len = len(rolling_data)
+                percentile_25 = rolling_data[data_len // 4] if data_len >= 4 else rolling_data[0]
+                percentile_75 = rolling_data[3 * data_len // 4] if data_len >= 4 else rolling_data[-1]
+                
+                today_time = today_stats['total_time_seconds'] or 0
+                
+                if today_time <= percentile_25:
+                    mood_emoji = '😢'
+                    current_rank = 'bottom'
+                elif today_time >= percentile_75:
+                    mood_emoji = '😄'
+                    current_rank = 'top'
+                else:
+                    mood_emoji = '😊'
+                    current_rank = 'middle'
+            
+            # Format time display
+            total_seconds = today_stats['total_time_seconds'] or 0
+            if total_seconds < 60:
+                time_formatted = f"{total_seconds}s"
+            elif total_seconds < 3600:
+                minutes = total_seconds // 60
+                time_formatted = f"{minutes}m"
+            else:
+                hours = total_seconds // 3600
+                minutes = (total_seconds % 3600) // 60
+                time_formatted = f"{hours}h {minutes}m"
+            
+            return jsonify({
+                "success": True,
+                "stats": {
+                    "finished_tasks": today_stats['finished_tasks'] or 0,
+                    "total_sessions": today_stats['total_sessions'] or 0,
+                    "total_time_seconds": total_seconds,
+                    "total_time_formatted": time_formatted,
+                    "completion_percentage": today_stats['completion_percentage'] or 0,
+                    "mood_emoji": mood_emoji,
+                    "historical_context": {
+                        "days_in_period": len(rolling_data),
+                        "percentile_25": percentile_25,
+                        "percentile_75": percentile_75,
+                        "current_rank": current_rank
+                    }
+                }
+            })
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "stats": {
+                "finished_tasks": 0,
+                "total_sessions": 0,
+                "total_time_seconds": 0,
+                "total_time_formatted": "0m",
+                "completion_percentage": 0,
+                "mood_emoji": "😊",
+                "historical_context": None
+            }
+        }), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)

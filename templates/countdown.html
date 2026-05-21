@@ -498,6 +498,100 @@
             background: #c82333;
         }
 
+        /* Daily Statistics Styles */
+        .daily-stats-container {
+            background-color: #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(76, 201, 240, 0.1);
+        }
+        
+        .daily-stats-header {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .daily-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .mood-indicator {
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .mood-indicator:hover {
+            transform: scale(1.1);
+        }
+        
+        .tasks-metric, .time-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .metric-value {
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .metric-label {
+            color: #4cc9f0;
+            font-size: 0.8em;
+            text-transform: lowercase;
+        }
+        
+        .completion-bar {
+            text-align: center;
+            padding: 8px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+        
+        .completion-bar span {
+            color: white;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        /* Completion percentage color coding */
+        .completion-bar.high-completion span {
+            color: #4CAF50;
+        }
+        
+        .completion-bar.medium-completion span {
+            color: #FFC107;
+        }
+        
+        .completion-bar.low-completion span {
+            color: #F44336;
+        }
+        
+        /* Loading state */
+        .daily-stats-container.loading {
+            opacity: 0.6;
+        }
+        
+        .daily-stats-container.loading .metric-value {
+            color: #888;
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
@@ -522,6 +616,19 @@
             
             .stats-overview {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .daily-stats-container {
+                width: 280px;
+                padding: 15px;
+            }
+            
+            .daily-stats-grid {
+                gap: 10px;
+            }
+            
+            .mood-indicator {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -550,6 +657,25 @@
                     <button id="start-btn">Start</button>
                     <button id="pause-btn">Pause</button>
                     <button id="stop-btn">Stop</button>
+                </div>
+                
+                <!-- Daily Statistics Block -->
+                <div class="daily-stats-container" id="daily-stats">
+                    <div class="daily-stats-header">📊 Daily Stats</div>
+                    <div class="daily-stats-grid">
+                        <div class="mood-indicator" id="mood-emoji">😊</div>
+                        <div class="tasks-metric">
+                            <div class="metric-value" id="tasks-count">0/0</div>
+                            <div class="metric-label">tasks</div>
+                        </div>
+                        <div class="time-metric">
+                            <div class="metric-value" id="time-spent">0m</div>
+                            <div class="metric-label">spent</div>
+                        </div>
+                    </div>
+                    <div class="completion-bar">
+                        <span id="completion-percentage">0% completed</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -889,7 +1015,121 @@
         }
     }
     
+    // Daily Statistics Management Class
+    class DailyStats {
+        constructor() {
+            this.cache = null;
+            this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+            this.lastFetch = 0;
+            
+            // DOM elements
+            this.container = document.getElementById('daily-stats');
+            this.moodEmoji = document.getElementById('mood-emoji');
+            this.tasksCount = document.getElementById('tasks-count');
+            this.timeSpent = document.getElementById('time-spent');
+            this.completionPercentage = document.getElementById('completion-percentage');
+        }
+        
+        async fetchStats() {
+            const now = Date.now();
+            
+            // Use cache if valid and recent
+            if (this.cache && (now - this.lastFetch) < this.cacheTimeout) {
+                return this.cache;
+            }
+            
+            try {
+                const response = await fetch('/api/daily-stats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.cache = data.stats;
+                    this.lastFetch = now;
+                    return this.cache;
+                } else {
+                    console.warn('Daily stats API failed:', data.error);
+                    return this.getDefaultStats();
+                }
+            } catch (error) {
+                console.warn('Daily stats fetch failed:', error);
+                return this.getDefaultStats();
+            }
+        }
+        
+        getDefaultStats() {
+            return {
+                finished_tasks: 0,
+                total_sessions: 0,
+                total_time_seconds: 0,
+                total_time_formatted: '0m',
+                completion_percentage: 0,
+                mood_emoji: '😊',
+                historical_context: null
+            };
+        }
+        
+        async refreshStats() {
+            if (!this.container) return;
+            
+            // Add loading state
+            this.container.classList.add('loading');
+            
+            try {
+                const stats = await this.fetchStats();
+                this.updateDisplay(stats);
+            } catch (error) {
+                console.error('Failed to refresh daily stats:', error);
+                this.updateDisplay(this.getDefaultStats());
+            } finally {
+                this.container.classList.remove('loading');
+            }
+        }
+        
+        updateDisplay(stats) {
+            if (!this.container) return;
+            
+            // Update mood emoji
+            if (this.moodEmoji) {
+                this.moodEmoji.textContent = stats.mood_emoji;
+            }
+            
+            // Update tasks count
+            if (this.tasksCount) {
+                this.tasksCount.textContent = `${stats.finished_tasks}/${stats.total_sessions}`;
+            }
+            
+            // Update time spent
+            if (this.timeSpent) {
+                this.timeSpent.textContent = stats.total_time_formatted;
+            }
+            
+            // Update completion percentage
+            if (this.completionPercentage) {
+                const percentage = Math.round(stats.completion_percentage || 0);
+                this.completionPercentage.textContent = `${percentage}% completed`;
+                
+                // Update completion bar styling
+                const completionBar = this.completionPercentage.parentElement;
+                completionBar.className = 'completion-bar'; // Reset classes
+                
+                if (percentage >= 75) {
+                    completionBar.classList.add('high-completion');
+                } else if (percentage >= 50) {
+                    completionBar.classList.add('medium-completion');
+                } else if (percentage > 0) {
+                    completionBar.classList.add('low-completion');
+                }
+            }
+        }
+        
+        clearCache() {
+            this.cache = null;
+            this.lastFetch = 0;
+        }
+    }
+    
     const taskStats = new TaskStatistics();
+    const dailyStats = new DailyStats();
     
     // Initialize
     async function init() {
@@ -900,6 +1140,9 @@
         
         // Build autocomplete cache
         autocompleteCache = tasks.map(t => t.name);
+        
+        // Load initial daily statistics
+        await dailyStats.refreshStats();
     }
     
     // Refresh statistics for task slots
@@ -1233,6 +1476,10 @@
         taskStats.clearCache();
         await refreshTaskSlotStats();
         
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
+        
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
             setTimeout(() => {
@@ -1330,6 +1577,10 @@
         // Clear stats cache and refresh task slot stats
         taskStats.clearCache();
         await refreshTaskSlotStats();
+        
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
         
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
