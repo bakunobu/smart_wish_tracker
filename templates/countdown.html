@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Wish Tracker</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .timer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .timer-container {
+            text-align: center;
+            background-color: #0f3460;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 487px;
+        }
+        
+        .task-panel {
+            background-color: #0f3460;
+            padding: 30px;
+            border-radius: 20px;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .task-panel h3 {
+            color: white;
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .clock {
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .task-container {
+            position: relative;
+            margin: 10px 0;
+        }
+        
+        .task-name {
+            font-size: 1.25rem;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .add-task {
+            font-size: 1.25rem;
+            color: #4cc9f0;
+            cursor: pointer;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #start-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #pause-btn {
+            background-color: #FFC107;
+            color: black;
+        }
+        
+        #stop-btn {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .progress-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+        
+        .circle-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .progress-circle {
+            fill: none;
+            stroke: rgba(76, 201, 240, 0.3);
+            stroke-width: 8;
+            stroke-dasharray: 879.2;
+            stroke-dashoffset: 0;
+        }
+        
+        .progress-arc {
+            fill: none;
+            stroke: #4cc9f0;
+            stroke-width: 8;
+            stroke-dasharray: 879.2;
+            stroke-dashoffset: 879.2;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+        
+        .progress-point {
+            fill: #f72585;
+            r: 10;
+            transition: transform 0.5s linear;
+        }
+        
+        /* Task Panel Styles */
+        .task-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .task-slot {
+            background: rgba(76, 201, 240, 0.1);
+            border: 2px dashed #4cc9f0;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .task-slot.filled {
+            background: rgba(76, 201, 240, 0.2);
+            border: 2px solid #4cc9f0;
+        }
+        
+        .task-slot.empty {
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .task-slot.empty:hover {
+            background: rgba(76, 201, 240, 0.2);
+        }
+        
+        .task-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .task-text {
+            color: white;
+            font-size: 1rem;
+            flex: 1;
+            text-align: left;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .task-actions button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        
+        .task-actions button:hover {
+            background: rgba(76, 201, 240, 0.3);
+        }
+        
+        .add-task-slot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #4cc9f0;
+            font-size: 1rem;
+        }
+        
+        .add-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Input Styles */
+        .task-input-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .task-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #1a1a2e;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .task-input:focus {
+            outline: 2px solid #4cc9f0;
+        }
+        
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #0f3460;
+            border: 1px solid #4cc9f0;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+            color: white;
+            border-bottom: 1px solid rgba(76, 201, 240, 0.2);
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background: rgba(76, 201, 240, 0.3);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .input-actions button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Task Statistics Styles */
+        .task-stats {
+            margin: 5px 0;
+            font-size: 0.8em;
+        }
+        
+        .stats-line {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+        }
+        
+        .success-rate, .total-time {
+            font-weight: 500;
+        }
+        
+        .success-rate {
+            color: #28a745;
+        }
+        
+        .total-time {
+            color: #6f42c1;
+        }
+        
+        /* Statistics Modal Styles */
+        .stats-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .stats-modal-content {
+            background: #2a2a2e;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .stats-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .stats-modal-header h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.5em;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            color: #dc3545;
+        }
+        
+        .stats-modal-body {
+            padding: 20px;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #3a3a3e;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .recent-sessions h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .session-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #3a3a3e;
+            border-radius: 8px;
+            border-left: 4px solid #666;
+        }
+        
+        .session-item.completed {
+            border-left-color: #28a745;
+        }
+        
+        .session-item.stopped {
+            border-left-color: #dc3545;
+        }
+        
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .session-status {
+            font-size: 1.2em;
+        }
+        
+        .session-date, .session-time {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .session-duration {
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .stats-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .stats-actions button {
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .stats-actions button:hover {
+            background: #5a2d91;
+        }
+        
+        .stats-actions button:last-child {
+            background: #dc3545;
+        }
+        
+        .stats-actions button:last-child:hover {
+            background: #c82333;
+        }
+
+        /* Daily Statistics Styles */
+        .daily-stats-container {
+            background-color: #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(76, 201, 240, 0.1);
+        }
+        
+        .daily-stats-header {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .daily-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .mood-indicator {
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .mood-indicator:hover {
+            transform: scale(1.1);
+        }
+        
+        .tasks-metric, .time-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .metric-value {
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .metric-label {
+            color: #4cc9f0;
+            font-size: 0.8em;
+            text-transform: lowercase;
+        }
+        
+        .completion-bar {
+            text-align: center;
+            padding: 8px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+        
+        .completion-bar span {
+            color: white;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        /* Completion percentage color coding */
+        .completion-bar.high-completion span {
+            color: #4CAF50;
+        }
+        
+        .completion-bar.medium-completion span {
+            color: #FFC107;
+        }
+        
+        .completion-bar.low-completion span {
+            color: #F44336;
+        }
+        
+        /* Loading state */
+        .daily-stats-container.loading {
+            opacity: 0.6;
+        }
+        
+        .daily-stats-container.loading .metric-value {
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timer-container {
+                width: 280px;
+                margin-bottom: 20px;
+                min-height: auto;
+            }
+            
+            .task-panel {
+                width: 280px;
+                min-height: auto;
+            }
+            
+            .stats-modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .daily-stats-container {
+                width: 280px;
+                padding: 15px;
+            }
+            
+            .daily-stats-grid {
+                gap: 10px;
+            }
+            
+            .mood-indicator {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="timer-section">
+            <div class="timer-container">
+                <div class="progress-container">
+                    <svg class="progress-ring" width="300" height="300">
+                        <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
+                        <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
+                        <circle class="progress-point" cx="150" cy="10" r="10"></circle>
+                    </svg>
+                    
+                    <!-- Timer and task centered inside circle -->
+                    <div class="circle-content">
+                        <div class="clock" id="clock">00:15:00</div>
+                        <div class="task-container" id="task-container">
+                            <div class="add-task" id="add-task">+ Add Task</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="start-btn">Start</button>
+                    <button id="pause-btn">Pause</button>
+                    <button id="stop-btn">Stop</button>
+                </div>
+                
+                <!-- Daily Statistics Block -->
+                <div class="daily-stats-container" id="daily-stats">
+                    <div class="daily-stats-header">📊 Daily Stats</div>
+                    <div class="daily-stats-grid">
+                        <div class="mood-indicator" id="mood-emoji">😊</div>
+                        <div class="tasks-metric">
+                            <div class="metric-value" id="tasks-count">0/0</div>
+                            <div class="metric-label">tasks</div>
+                        </div>
+                        <div class="time-metric">
+                            <div class="metric-value" id="time-spent">0m</div>
+                            <div class="metric-label">spent</div>
+                        </div>
+                    </div>
+                    <div class="completion-bar">
+                        <span id="completion-percentage">0% completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="task-panel">
+            <h3>📋 Tasks</h3>
+            <div class="task-slots" id="task-slots">
+                <!-- Task slots will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Constants
+    const MAX_TASKS = 5;
+    const STORAGE_KEY = 'smart_timer_tasks';
+    
+    // DOM elements
+    const clockEl = document.getElementById('clock');
+    const taskContainerEl = document.getElementById('task-container');
+    const startBtn = document.getElementById('start-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const progressPoint = document.querySelector('.progress-point');
+    const progressArc = document.querySelector('.progress-arc');
+    const taskSlotsEl = document.getElementById('task-slots');
+    const CIRCUMFERENCE = 879.2;
+    const DEFAULT_SECONDS = 900;
+    
+    // Timer state
+    let totalSeconds = DEFAULT_SECONDS;
+    let timerInterval = null;
+    let isRunning = false;
+    let isPaused = false;
+    let currentTask = '';
+    
+    // Task management state
+    let tasks = [];
+    let autocompleteCache = [];
+    let currentEditingSlot = -1;
+    let selectedSuggestionIndex = -1;
+
+    // Task Storage Class
+    class TaskStorage {
+        constructor() {
+            this.useDatabase = true;
+        }
+        
+        async loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data.tasks));
+                    return data.tasks;
+                }
+            } catch (error) {
+                console.warn('Database unavailable, using localStorage:', error);
+                this.useDatabase = false;
+            }
+            
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+        
+        async saveTask(name) {
+            const newTask = { name, position: tasks.length };
+            
+            // Save to localStorage immediately
+            tasks.push(newTask);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+            
+            if (this.useDatabase) {
+                try {
+                    const response = await fetch('/api/tasks', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            newTask.id = data.data.id;
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Database save failed:', error);
+                }
+            }
+            
+            return newTask;
+        }
+        
+        async updateTask(id, name) {
+            const taskIndex = tasks.findIndex(t => t.id === id);
+            if (taskIndex >= 0) {
+                tasks[taskIndex].name = name;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                
+                if (this.useDatabase) {
+                    try {
+                        await fetch(`/api/tasks/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name })
+                        });
+                    } catch (error) {
+                        console.warn('Database update failed:', error);
+                    }
+                }
+            }
+        }
+        
+        async deleteTask(id) {
+            const taskIndex = tasks.findIndex(t => t.id === id);
+            if (taskIndex >= 0) {
+                tasks.splice(taskIndex, 1);
+                // Reorder positions
+                tasks.forEach((task, index) => {
+                    task.position = index;
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                
+                if (this.useDatabase) {
+                    try {
+                        await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+                    } catch (error) {
+                        console.warn('Database delete failed:', error);
+                    }
+                }
+            }
+        }
+
+        async getSuggestions(query) {
+            if (this.useDatabase) {
+                try {
+                    const response = await fetch(`/api/tasks/suggestions?q=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    return data.success ? data.suggestions : [];
+                } catch (error) {
+                    console.warn('Suggestions API failed:', error);
+                }
+            }
+            
+            // Fallback to local cache
+            return autocompleteCache.filter(name => 
+                name.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+        }
+    }
+    
+    const storage = new TaskStorage();
+    
+    // Timer Session Management Class
+    class TimerSession {
+        constructor(taskName, creationSource = 'manual') {
+            this.taskName = taskName;
+            this.sessionId = this.generateSessionId();
+            this.creationSource = creationSource;
+            this.startTime = null;
+            this.endTime = null;
+            this.plannedDuration = null;
+            this.actualDuration = null;
+            this.status = 'inactive';
+            this.dbId = null;
+        }
+        
+        generateSessionId() {
+            return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        }
+        
+        async start(plannedSeconds) {
+            try {
+                this.plannedDuration = plannedSeconds;
+                this.startTime = new Date();
+                this.status = 'active';
+                
+                const response = await fetch('/api/timer/start', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        task_name: this.taskName,
+                        session_id: this.sessionId,
+                        planned_duration: plannedSeconds,
+                        creation_source: this.creationSource
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.dbId = data.session_id;
+                    console.log(`Timer session started: ${this.taskName}`);
+                    return true;
+                } else {
+                    console.error('Failed to start session:', data.error);
+                    return false;
+                }
+            } catch (error) {
+                console.warn('Timer session start failed, continuing offline:', error);
+                return true; // Continue offline
+            }
+        }
+        
+        async stop() {
+            try {
+                this.endTime = new Date();
+                this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
+                this.status = 'stopped';
+                
+                const response = await fetch('/api/timer/stop', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: this.sessionId,
+                        actual_duration: this.actualDuration
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    console.log(`Timer session stopped: ${this.taskName}, ${this.actualDuration}s`);
+                } else {
+                    console.error('Failed to stop session:', data.error);
+                }
+                
+                return this.actualDuration;
+            } catch (error) {
+                console.warn('Timer session stop failed:', error);
+                this.actualDuration = Math.floor((new Date() - this.startTime) / 1000);
+                return this.actualDuration;
+            }
+        }
+        
+        async complete() {
+            try {
+                this.endTime = new Date();
+                this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
+                this.status = 'completed';
+                
+                const response = await fetch('/api/timer/complete', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        session_id: this.sessionId,
+                        actual_duration: this.actualDuration
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    console.log(`Timer session completed: ${this.taskName}, ${this.actualDuration}s`);
+                } else {
+                    console.error('Failed to complete session:', data.error);
+                }
+                
+                return this.actualDuration;
+            } catch (error) {
+                console.warn('Timer session complete failed:', error);
+                this.actualDuration = Math.floor((new Date() - this.startTime) / 1000);
+                return this.actualDuration;
+            }
+        }
+    }
+    
+    // Session management state
+    let currentSession = null;
+    
+    // Task Statistics Class
+    class TaskStatistics {
+        constructor() {
+            this.statsCache = new Map();
+            this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+        }
+        
+        async getTaskStats(taskName) {
+            const cached = this.statsCache.get(taskName);
+            if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+                return cached.data;
+            }
+            
+            try {
+                const response = await fetch(`/api/timer/stats?task=${encodeURIComponent(taskName)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.statsCache.set(taskName, {
+                        data: data.stats,
+                        timestamp: Date.now()
+                    });
+                    return data.stats;
+                }
+            } catch (error) {
+                console.warn('Stats API failed:', error);
+            }
+            
+            return null;
+        }
+        
+        async getAllStats() {
+            try {
+                const response = await fetch('/api/timer/stats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update cache for all tasks
+                    data.stats.forEach(stat => {
+                        this.statsCache.set(stat.task_name, {
+                            data: stat,
+                            timestamp: Date.now()
+                        });
+                    });
+                    return data.stats;
+                }
+            } catch (error) {
+                console.warn('Stats API failed:', error);
+            }
+            
+            return [];
+        }
+        
+        clearCache() {
+            this.statsCache.clear();
+        }
+        
+        formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+                return `${minutes}m`;
+            } else {
+                return `${seconds}s`;
+            }
+        }
+    }
+    
+    // Daily Statistics Management Class
+    class DailyStats {
+        constructor() {
+            this.cache = null;
+            this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+            this.lastFetch = 0;
+            
+            // DOM elements
+            this.container = document.getElementById('daily-stats');
+            this.moodEmoji = document.getElementById('mood-emoji');
+            this.tasksCount = document.getElementById('tasks-count');
+            this.timeSpent = document.getElementById('time-spent');
+            this.completionPercentage = document.getElementById('completion-percentage');
+        }
+        
+        async fetchStats() {
+            const now = Date.now();
+            
+            // Use cache if valid and recent
+            if (this.cache && (now - this.lastFetch) < this.cacheTimeout) {
+                return this.cache;
+            }
+            
+            try {
+                const response = await fetch('/api/daily-stats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.cache = data.stats;
+                    this.lastFetch = now;
+                    return this.cache;
+                } else {
+                    console.warn('Daily stats API failed:', data.error);
+                    return this.getDefaultStats();
+                }
+            } catch (error) {
+                console.warn('Daily stats fetch failed:', error);
+                return this.getDefaultStats();
+            }
+        }
+        
+        getDefaultStats() {
+            return {
+                finished_tasks: 0,
+                total_sessions: 0,
+                total_time_seconds: 0,
+                total_time_formatted: '0m',
+                completion_percentage: 0,
+                mood_emoji: '😊',
+                historical_context: null
+            };
+        }
+        
+        async refreshStats() {
+            if (!this.container) return;
+            
+            // Add loading state
+            this.container.classList.add('loading');
+            
+            try {
+                const stats = await this.fetchStats();
+                this.updateDisplay(stats);
+            } catch (error) {
+                console.error('Failed to refresh daily stats:', error);
+                this.updateDisplay(this.getDefaultStats());
+            } finally {
+                this.container.classList.remove('loading');
+            }
+        }
+        
+        updateDisplay(stats) {
+            if (!this.container) return;
+            
+            // Update mood emoji
+            if (this.moodEmoji) {
+                this.moodEmoji.textContent = stats.mood_emoji;
+            }
+            
+            // Update tasks count
+            if (this.tasksCount) {
+                this.tasksCount.textContent = `${stats.finished_tasks}/${stats.total_sessions}`;
+            }
+            
+            // Update time spent
+            if (this.timeSpent) {
+                this.timeSpent.textContent = stats.total_time_formatted;
+            }
+            
+            // Update completion percentage
+            if (this.completionPercentage) {
+                const percentage = Math.round(stats.completion_percentage || 0);
+                this.completionPercentage.textContent = `${percentage}% completed`;
+                
+                // Update completion bar styling
+                const completionBar = this.completionPercentage.parentElement;
+                completionBar.className = 'completion-bar'; // Reset classes
+                
+                if (percentage >= 75) {
+                    completionBar.classList.add('high-completion');
+                } else if (percentage >= 50) {
+                    completionBar.classList.add('medium-completion');
+                } else if (percentage > 0) {
+                    completionBar.classList.add('low-completion');
+                }
+            }
+        }
+        
+        clearCache() {
+            this.cache = null;
+            this.lastFetch = 0;
+        }
+    }
+    
+    const taskStats = new TaskStatistics();
+    const dailyStats = new DailyStats();
+    
+    // Initialize
+    async function init() {
+        tasks = await storage.loadTasks();
+        renderTaskSlots();
+        updateClockDisplay();
+        attachAddTaskListener();
+        
+        // Build autocomplete cache
+        autocompleteCache = tasks.map(t => t.name);
+        
+        // Load initial daily statistics
+        await dailyStats.refreshStats();
+    }
+    
+    // Refresh statistics for task slots
+    async function refreshTaskSlotStats() {
+        const allStats = await taskStats.getAllStats();
+        
+        // Update each task slot with statistics
+        const taskSlots = document.querySelectorAll('.task-slot.filled');
+        taskSlots.forEach(async (slotEl, index) => {
+            const task = tasks[index];
+            if (!task) return;
+            
+            const stats = allStats.find(s => s.task_name === task.name);
+            if (stats) {
+                updateTaskSlotStats(slotEl, stats);
+            }
+        });
+    }
+    
+    function updateTaskSlotStats(slotEl, stats) {
+        let statsEl = slotEl.querySelector('.task-stats');
+        if (!statsEl) {
+            // Create stats element if it doesn't exist
+            statsEl = document.createElement('div');
+            statsEl.className = 'task-stats';
+            const taskContent = slotEl.querySelector('.task-content');
+            taskContent.insertBefore(statsEl, taskContent.querySelector('.task-actions'));
+        }
+        
+        const successRate = stats.success_rate || 0;
+        const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
+        const attempts = stats.total_attempts || 0;
+        const successes = stats.successful_runs || 0;
+        
+        statsEl.innerHTML = `
+            <div class="stats-line">
+                <span class="success-rate">✅ ${successes}/${attempts} sessions</span>
+                <span class="total-time">⏱️ ${totalTime}</span>
+            </div>
+        `;
+    }
+    
+    // Task slot rendering
+    async function renderTaskSlots() {
+        taskSlotsEl.innerHTML = '';
+        
+        for (let i = 0; i < MAX_TASKS; i++) {
+            const task = tasks[i];
+            const slotEl = document.createElement('div');
+            slotEl.className = task ? 'task-slot filled' : 'task-slot empty';
+            
+            if (task) {
+                slotEl.innerHTML = `
+                    <div class="task-content">
+                        <span class="task-text">${task.name}</span>
+                        <div class="task-stats">
+                            <div class="stats-line">
+                                <span class="success-rate">✅ 0/0 sessions</span>
+                                <span class="total-time">⏱️ 0s</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button onclick="runTask('${task.name}')" title="Run Timer">🏃</button>
+                            <button onclick="editTask(${i})" title="Edit Task">✏️</button>
+                            <button onclick="showTaskStats('${task.name}')" title="View Statistics">📊</button>
+                            <button onclick="deleteTask(${task.id || i})" title="Delete Task">🗑️</button>
+                        </div>
+                    </div>`;
+                
+                // Load and update statistics for this task
+                const stats = await taskStats.getTaskStats(task.name);
+                if (stats) {
+                    updateTaskSlotStats(slotEl, stats);
+                }
+            } else {
+                slotEl.innerHTML = `
+                    <div class="add-task-slot" onclick="addTask(${i})">
+                        <span class="add-icon">➕</span>
+                        <span class="add-text">Add Task</span>
+                    </div>`;
+            }
+            
+            taskSlotsEl.appendChild(slotEl);
+        }
+    }
+    
+    // Task management functions
+    async function addTask(slotIndex) {
+        if (tasks.length >= MAX_TASKS) return;
+        
+        currentEditingSlot = slotIndex;
+        showTaskInput(slotIndex, '');
+    }
+    
+    async function editTask(slotIndex) {
+        const task = tasks[slotIndex];
+        if (!task) return;
+        
+        currentEditingSlot = slotIndex;
+        showTaskInput(slotIndex, task.name);
+    }
+    
+    async function deleteTask(id) {
+        if (!confirm('Are you sure you want to delete this task?')) return;
+        
+        await storage.deleteTask(id);
+        renderTaskSlots();
+    }
+    
+    function showTaskInput(slotIndex, initialValue) {
+        const slotEl = taskSlotsEl.children[slotIndex];
+        slotEl.innerHTML = `
+            <div class="task-input-container">
+                <input type="text" class="task-input" value="${initialValue}" 
+                       placeholder="Enter task name..." maxlength="50">
+                <div class="autocomplete-dropdown"></div>
+                <div class="input-actions">
+                    <button class="save-btn" onclick="saveTask(${slotIndex})">💾 Save</button>
+                    <button class="cancel-btn" onclick="cancelEdit()">❌ Cancel</button>
+                </div>
+            </div>`;
+            
+        const input = slotEl.querySelector('.task-input');
+        input.focus();
+        setupAutocomplete(input);
+        
+        // Handle Enter key
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveTask(slotIndex);
+            if (e.key === 'Escape') cancelEdit();
+        });
+    }
+    
+    async function saveTask(slotIndex) {
+        const input = taskSlotsEl.children[slotIndex].querySelector('.task-input');
+        const name = input.value.trim();
+        
+        if (!name) {
+            cancelEdit();
+            return;
+        }
+        
+        const existingTask = tasks[slotIndex];
+        
+        if (existingTask) {
+            // Update existing task
+            await storage.updateTask(existingTask.id, name);
+            existingTask.name = name;
+        } else {
+            // Create new task
+            if (tasks.length >= MAX_TASKS) {
+                alert('Maximum of 5 tasks reached!');
+                cancelEdit();
+                return;
+            }
+            
+            const newTask = await storage.saveTask(name);
+            if (!autocompleteCache.includes(name)) {
+                autocompleteCache.push(name);
+            }
+        }
+        
+        currentEditingSlot = -1;
+        renderTaskSlots();
+    }
+    
+    function cancelEdit() {
+        currentEditingSlot = -1;
+        renderTaskSlots();
+    }
+    
+    // Autocomplete functionality
+    function setupAutocomplete(inputElement) {
+        const dropdown = inputElement.parentNode.querySelector('.autocomplete-dropdown');
+        let debounceTimer;
+        
+        inputElement.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+            
+            if (query.length < 2) {
+                hideDropdown();
+                return;
+            }
+            
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                const suggestions = await storage.getSuggestions(query);
+                showDropdown(dropdown, suggestions, inputElement);
+            }, 300);
+        });
+        
+        inputElement.addEventListener('keydown', (e) => {
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            
+            if (e.key === 'Tab' && items.length > 0) {
+                e.preventDefault();
+                const nextIndex = (selectedSuggestionIndex + 1) % items.length;
+                selectSuggestion(items, nextIndex, inputElement);
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                const direction = e.key === 'ArrowUp' ? -1 : 1;
+                const nextIndex = Math.max(0, Math.min(items.length - 1, selectedSuggestionIndex + direction));
+                selectSuggestion(items, nextIndex, inputElement);
+            } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+                e.preventDefault();
+                inputElement.value = items[selectedSuggestionIndex].textContent;
+                hideDropdown();
+            } else if (e.key === 'Escape') {
+                hideDropdown();
+            }
+        });
+        
+        function hideDropdown() {
+            dropdown.style.display = 'none';
+            selectedSuggestionIndex = -1;
+        }
+    }
+    
+    function showDropdown(dropdown, suggestions, inputElement) {
+        if (suggestions.length === 0) {
+            dropdown.style.display = 'none';
+            return;
+        }
+        
+        dropdown.innerHTML = suggestions.map(suggestion => 
+            `<div class="autocomplete-item">${suggestion}</div>`
+        ).join('');
+        
+        dropdown.style.display = 'block';
+        selectedSuggestionIndex = -1;
+        
+        // Add click handlers
+        dropdown.querySelectorAll('.autocomplete-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                inputElement.value = item.textContent;
+                dropdown.style.display = 'none';
+            });
+        });
+    }
+    
+    function selectSuggestion(items, index, inputElement) {
+        items.forEach(item => item.classList.remove('selected'));
+        if (index >= 0 && index < items.length) {
+            items[index].classList.add('selected');
+            selectedSuggestionIndex = index;
+        }
+    }
+    
+    // Timer integration
+    function runTask(taskName) {
+        currentTask = taskName;
+        taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${taskName}</div>`;
+        
+        // Add edit handler for center task
+        document.getElementById('task-name').addEventListener('click', function () {
+            const newName = prompt('Edit task name:', currentTask);
+            if (newName && newName.trim()) {
+                const oldName = currentTask;
+                currentTask = newName.trim();
+                this.textContent = currentTask;
+                
+                // Update in task slots if it exists there
+                const taskIndex = tasks.findIndex(t => t.name === oldName);
+                if (taskIndex >= 0) {
+                    storage.updateTask(tasks[taskIndex].id, currentTask);
+                    tasks[taskIndex].name = currentTask;
+                    renderTaskSlots();
+                }
+            }
+        });
+    }
+    
+    // Enhanced add task listener for center
+    function attachAddTaskListener() {
+        const addTaskEl = document.getElementById('add-task');
+        if (addTaskEl) {
+            addTaskEl.addEventListener('click', async () => {
+                const taskName = prompt('Enter task name:');
+                if (taskName && taskName.trim()) {
+                    currentTask = taskName.trim();
+                    taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
+                    
+                    // Offer to save to slots if there's space
+                    if (tasks.length < MAX_TASKS) {
+                        setTimeout(() => {
+                            if (confirm('Save this task to your task list?')) {
+                                storage.saveTask(currentTask).then(() => {
+                                    renderTaskSlots();
+                                });
+                            }
+                        }, 100);
+                    }
+                    
+                    document.getElementById('task-name').addEventListener('click', function () {
+                        const newName = prompt('Edit task name:', currentTask);
+                        if (newName && newName.trim()) {
+                            currentTask = newName.trim();
+                            this.textContent = currentTask;
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    // Enhanced stop timer
+    async function stopTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isRunning = false;
+        isPaused = false;
+        
+        // End timer session (unsuccessful completion)
+        if (currentSession && currentSession.status === 'active') {
+            await currentSession.stop();
+            console.log(`Session stopped: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
+        }
+        
+        const wasRunningTask = currentTask;
+        currentTask = '';
+        currentSession = null;
+        totalSeconds = DEFAULT_SECONDS;
+        
+        // Reset UI
+        taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
+        attachAddTaskListener();
+        updateClockDisplay();
+        resetProgress();
+        
+        // Clear stats cache to show updated data
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
+        
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
+        
+        // Offer to save if task not in slots
+        if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
+            setTimeout(() => {
+                if (confirm(`Save "${wasRunningTask}" to your task list?`)) {
+                    storage.saveTask(wasRunningTask).then(() => {
+                        renderTaskSlots();
+                    });
+                }
+            }, 100);
+        }
+    }
+
+    // Clock click handler for setting time
+    clockEl.addEventListener('click', () => {
+        if (!isRunning && !isPaused) {
+            const digits = prompt('Enter time digits (max 6 digits, e.g. 001500 for 15 min):');
+            if (digits !== null) {
+                if (digits.length > 0 && digits.length <= 6 && /^\d+$/.test(digits)) {
+                    setTimeFromDigits(digits);
+                } else {
+                    totalSeconds = DEFAULT_SECONDS;
+                    updateClockDisplay();
+                }
+            }
+        }
+    });
+
+    // Timer controls
+    startBtn.addEventListener('click', startTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    stopBtn.addEventListener('click', stopTimer);
+
+    async function startTimer() {
+        if (!currentTask) return;
+        if (timerInterval) clearInterval(timerInterval);
+
+        // Create new timer session
+        const creationSource = tasks.find(t => t.name === currentTask) ? 'task_slot' : 'timer_center';
+        currentSession = new TimerSession(currentTask, creationSource);
+        
+        // Start session tracking
+        const sessionStarted = await currentSession.start(totalSeconds);
+        if (!sessionStarted) {
+            console.warn('Session tracking failed, continuing without history');
+        }
+
+        isRunning = true;
+        isPaused = false;
+
+        timerInterval = setInterval(() => {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                updateClockDisplay();
+                updateProgress();
+            } else {
+                timerComplete();
+            }
+        }, 1000);
+    }
+
+    function pauseTimer() {
+        if (isRunning) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isRunning = false;
+            isPaused = true;
+        }
+    }
+
+    async function timerComplete() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isRunning = false;
+        isPaused = false;
+        
+        // Complete timer session (successful completion)
+        if (currentSession && currentSession.status === 'active') {
+            await currentSession.complete();
+            console.log(`Session completed: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
+        }
+        
+        alert('⏰ Timer completed! Great job! 🎉');
+        
+        const wasRunningTask = currentTask;
+        currentTask = '';
+        currentSession = null;
+        totalSeconds = DEFAULT_SECONDS;
+        
+        // Reset UI
+        taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
+        attachAddTaskListener();
+        updateClockDisplay();
+        resetProgress();
+        
+        // Clear stats cache and refresh task slot stats
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
+        
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
+        
+        // Offer to save if task not in slots
+        if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
+            setTimeout(() => {
+                if (confirm(`Save "${wasRunningTask}" to your task list?`)) {
+                    storage.saveTask(wasRunningTask).then(() => {
+                        renderTaskSlots();
+                    });
+                }
+            }, 100);
+        }
+    }
+
+    // Task Statistics Modal
+    async function showTaskStats(taskName) {
+        try {
+            const [stats, history] = await Promise.all([
+                taskStats.getTaskStats(taskName),
+                fetch(`/api/timer/history?task=${encodeURIComponent(taskName)}&limit=10`).then(r => r.json())
+            ]);
+            
+            if (!stats) {
+                alert('No statistics available for this task yet.');
+                return;
+            }
+            
+            const modal = createStatsModal(taskName, stats, history.success ? history.sessions : []);
+            document.body.appendChild(modal);
+            
+            // Add close handlers
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+            
+        } catch (error) {
+            console.error('Failed to load task statistics:', error);
+            alert('Failed to load statistics. Please try again.');
+        }
+    }
+    
+    function createStatsModal(taskName, stats, sessions) {
+        const modal = document.createElement('div');
+        modal.className = 'stats-modal';
+        
+        const successRate = Math.round(stats.success_rate || 0);
+        const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
+        const avgSessionTime = stats.total_attempts > 0 ?
+            taskStats.formatDuration(Math.round(stats.total_seconds_spent / stats.total_attempts)) : '0s';
+        
+        modal.innerHTML = `
+            <div class="stats-modal-content">
+                <div class="stats-modal-header">
+                    <h2>📊 Statistics: ${taskName}</h2>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="stats-modal-body">
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.total_attempts || 0}</div>
+                            <div class="stat-label">Total Attempts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.successful_runs || 0}</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${successRate}%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${totalTime}</div>
+                            <div class="stat-label">Total Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${avgSessionTime}</div>
+                            <div class="stat-label">Avg Session</div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-sessions">
+                        <h3>Recent Sessions</h3>
+                        <div class="session-list">
+                            ${sessions.length > 0 ? sessions.map(session => `
+                                <div class="session-item ${session.status}">
+                                    <div class="session-info">
+                                        <span class="session-status">${session.status === 'completed' ? '✅' : '⏹️'}</span>
+                                        <span class="session-date">${new Date(session.started_at).toLocaleDateString()}</span>
+                                        <span class="session-time">${new Date(session.started_at).toLocaleTimeString()}</span>
+                                    </div>
+                                    <div class="session-duration">
+                                        ${taskStats.formatDuration(session.actual_duration || 0)}
+                                    </div>
+                                </div>
+                            `).join('') : '<p>No sessions recorded yet.</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="stats-actions">
+                        <button onclick="exportTaskData('${taskName}')">📥 Export Data</button>
+                        <button onclick="clearTaskHistory('${taskName}')">🗑️ Clear History</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        return modal;
+    }
+    
+    async function exportTaskData(taskName) {
+        try {
+            const response = await fetch(`/api/timer/export?format=json`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${taskName}_timer_data.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Export failed. Please try again.');
+        }
+    }
+    
+    async function clearTaskHistory(taskName) {
+        if (confirm(`Are you sure you want to clear all history for "${taskName}"? This cannot be undone.`)) {
+            try {
+                // This would need a specific API endpoint to clear task history
+                alert('Clear history feature will be implemented in a future update.');
+            } catch (error) {
+                console.error('Clear history failed:', error);
+            }
+        }
+    }
+
+    function setTimeFromDigits(digits) {
+        const padded = digits.padStart(6, '0');
+        const hours = parseInt(padded.slice(0, 2));
+        const minutes = parseInt(padded.slice(2, 4));
+        const seconds = parseInt(padded.slice(4, 6));
+        totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+        updateClockDisplay();
+    }
+
+    function updateClockDisplay() {
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        clockEl.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function updateProgress() {
+        const progress = 1 - (totalSeconds / DEFAULT_SECONDS);
+        const angle = progress * 2 * Math.PI;
+
+        const cx = 150 + 140 * Math.sin(-angle);
+        const cy = 150 - 140 * Math.cos(-angle);
+        progressPoint.setAttribute('cx', cx);
+        progressPoint.setAttribute('cy', cy);
+
+        progressArc.style.strokeDashoffset = progress * CIRCUMFERENCE;
+    }
+
+    function resetProgress() {
+        progressPoint.setAttribute('cx', 150);
+        progressPoint.setAttribute('cy', 10);
+        progressArc.style.strokeDashoffset = 0;
+    }
+    
+    function resetToDefault() {
+        totalSeconds = DEFAULT_SECONDS;
+        updateClockDisplay();
+    }
+    
+    // Initialize the application
+    init();
+</script>
+</body>
+</html>

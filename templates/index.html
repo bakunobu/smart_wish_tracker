@@ -3,112 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub-Style Contributions Grid</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Time Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .timer-card { background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .active-timer { background: #e6f7ff; border-left: 4px solid #1890ff; }
+        button { background: #1890ff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #40a9ff; }
+        form { margin-bottom: 20px; }
+        input, select { padding: 8px; margin-right: 10px; border-radius: 4px; border: 1px solid #ddd; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Contribution Calendar</h1>
-        
-        <!-- Time Tracker Section -->
-        <div class="time-tracker">
-            <h2>Time Tracker</h2>
-            <div class="timer-display">00:00:00</div>
-            <div class="timer-controls">
-                <button id="start-stop-btn" class="timer-btn start">Start</button>
-                <button id="reset-btn" class="timer-btn reset">Reset</button>
-            </div>
+    <h1>Time Tracker</h1>
+
+    <form action="{{ url_for('main.start_timer') }}" method="post">
+        <input type="text" name="description" placeholder="What are you working on?" required>
+        <input type="text" name="project" placeholder="Project (optional)">
+        <button type="submit">Start Timer</button>
+    </form>
+
+    <h2>Active Timers</h2>
+    {% for entry in entries if not entry.end_time %}
+        <div class="timer-card active-timer">
+            <p><strong>{{ entry.description }}</strong> - {{ entry.project }}</p>
+            <p>Started: {{ entry.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
+            <a href="{{ url_for('main.stop_timer', entry_id=entry.id) }}">
+                <button>Stop Timer</button>
+            </a>
         </div>
-        
-        <!-- Problem Adder/Selector Section -->
-        <div class="problem-manager">
-            <h2>Problem Selector & Adder</h2>
-            <div class="problem-selector">
-                <label for="project-select">Select Project:</label>
-                <select id="project-select" name="project">
-                    <option value="">-- Select a Project --</option>
-                    <!-- Project options will be populated by JavaScript -->
-                </select>
-                
-                <label for="event-select">Select Event:</label>
-                <select id="event-select" name="event">
-                    <option value="">-- Select an Event --</option>
-                    <!-- Event options will be populated by JavaScript -->
-                </select>
-            </div>
-            
-            <div class="problem-adder">
-                <h3>Add New Problem</h3>
-                <form id="problem-form">
-                    <div class="form-group">
-                        <label for="new-project-name">Project Name:</label>
-                        <input type="text" id="new-project-name" name="project_name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="new-project-desc">Description:</label>
-                        <textarea id="new-project-desc" name="description"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="new-event-topic">Event Topic:</label>
-                        <input type="text" id="new-event-topic" name="event_topic" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="event-duration">Duration (minutes):</label>
-                        <input type="number" id="event-duration" name="duration" value="15" min="1" required>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">Add Problem</button>
-                </form>
-            </div>
+    {% else %}
+        <p>No active timers</p>
+    {% endfor %}
+
+    <h2>Recent Entries</h2>
+    {% for entry in entries if entry.end_time %}
+        <div class="timer-card">
+            <p><strong>{{ entry.description }}</strong> - {{ entry.project }}</p>
+            <p>{{ entry.start_time.strftime('%Y-%m-%d %H:%M') }} to {{ entry.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p>Duration: {{ (entry.end_time - entry.start_time)|duration }}</p>
         </div>
-        
-        <!-- Calendar Section -->
-        <div class="calendar-container">
-            <!-- Day of week labels (vertical) -->
-            <div class="day-labels">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
-            </div>
-            
-            <!-- Main grid container -->
-            <div class="grid-container">
-                <!-- Week labels (horizontal) -->
-                <div class="week-labels" id="week-labels">
-                    <!-- Will be generated by JavaScript -->
-                </div>
-                
-                <!-- Contribution grid -->
-                <div class="contribution-grid" id="grid">
-                    <!-- Will be generated by JavaScript -->
-                </div>
-            </div>
-        </div>
-        
-        <div class="legend">
-            <span>Less</span>
-            <div class="legend-colors">
-                <div class="color-level" style="background-color: #ebedf0;"></div>
-                <div class="color-level" style="background-color: #c6e48b;"></div>
-                <div class="color-level" style="background-color: #7bc96f;"></div>
-                <div class="color-level" style="background-color: #239a3b;"></div>
-                <div class="color-level" style="background-color: #196127;"></div>
-            </div>
-            <span>More</span>
-        </div>
-    </div>
-    
-    <script>
-        // Pass the contribution data from Flask to JavaScript
-        const contributions = {{ contributions|tojson }};
-    </script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% else %}
+        <p>No completed entries</p>
+    {% endfor %}
 </body>
 </html>
