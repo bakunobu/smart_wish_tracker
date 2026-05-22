@@ -28,6 +28,24 @@ def init_db():
         ''')
         
         conn.execute('''
+            CREATE TABLE IF NOT EXISTS quests (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                short_name TEXT NOT NULL,
+                description TEXT NOT NULL,
+                quest_type TEXT NOT NULL CHECK (quest_type IN ('stack', 'duration', 'complete')),
+                stack_duration_days INTEGER DEFAULT 0,
+                stack_min_time_per_day INTEGER DEFAULT 15,
+                duration_hours REAL DEFAULT 0.0,
+                complete_result TEXT NOT NULL,
+                reward_url TEXT,
+                reward_image TEXT,
+                position INTEGER DEFAULT 0,
+                is_active BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        conn.execute('''
             CREATE TABLE IF NOT EXISTS timer_sessions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 task_name TEXT NOT NULL,
@@ -69,6 +87,10 @@ init_db()
 @app.route('/')
 def index():
     return render_template('countdown.html')
+
+@app.route('/add-quest')
+def add_quest():
+    return render_template('add_quest.html')
 
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
@@ -239,6 +261,159 @@ def get_suggestions():
             "success": False,
             "error": str(e)
         }), 500
+
+# Quest Management Endpoints
+
+@app.route('/api/quests', methods=['GET'])
+def get_quests():
+    """Get all quests ordered by position"""
+    try:
+        with get_db() as conn:
+            cursor = conn.execute('SELECT id, short_name, description, quest_type, stack_duration_days, stack_min_time_per_day, duration_hours, complete_result, reward_url, reward_image, position, is_active FROM quests ORDER BY position')
+            quests = [dict(row) for row in cursor.fetchall()]
+        
+        return jsonify({
+            "success": True,
+            "quests": quests
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+@app.route('/api/quests/<int:quest_id>', methods=['PUT'])
+def update_quest(quest_id):
+    """Update an existing quest"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('short_name') or not data.get('description') or not data.get('quest_type'):
+            return jsonify({"success": False, "error": "Missing required fields"}), 400
+        
+        with get_db() as conn:
+            # Update quest
+            conn.execute(
+                '''UPDATE quests SET
+                   short_name = ?, description = ?, quest_type = ?, stack_duration_days = ?,
+                   stack_min_time_per_day = ?, duration_hours = ?, complete_result = ?,
+                   reward_url = ?, reward_image = ?
+                   WHERE id = ?''',
+                (
+                    data['short_name'],
+                    data['description'],
+                    data['quest_type'],
+                    data.get('stack_duration_days'),
+                    data.get('stack_min_time_per_day'),
+                    data.get('duration_hours'),
+                    data.get('complete_result'),
+                    data.get('reward_url'),
+                    data.get('reward_image'),
+                    quest_id
+                )
+            )
+            conn.commit()
+            
+            return jsonify({"success": True})
+            
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/quests/<int:quest_id>', methods=['DELETE'])
+def delete_quest(quest_id):
+    """Delete a quest"""
+    try:
+        with get_db() as conn:
+            # Delete quest
+            conn.execute('DELETE FROM quests WHERE id = ?', (quest_id,))
+            
+            # Reorder remaining quests
+            conn.execute('UPDATE quests SET position = position - 1 WHERE position > (SELECT position FROM quests WHERE id = ?)', (quest_id,))
+            conn.commit()
+            
+            return jsonify({"success": True})
+            
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/quests/<int:quest_id>/activate', methods=['POST'])
+def activate_quest(quest_id):
+    """Activate a quest and move it to top position"""
+    try:
+        with get_db() as conn:
+            # Get current position of quest
+            cursor = conn.execute('SELECT position FROM quests WHERE id = ?', (quest_id,))
+            current_pos = cursor.fetchone()['position']
+            
+            # Move all quests above down one position
+            conn.execute('UPDATE quests SET position = position + 1 WHERE position < ?', (current_pos,))
+            
+            # Move quest to top position (1)
+            conn.execute('UPDATE quests SET position = 1, is_active = TRUE WHERE id = ?', (quest_id,))
+            conn.commit()
+            
+            return jsonify({"success": True})
+            
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/quests', methods=['POST'])
+def create_quest():
+    """Create a new quest"""
+    try:
+        data = request.get_json()
+        required_fields = ['short_name', 'description', 'quest_type']
+        if not all(field in data for field in required_fields):
+            return jsonify({"success": False, "error": "Missing required fields"}), 400
+
+        # Validate quest type specific fields
+        quest_type = data['quest_type']
+        if quest_type == 'stack' and ('stack_duration_days' not in data or 'stack_min_time_per_day' not in data):
+            return jsonify({"success": False, "error": "Missing stack duration fields"}), 400
+        if quest_type == 'duration' and 'duration_hours' not in data:
+            return jsonify({"success": False, "error": "Missing duration hours"}), 400
+        if quest_type == 'complete' and 'complete_result' not in data:
+            return jsonify({"success": False, "error": "Missing complete result"}), 400
+
+        with get_db() as conn:
+            # Get current max position
+            cursor = conn.execute('SELECT MAX(position) as max_pos FROM quests')
+            max_pos = cursor.fetchone()['max_pos'] or 0
+            new_position = max_pos + 1
+
+            # Insert new quest
+            cursor = conn.execute('''
+                INSERT INTO quests (short_name, description, quest_type, stack_duration_days, stack_min_time_per_day, duration_hours, complete_result, reward_url, reward_image, position)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                data['short_name'],
+                data['description'],
+                quest_type,
+                data.get('stack_duration_days', 0),
+                data.get('stack_min_time_per_day', 15),
+                data.get('duration_hours', 0.0),
+                data.get('complete_result', ''),
+                data.get('reward_url', ''),
+                data.get('reward_image', ''),
+                new_position
+            ))
+            quest_id = cursor.lastrowid
+            conn.commit()
+
+        return jsonify({
+            "success": True,
+            "data": {"id": quest_id, "position": new_position}
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 
 # Timer Session Management Endpoints
 

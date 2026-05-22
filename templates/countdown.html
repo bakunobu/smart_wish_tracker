@@ -18,10 +18,20 @@
         
         .main-container {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .top-row {
+            display: flex;
             justify-content: center;
             align-items: flex-start;
             gap: 30px;
             flex-wrap: wrap;
+            width: 100%;
         }
         
         .timer-section {
@@ -598,6 +608,11 @@
                 align-items: center;
             }
             
+            .top-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            
             .timer-container {
                 width: 280px;
                 margin-bottom: 20px;
@@ -607,6 +622,12 @@
             .task-panel {
                 width: 280px;
                 min-height: auto;
+            }
+            
+            .quest-block {
+                width: 280px;
+                max-width: 280px;
+                padding: 20px;
             }
             
             .stats-modal-content {
@@ -631,64 +652,242 @@
                 font-size: 1.5em;
             }
         }
+        
+        /* Quest Block Styles */
+        .quest-block {
+          width: 100%;
+          max-width: 730px; /* Combined width of timer-section (380px) + task-panel (320px) + gap (30px) */
+          background-color: #0f3460;
+          border-radius: 20px;
+          padding: 30px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quest-block h3 {
+          color: white;
+          margin: 0 0 20px 0;
+          font-size: 1.5rem;
+          text-align: center;
+        }
+        
+        .quest-slots-container {
+          max-height: 300px;
+          overflow-y: auto;
+          padding-right: 5px;
+        }
+        
+        .quest-slots {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .quest-slot {
+          background: rgba(76, 201, 240, 0.1);
+          border: 2px dashed #4cc9f0;
+          border-radius: 10px;
+          padding: 20px;
+          transition: all 0.3s ease;
+          min-height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .quest-slot.filled {
+          background: rgba(76, 201, 240, 0.2);
+          border: 2px solid #4cc9f0;
+          justify-content: space-between;
+        }
+        
+        .quest-slot.empty {
+          cursor: pointer;
+        }
+        
+        .quest-slot.empty:hover {
+          background: rgba(76, 201, 240, 0.2);
+        }
+        
+        .quest-slot.active {
+          background: rgba(247, 37, 133, 0.2);
+          border: 2px solid #f72585;
+          box-shadow: 0 0 20px rgba(247, 37, 133, 0.3);
+        }
+        
+        .quest-slot.active .quest-text {
+          color: #f72585;
+          font-weight: bold;
+        }
+        
+        .quest-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
+        
+        .quest-text {
+          color: white;
+          font-size: 1.1rem;
+          flex: 1;
+          text-align: left;
+        }
+        
+        .quest-actions {
+          display: flex;
+          gap: 10px;
+        }
+        
+        .quest-actions button {
+          background: none;
+          border: none;
+          font-size: 1.3rem;
+          cursor: pointer;
+          padding: 5px;
+          border-radius: 3px;
+          transition: background 0.2s;
+        }
+        
+        .quest-actions button:hover {
+          background: rgba(76, 201, 240, 0.3);
+        }
+        
+        .add-quest-slot {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          color: #4cc9f0;
+          font-size: 1.1rem;
+        }
+        
+        .progress-bar {
+          height: 10px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 5px;
+          overflow: hidden;
+          margin: 10px 0;
+        }
+        
+        .progress-fill {
+          height: 100%;
+          background: #4cc9f0;
+          width: 0%;
+          transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <div class="timer-section">
-            <div class="timer-container">
-                <div class="progress-container">
-                    <svg class="progress-ring" width="300" height="300">
-                        <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
-                        <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
-                        <circle class="progress-point" cx="150" cy="10" r="10"></circle>
-                    </svg>
+        <div class="top-row">
+            <div class="timer-section">
+                <div class="timer-container">
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="300" height="300">
+                            <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
+                            <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
+                            <circle class="progress-point" cx="150" cy="10" r="10"></circle>
+                        </svg>
+                        
+                        <!-- Timer and task centered inside circle -->
+                        <div class="circle-content">
+                            <div class="clock" id="clock">00:15:00</div>
+                            <div class="task-container" id="task-container">
+                                <div class="add-task" id="add-task">+ Add Task</div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <!-- Timer and task centered inside circle -->
-                    <div class="circle-content">
-                        <div class="clock" id="clock">00:15:00</div>
-                        <div class="task-container" id="task-container">
-                            <div class="add-task" id="add-task">+ Add Task</div>
+                    <div class="controls">
+                        <button id="start-btn">Start</button>
+                        <button id="pause-btn">Pause</button>
+                        <button id="stop-btn">Stop</button>
+                    </div>
+                    
+                    <!-- Daily Statistics Block -->
+                    <div class="daily-stats-container" id="daily-stats">
+                        <div class="daily-stats-header">📊 Daily Stats</div>
+                        <div class="daily-stats-grid">
+                            <div class="mood-indicator" id="mood-emoji">😊</div>
+                            <div class="tasks-metric">
+                                <div class="metric-value" id="tasks-count">0/0</div>
+                                <div class="metric-label">tasks</div>
+                            </div>
+                            <div class="time-metric">
+                                <div class="metric-value" id="time-spent">0m</div>
+                                <div class="metric-label">spent</div>
+                            </div>
+                        </div>
+                        <div class="completion-bar">
+                            <span id="completion-percentage">0% completed</span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="controls">
-                    <button id="start-btn">Start</button>
-                    <button id="pause-btn">Pause</button>
-                    <button id="stop-btn">Stop</button>
-                </div>
-                
-                <!-- Daily Statistics Block -->
-                <div class="daily-stats-container" id="daily-stats">
-                    <div class="daily-stats-header">📊 Daily Stats</div>
-                    <div class="daily-stats-grid">
-                        <div class="mood-indicator" id="mood-emoji">😊</div>
-                        <div class="tasks-metric">
-                            <div class="metric-value" id="tasks-count">0/0</div>
-                            <div class="metric-label">tasks</div>
-                        </div>
-                        <div class="time-metric">
-                            <div class="metric-value" id="time-spent">0m</div>
-                            <div class="metric-label">spent</div>
-                        </div>
-                    </div>
-                    <div class="completion-bar">
-                        <span id="completion-percentage">0% completed</span>
-                    </div>
+            </div>
+            
+            <div class="task-panel">
+                <h3>📋 Tasks</h3>
+                <div class="task-slots" id="task-slots">
+                    <!-- Task slots will be dynamically generated -->
                 </div>
             </div>
         </div>
         
-        <div class="task-panel">
-            <h3>📋 Tasks</h3>
-            <div class="task-slots" id="task-slots">
-                <!-- Task slots will be dynamically generated -->
+        <!-- Quest Block - Now properly inside main-container -->
+        <div class="quest-block">
+            <h3>🗡️ Quests</h3>
+            <div class="quest-slots-container">
+                <div class="quest-slots" id="quest-slots">
+                    <!-- Quest slots will be dynamically loaded here -->
+                </div>
             </div>
         </div>
     </div>
 
 <script>
+  // Initialize quest slots
+  document.addEventListener('DOMContentLoaded', function() {
+    loadQuests();
+  });
+  
+  function setupQuestScroll() {
+    const questContainer = document.querySelector('.quest-slots-container');
+    const questSlots = document.getElementById('quest-slots');
+    
+    questContainer.addEventListener('scroll', function() {
+      if (questContainer.scrollTop + questContainer.clientHeight >=
+          questContainer.scrollHeight - 100) {
+        loadMoreQuests();
+      }
+    });
+  }
+  
+  function loadMoreQuests() {
+    // Add 5 more empty slots when reaching bottom
+    const questSlots = document.getElementById('quest-slots');
+    
+    for (let i = 0; i < 5; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'quest-slot empty';
+      
+      const addSlot = document.createElement('div');
+      addSlot.className = 'add-quest-slot';
+      addSlot.onclick = () => window.location.href = '/add-quest';
+      
+      const plusIcon = document.createElement('span');
+      plusIcon.className = 'add-icon';
+      plusIcon.textContent = '➕';
+      
+      const addText = document.createElement('span');
+      addText.className = 'add-text';
+      addText.textContent = 'Add Quest';
+      
+      addSlot.appendChild(plusIcon);
+      addSlot.appendChild(addText);
+      slot.appendChild(addSlot);
+      questSlots.appendChild(slot);
+    }
+  }
     // Constants
     const MAX_TASKS = 5;
     const STORAGE_KEY = 'smart_timer_tasks';
@@ -1561,9 +1760,19 @@
             console.log(`Session completed: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
         }
         
-        alert('⏰ Timer completed! Great job! 🎉');
-        
         const wasRunningTask = currentTask;
+        
+        // Check if this was a quest and handle quest completion
+        let questCompleted = false;
+        if (wasRunningTask && wasRunningTask.startsWith('🗡️ ')) {
+            questCompleted = await handleQuestProgress(wasRunningTask, currentSession.actualDuration);
+        }
+        
+        if (questCompleted) {
+            alert('🎉 QUEST COMPLETED! You are victorious! 🏆✨');
+        } else {
+            alert('⏰ Timer completed! Great job! 🎉');
+        }
         currentTask = '';
         currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
@@ -1581,6 +1790,9 @@
         // Refresh daily statistics
         dailyStats.clearCache();
         await dailyStats.refreshStats();
+        
+        // Refresh quest display to show updated progress
+        await loadQuests();
         
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
@@ -1765,6 +1977,240 @@
     
     // Initialize the application
     init();
+    
+    // Quest progress tracking
+    async function handleQuestProgress(questTaskName, sessionDuration) {
+      try {
+        // Extract quest name from task name (remove "🗡️ " prefix)
+        const questName = questTaskName.replace('🗡️ ', '');
+        
+        // Get current quests to find the active one
+        const response = await fetch('/api/quests');
+        const data = await response.json();
+        if (!data.success) return false;
+        
+        const activeQuest = data.quests.find(q => q.short_name === questName && q.is_active);
+        if (!activeQuest) return false;
+        
+        // Handle progress based on quest type
+        let questCompleted = false;
+        
+        if (activeQuest.quest_type === 'stack') {
+          // For stack quests, each completed session counts as one day
+          // This is simplified - in a real app, you'd track daily progress
+          questCompleted = true; // Mark as completed for demo
+        } else if (activeQuest.quest_type === 'duration') {
+          // For duration quests, accumulate time
+          // This is simplified - you'd need to store progress in database
+          questCompleted = sessionDuration >= (activeQuest.duration_hours * 3600 * 0.1); // 10% threshold for demo
+        } else if (activeQuest.quest_type === 'complete') {
+          // For complete quests, user needs to manually mark as done
+          questCompleted = confirm(`Did you complete the quest objective: "${activeQuest.complete_result}"?`);
+        }
+        
+        if (questCompleted && activeQuest.reward_url) {
+          // Show reward if quest is completed
+          setTimeout(() => {
+            if (confirm(`🎁 Quest completed! Would you like to claim your reward?`)) {
+              window.open(activeQuest.reward_url, '_blank');
+            }
+          }, 1000);
+        }
+        
+        return questCompleted;
+      } catch (error) {
+        console.error('Error handling quest progress:', error);
+        return false;
+      }
+    }
+    
+    // Quest management functions
+    async function addQuest() {
+      window.location.href = '/add-quest';
+    }
+    
+    async function loadQuests() {
+      try {
+        const response = await fetch('/api/quests');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        if (data.success) {
+          renderQuests(data.quests);
+        } else {
+          console.error('API returned error:', data.error);
+          renderQuests([]);
+          showErrorMessage('Failed to load quests: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error loading quests:', error);
+        renderQuests([]);
+        showErrorMessage('Unable to load quests. Please check your connection and try again.');
+      }
+    }
+    
+    // Error handling utility
+    function showErrorMessage(message, duration = 5000) {
+      // Create or update error notification
+      let errorDiv = document.getElementById('error-notification');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'error-notification';
+        errorDiv.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #f72585;
+          color: white;
+          padding: 15px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          z-index: 10000;
+          max-width: 300px;
+          font-size: 14px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        `;
+        document.body.appendChild(errorDiv);
+      }
+      
+      errorDiv.textContent = message;
+      errorDiv.style.transform = 'translateX(0)';
+      
+      // Auto-hide after duration
+      setTimeout(() => {
+        if (errorDiv) {
+          errorDiv.style.transform = 'translateX(100%)';
+          setTimeout(() => errorDiv.remove(), 300);
+        }
+      }, duration);
+    }
+    
+    function renderQuests(quests) {
+      const container = document.getElementById('quest-slots');
+      container.innerHTML = '';
+      
+      // Sort quests by position (active quests first)
+      const sortedQuests = [...quests].sort((a, b) => {
+        if (a.is_active && !b.is_active) return -1;
+        if (!a.is_active && b.is_active) return 1;
+        return a.position - b.position;
+      });
+      
+      // Render existing quests
+      sortedQuests.forEach(quest => {
+        const questEl = document.createElement('div');
+        questEl.className = quest.is_active ? 'quest-slot filled active' : 'quest-slot filled';
+        
+        const questText = quest.is_active ? `🔥 ${quest.short_name}` : quest.short_name;
+        
+        questEl.innerHTML = `
+          <div class="quest-content">
+            <div class="quest-text">${questText}</div>
+            <div class="progress-bar" style="display: ${quest.is_active ? 'block' : 'none'}">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="quest-actions">
+              <button title="Run Quest" onclick="runQuest(${quest.id})">🏃</button>
+              <button title="Edit Quest" onclick="editQuest(${quest.id})">✏️</button>
+              <button title="Delete Quest" onclick="deleteQuest(${quest.id})">🗑️</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(questEl);
+      });
+      
+      // Ensure minimum 5 slots by adding empty ones
+      const totalSlots = Math.max(5, quests.length);
+      const emptySlots = totalSlots - quests.length;
+      
+      for (let i = 0; i < emptySlots; i++) {
+        const emptySlot = document.createElement('div');
+        emptySlot.className = 'quest-slot empty';
+        emptySlot.innerHTML = `
+          <div class="add-quest-slot" onclick="addQuest()">
+            <span class="add-icon">➕</span>
+            <span class="add-text">Add Quest</span>
+          </div>
+        `;
+        container.appendChild(emptySlot);
+      }
+      
+      // Setup scroll observer for infinite scroll
+      setupQuestScroll();
+    }
+    
+    async function runQuest(questId) {
+      try {
+        // Get quest details
+        const response = await fetch('/api/quests');
+        const data = await response.json();
+        if (!data.success) return;
+        
+        const quest = data.quests.find(q => q.id === questId);
+        if (!quest) {
+          alert('Quest not found');
+          return;
+        }
+        
+        // Activate the quest
+        const activateResponse = await fetch(`/api/quests/${questId}/activate`, {
+          method: 'POST'
+        });
+        
+        if (activateResponse.ok) {
+          // Set quest as current task in timer
+          currentTask = `🗡️ ${quest.short_name}`;
+          taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
+          
+          // Set timer based on quest type
+          if (quest.quest_type === 'stack') {
+            // For stack quests, use minimum time per day (convert minutes to seconds)
+            totalSeconds = quest.stack_min_time_per_day * 60;
+          } else if (quest.quest_type === 'duration') {
+            // For duration quests, use a portion of total hours (e.g., 25 minutes)
+            totalSeconds = Math.min(quest.duration_hours * 3600, 1500); // Max 25 minutes per session
+          } else {
+            // For complete quests, use default timer
+            totalSeconds = DEFAULT_SECONDS;
+          }
+          
+          updateClockDisplay();
+          alert(`🗡️ Quest "${quest.short_name}" is now active! Ready to start timer.`);
+          
+          // Reload quests to show activation
+          loadQuests();
+        }
+      } catch (error) {
+        console.error('Error running quest:', error);
+        alert('Error starting quest. Please try again.');
+      }
+    }
+    
+    function editQuest(questId) {
+      // For now, redirect to add quest page with edit mode
+      // TODO: Implement proper edit functionality
+      alert('Edit functionality coming soon! For now, you can delete and recreate the quest.');
+    }
+    
+    async function deleteQuest(questId) {
+      if (confirm('Are you sure you want to delete this quest?')) {
+        try {
+          const response = await fetch(`/api/quests/${questId}`, { method: 'DELETE' });
+          const data = await response.json();
+          if (data.success) {
+            loadQuests();
+          }
+        } catch (error) {
+          console.error('Error deleting quest:', error);
+        }
+      }
+    }
+    
+    // Load quests on page load
+    loadQuests();
 </script>
 </body>
 </html>
