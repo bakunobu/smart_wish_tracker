@@ -15,7 +15,7 @@
             font-family: Arial, sans-serif;
             padding: 20px;
         }
-        
+
         .main-container {
             display: flex;
             flex-direction: column;
@@ -24,7 +24,7 @@
             width: 100%;
             max-width: 1200px;
         }
-        
+
         .top-row {
             display: flex;
             justify-content: center;
@@ -33,13 +33,13 @@
             flex-wrap: wrap;
             width: 100%;
         }
-        
+
         .timer-section {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
+
         .timer-container {
             text-align: center;
             background-color: #0f3460;
@@ -51,7 +51,7 @@
             justify-content: space-between;
             min-height: 487px;
         }
-        
+
         .task-panel {
             background-color: #0f3460;
             padding: 30px;
@@ -59,45 +59,45 @@
             width: 320px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        
+
         .task-panel h3 {
             color: white;
             margin: 0 0 20px 0;
             font-size: 1.5rem;
             text-align: center;
         }
-        
+
         .clock {
             font-size: 4rem;
             color: white;
             margin-bottom: 10px;
             cursor: pointer;
         }
-        
+
         .task-container {
             position: relative;
             margin: 10px 0;
         }
-        
+
         .task-name {
             font-size: 1.25rem;
             color: white;
             cursor: pointer;
         }
-        
+
         .add-task {
             font-size: 1.25rem;
             color: #4cc9f0;
             cursor: pointer;
         }
-        
+
         .controls {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
         }
-        
+
         button {
             padding: 10px 20px;
             font-size: 1rem;
@@ -106,29 +106,29 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         #start-btn {
             background-color: #4CAF50;
             color: white;
         }
-        
+
         #pause-btn {
             background-color: #FFC107;
             color: black;
         }
-        
+
         #stop-btn {
             background-color: #F44336;
             color: white;
         }
-        
+
         .progress-container {
             position: relative;
             width: 300px;
             height: 300px;
             margin: 0 auto 30px;
         }
-        
+
         .circle-content {
             position: absolute;
             top: 0;
@@ -141,7 +141,7 @@
             align-items: center;
             text-align: center;
         }
-        
+
         .progress-circle {
             fill: none;
             stroke: rgba(76, 201, 240, 0.3);
@@ -149,7 +149,7 @@
             stroke-dasharray: 879.2;
             stroke-dashoffset: 0;
         }
-        
+
         .progress-arc {
             fill: none;
             stroke: #4cc9f0;
@@ -159,13 +159,13 @@
             transform: rotate(-90deg);
             transform-origin: center;
         }
-        
+
         .progress-point {
             fill: #f72585;
             r: 10;
             transition: transform 0.5s linear;
         }
-        
+
         /* Task Panel Styles */
         .task-slots {
             display: flex;
@@ -173,7 +173,7 @@
             gap: 10px;
             flex: 1;
         }
-        
+
         .task-slot {
             background: rgba(76, 201, 240, 0.1);
             border: 2px dashed #4cc9f0;
@@ -185,40 +185,40 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .task-slot.filled {
             background: rgba(76, 201, 240, 0.2);
             border: 2px solid #4cc9f0;
         }
-        
+
         .task-slot.empty {
             justify-content: center;
             cursor: pointer;
         }
-        
+
         .task-slot.empty:hover {
             background: rgba(76, 201, 240, 0.2);
         }
-        
+
         .task-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
         }
-        
+
         .task-text {
             color: white;
             font-size: 1rem;
             flex: 1;
             text-align: left;
         }
-        
+
         .task-actions {
             display: flex;
             gap: 5px;
         }
-        
+
         .task-actions button {
             background: none;
             border: none;
@@ -228,11 +228,11 @@
             border-radius: 3px;
             transition: background 0.2s;
         }
-        
+
         .task-actions button:hover {
             background: rgba(76, 201, 240, 0.3);
         }
-        
+
         .add-task-slot {
             display: flex;
             align-items: center;
@@ -241,17 +241,17 @@
             color: #4cc9f0;
             font-size: 1rem;
         }
-        
+
         .add-icon {
             font-size: 1.2rem;
         }
-        
+
         /* Input Styles */
         .task-input-container {
             position: relative;
             width: 100%;
         }
-        
+
         .task-input {
             width: 100%;
             padding: 10px;
@@ -262,11 +262,11 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
-        
+
         .task-input:focus {
             outline: 2px solid #4cc9f0;
         }
-        
+
         .autocomplete-dropdown {
             position: absolute;
             top: 100%;
@@ -280,68 +280,68 @@
             z-index: 1000;
             display: none;
         }
-        
+
         .autocomplete-item {
             padding: 10px;
             cursor: pointer;
             color: white;
             border-bottom: 1px solid rgba(76, 201, 240, 0.2);
         }
-        
+
         .autocomplete-item:last-child {
             border-bottom: none;
         }
-        
+
         .autocomplete-item:hover,
         .autocomplete-item.selected {
             background: rgba(76, 201, 240, 0.3);
         }
-        
+
         .input-actions {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
-        
+
         .input-actions button {
             padding: 8px 15px;
             font-size: 0.9rem;
         }
-        
+
         .save-btn {
             background-color: #4CAF50;
             color: white;
         }
-        
+
         .cancel-btn {
             background-color: #6c757d;
             color: white;
         }
-        
+
         /* Task Statistics Styles */
         .task-stats {
             margin: 5px 0;
             font-size: 0.8em;
         }
-        
+
         .stats-line {
             display: flex;
             justify-content: space-between;
             color: #666;
         }
-        
+
         .success-rate, .total-time {
             font-weight: 500;
         }
-        
+
         .success-rate {
             color: #28a745;
         }
-        
+
         .total-time {
             color: #6f42c1;
         }
-        
+
         /* Statistics Modal Styles */
         .stats-modal {
             position: fixed;
@@ -355,7 +355,7 @@
             align-items: center;
             z-index: 1000;
         }
-        
+
         .stats-modal-content {
             background: #2a2a2e;
             border-radius: 15px;
@@ -365,7 +365,7 @@
             overflow-y: auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-        
+
         .stats-modal-header {
             display: flex;
             justify-content: space-between;
@@ -373,13 +373,13 @@
             padding: 20px;
             border-bottom: 1px solid #444;
         }
-        
+
         .stats-modal-header h2 {
             margin: 0;
             color: #fff;
             font-size: 1.5em;
         }
-        
+
         .modal-close {
             background: none;
             border: none;
@@ -393,22 +393,22 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .modal-close:hover {
             color: #dc3545;
         }
-        
+
         .stats-modal-body {
             padding: 20px;
         }
-        
+
         .stats-overview {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
-        
+
         .stat-card {
             background: #3a3a3e;
             border-radius: 10px;
@@ -416,30 +416,30 @@
             text-align: center;
             border: 1px solid #444;
         }
-        
+
         .stat-value {
             font-size: 1.5em;
             font-weight: bold;
             color: #fff;
             margin-bottom: 5px;
         }
-        
+
         .stat-label {
             color: #888;
             font-size: 0.9em;
         }
-        
+
         .recent-sessions h3 {
             color: #fff;
             margin-bottom: 15px;
             font-size: 1.2em;
         }
-        
+
         .session-list {
             max-height: 200px;
             overflow-y: auto;
         }
-        
+
         .session-item {
             display: flex;
             justify-content: space-between;
@@ -450,42 +450,42 @@
             border-radius: 8px;
             border-left: 4px solid #666;
         }
-        
+
         .session-item.completed {
             border-left-color: #28a745;
         }
-        
+
         .session-item.stopped {
             border-left-color: #dc3545;
         }
-        
+
         .session-info {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .session-status {
             font-size: 1.2em;
         }
-        
+
         .session-date, .session-time {
             color: #888;
             font-size: 0.9em;
         }
-        
+
         .session-duration {
             font-weight: bold;
             color: #fff;
         }
-        
+
         .stats-actions {
             margin-top: 20px;
             display: flex;
             gap: 10px;
             justify-content: center;
         }
-        
+
         .stats-actions button {
             background: #6f42c1;
             color: white;
@@ -495,15 +495,15 @@
             cursor: pointer;
             font-size: 0.9em;
         }
-        
+
         .stats-actions button:hover {
             background: #5a2d91;
         }
-        
+
         .stats-actions button:last-child {
             background: #dc3545;
         }
-        
+
         .stats-actions button:last-child:hover {
             background: #c82333;
         }
@@ -517,7 +517,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             border: 2px solid rgba(76, 201, 240, 0.1);
         }
-        
+
         .daily-stats-header {
             color: white;
             font-size: 0.9em;
@@ -525,7 +525,7 @@
             text-align: center;
             font-weight: 500;
         }
-        
+
         .daily-stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -533,7 +533,7 @@
             margin-bottom: 15px;
             text-align: center;
         }
-        
+
         .mood-indicator {
             font-size: 1.8em;
             display: flex;
@@ -541,31 +541,31 @@
             justify-content: center;
             transition: transform 0.3s ease;
         }
-        
+
         .mood-indicator:hover {
             transform: scale(1.1);
         }
-        
+
         .tasks-metric, .time-metric {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
         }
-        
+
         .metric-value {
             color: white;
             font-size: 1.1em;
             font-weight: bold;
             line-height: 1;
         }
-        
+
         .metric-label {
             color: #4cc9f0;
             font-size: 0.8em;
             text-transform: lowercase;
         }
-        
+
         .completion-bar {
             text-align: center;
             padding: 8px;
@@ -573,31 +573,31 @@
             border-radius: 8px;
             border: 1px solid rgba(76, 201, 240, 0.2);
         }
-        
+
         .completion-bar span {
             color: white;
             font-size: 0.85em;
             font-weight: 500;
         }
-        
+
         /* Completion percentage color coding */
         .completion-bar.high-completion span {
             color: #4CAF50;
         }
-        
+
         .completion-bar.medium-completion span {
             color: #FFC107;
         }
-        
+
         .completion-bar.low-completion span {
             color: #F44336;
         }
-        
+
         /* Loading state */
         .daily-stats-container.loading {
             opacity: 0.6;
         }
-        
+
         .daily-stats-container.loading .metric-value {
             color: #888;
         }
@@ -607,52 +607,52 @@
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .top-row {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .timer-container {
                 width: 280px;
                 margin-bottom: 20px;
                 min-height: auto;
             }
-            
+
             .task-panel {
                 width: 280px;
                 min-height: auto;
             }
-            
+
             .quest-block {
                 width: 280px;
                 max-width: 280px;
                 padding: 20px;
             }
-            
+
             .stats-modal-content {
                 width: 95%;
                 margin: 10px;
             }
-            
+
             .stats-overview {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .daily-stats-container {
                 width: 280px;
                 padding: 15px;
             }
-            
+
             .daily-stats-grid {
                 gap: 10px;
             }
-            
+
             .mood-indicator {
                 font-size: 1.5em;
             }
         }
-        
+
         /* Quest Block Styles */
         .quest-block {
           width: 100%;
@@ -662,26 +662,26 @@
           padding: 30px;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        
+
         .quest-block h3 {
           color: white;
           margin: 0 0 20px 0;
           font-size: 1.5rem;
           text-align: center;
         }
-        
+
         .quest-slots-container {
           max-height: 300px;
           overflow-y: auto;
           padding-right: 5px;
         }
-        
+
         .quest-slots {
           display: flex;
           flex-direction: column;
           gap: 15px;
         }
-        
+
         .quest-slot {
           background: rgba(76, 201, 240, 0.1);
           border: 2px dashed #4cc9f0;
@@ -693,51 +693,51 @@
           align-items: center;
           justify-content: center;
         }
-        
+
         .quest-slot.filled {
           background: rgba(76, 201, 240, 0.2);
           border: 2px solid #4cc9f0;
           justify-content: space-between;
         }
-        
+
         .quest-slot.empty {
           cursor: pointer;
         }
-        
+
         .quest-slot.empty:hover {
           background: rgba(76, 201, 240, 0.2);
         }
-        
+
         .quest-slot.active {
           background: rgba(247, 37, 133, 0.2);
           border: 2px solid #f72585;
           box-shadow: 0 0 20px rgba(247, 37, 133, 0.3);
         }
-        
+
         .quest-slot.active .quest-text {
           color: #f72585;
           font-weight: bold;
         }
-        
+
         .quest-content {
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
         }
-        
+
         .quest-text {
           color: white;
           font-size: 1.1rem;
           flex: 1;
           text-align: left;
         }
-        
+
         .quest-actions {
           display: flex;
           gap: 10px;
         }
-        
+
         .quest-actions button {
           background: none;
           border: none;
@@ -747,11 +747,11 @@
           border-radius: 3px;
           transition: background 0.2s;
         }
-        
+
         .quest-actions button:hover {
           background: rgba(76, 201, 240, 0.3);
         }
-        
+
         .add-quest-slot {
           display: flex;
           align-items: center;
@@ -760,7 +760,7 @@
           color: #4cc9f0;
           font-size: 1.1rem;
         }
-        
+
         .progress-bar {
           height: 10px;
           background: rgba(255, 255, 255, 0.1);
@@ -768,7 +768,7 @@
           overflow: hidden;
           margin: 10px 0;
         }
-        
+
         .progress-fill {
           height: 100%;
           background: #4cc9f0;
@@ -788,7 +788,7 @@
                             <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
                             <circle class="progress-point" cx="150" cy="10" r="10"></circle>
                         </svg>
-                        
+
                         <!-- Timer and task centered inside circle -->
                         <div class="circle-content">
                             <div class="clock" id="clock">00:15:00</div>
@@ -797,13 +797,13 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="controls">
                         <button id="start-btn">Start</button>
                         <button id="pause-btn">Pause</button>
                         <button id="stop-btn">Stop</button>
                     </div>
-                    
+
                     <!-- Daily Statistics Block -->
                     <div class="daily-stats-container" id="daily-stats">
                         <div class="daily-stats-header">📊 Daily Stats</div>
@@ -824,7 +824,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="task-panel">
                 <h3>📋 Tasks</h3>
                 <div class="task-slots" id="task-slots">
@@ -832,7 +832,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Quest Block - Now properly inside main-container -->
         <div class="quest-block">
             <h3>🗡️ Quests</h3>
@@ -849,11 +849,11 @@
   document.addEventListener('DOMContentLoaded', function() {
     loadQuests();
   });
-  
+
   function setupQuestScroll() {
     const questContainer = document.querySelector('.quest-slots-container');
     const questSlots = document.getElementById('quest-slots');
-    
+
     questContainer.addEventListener('scroll', function() {
       if (questContainer.scrollTop + questContainer.clientHeight >=
           questContainer.scrollHeight - 100) {
@@ -861,27 +861,27 @@
       }
     });
   }
-  
+
   function loadMoreQuests() {
     // Add 5 more empty slots when reaching bottom
     const questSlots = document.getElementById('quest-slots');
-    
+
     for (let i = 0; i < 5; i++) {
       const slot = document.createElement('div');
       slot.className = 'quest-slot empty';
-      
+
       const addSlot = document.createElement('div');
       addSlot.className = 'add-quest-slot';
       addSlot.onclick = () => window.location.href = '/add-quest';
-      
+
       const plusIcon = document.createElement('span');
       plusIcon.className = 'add-icon';
       plusIcon.textContent = '➕';
-      
+
       const addText = document.createElement('span');
       addText.className = 'add-text';
       addText.textContent = 'Add Quest';
-      
+
       addSlot.appendChild(plusIcon);
       addSlot.appendChild(addText);
       slot.appendChild(addSlot);
@@ -891,7 +891,7 @@
     // Constants
     const MAX_TASKS = 5;
     const STORAGE_KEY = 'smart_timer_tasks';
-    
+
     // DOM elements
     const clockEl = document.getElementById('clock');
     const taskContainerEl = document.getElementById('task-container');
@@ -903,14 +903,14 @@
     const taskSlotsEl = document.getElementById('task-slots');
     const CIRCUMFERENCE = 879.2;
     const DEFAULT_SECONDS = 900;
-    
+
     // Timer state
     let totalSeconds = DEFAULT_SECONDS;
     let timerInterval = null;
     let isRunning = false;
     let isPaused = false;
     let currentTask = '';
-    
+
     // Task management state
     let tasks = [];
     let autocompleteCache = [];
@@ -922,7 +922,7 @@
         constructor() {
             this.useDatabase = true;
         }
-        
+
         async loadTasks() {
             try {
                 const response = await fetch('/api/tasks');
@@ -935,18 +935,18 @@
                 console.warn('Database unavailable, using localStorage:', error);
                 this.useDatabase = false;
             }
-            
+
             const stored = localStorage.getItem(STORAGE_KEY);
             return stored ? JSON.parse(stored) : [];
         }
-        
+
         async saveTask(name) {
             const newTask = { name, position: tasks.length };
-            
+
             // Save to localStorage immediately
             tasks.push(newTask);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-            
+
             if (this.useDatabase) {
                 try {
                     const response = await fetch('/api/tasks', {
@@ -965,16 +965,16 @@
                     console.warn('Database save failed:', error);
                 }
             }
-            
+
             return newTask;
         }
-        
+
         async updateTask(id, name) {
             const taskIndex = tasks.findIndex(t => t.id === id);
             if (taskIndex >= 0) {
                 tasks[taskIndex].name = name;
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-                
+
                 if (this.useDatabase) {
                     try {
                         await fetch(`/api/tasks/${id}`, {
@@ -988,7 +988,7 @@
                 }
             }
         }
-        
+
         async deleteTask(id) {
             const taskIndex = tasks.findIndex(t => t.id === id);
             if (taskIndex >= 0) {
@@ -998,7 +998,7 @@
                     task.position = index;
                 });
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-                
+
                 if (this.useDatabase) {
                     try {
                         await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
@@ -1019,16 +1019,16 @@
                     console.warn('Suggestions API failed:', error);
                 }
             }
-            
+
             // Fallback to local cache
-            return autocompleteCache.filter(name => 
+            return autocompleteCache.filter(name =>
                 name.toLowerCase().includes(query.toLowerCase())
             ).slice(0, 5);
         }
     }
-    
+
     const storage = new TaskStorage();
-    
+
     // Timer Session Management Class
     class TimerSession {
         constructor(taskName, creationSource = 'manual') {
@@ -1042,17 +1042,17 @@
             this.status = 'inactive';
             this.dbId = null;
         }
-        
+
         generateSessionId() {
             return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         }
-        
+
         async start(plannedSeconds) {
             try {
                 this.plannedDuration = plannedSeconds;
                 this.startTime = new Date();
                 this.status = 'active';
-                
+
                 const response = await fetch('/api/timer/start', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -1063,7 +1063,7 @@
                         creation_source: this.creationSource
                     })
                 });
-                
+
                 const data = await response.json();
                 if (data.success) {
                     this.dbId = data.session_id;
@@ -1078,13 +1078,13 @@
                 return true; // Continue offline
             }
         }
-        
+
         async stop() {
             try {
                 this.endTime = new Date();
                 this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
                 this.status = 'stopped';
-                
+
                 const response = await fetch('/api/timer/stop', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
@@ -1093,14 +1093,14 @@
                         actual_duration: this.actualDuration
                     })
                 });
-                
+
                 const data = await response.json();
                 if (data.success) {
                     console.log(`Timer session stopped: ${this.taskName}, ${this.actualDuration}s`);
                 } else {
                     console.error('Failed to stop session:', data.error);
                 }
-                
+
                 return this.actualDuration;
             } catch (error) {
                 console.warn('Timer session stop failed:', error);
@@ -1108,13 +1108,13 @@
                 return this.actualDuration;
             }
         }
-        
+
         async complete() {
             try {
                 this.endTime = new Date();
                 this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
                 this.status = 'completed';
-                
+
                 const response = await fetch('/api/timer/complete', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
@@ -1123,14 +1123,14 @@
                         actual_duration: this.actualDuration
                     })
                 });
-                
+
                 const data = await response.json();
                 if (data.success) {
                     console.log(`Timer session completed: ${this.taskName}, ${this.actualDuration}s`);
                 } else {
                     console.error('Failed to complete session:', data.error);
                 }
-                
+
                 return this.actualDuration;
             } catch (error) {
                 console.warn('Timer session complete failed:', error);
@@ -1139,27 +1139,27 @@
             }
         }
     }
-    
+
     // Session management state
     let currentSession = null;
-    
+
     // Task Statistics Class
     class TaskStatistics {
         constructor() {
             this.statsCache = new Map();
             this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
         }
-        
+
         async getTaskStats(taskName) {
             const cached = this.statsCache.get(taskName);
             if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
                 return cached.data;
             }
-            
+
             try {
                 const response = await fetch(`/api/timer/stats?task=${encodeURIComponent(taskName)}`);
                 const data = await response.json();
-                
+
                 if (data.success) {
                     this.statsCache.set(taskName, {
                         data: data.stats,
@@ -1170,15 +1170,15 @@
             } catch (error) {
                 console.warn('Stats API failed:', error);
             }
-            
+
             return null;
         }
-        
+
         async getAllStats() {
             try {
                 const response = await fetch('/api/timer/stats');
                 const data = await response.json();
-                
+
                 if (data.success) {
                     // Update cache for all tasks
                     data.stats.forEach(stat => {
@@ -1192,18 +1192,18 @@
             } catch (error) {
                 console.warn('Stats API failed:', error);
             }
-            
+
             return [];
         }
-        
+
         clearCache() {
             this.statsCache.clear();
         }
-        
+
         formatDuration(seconds) {
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
-            
+
             if (hours > 0) {
                 return `${hours}h ${minutes}m`;
             } else if (minutes > 0) {
@@ -1213,14 +1213,14 @@
             }
         }
     }
-    
+
     // Daily Statistics Management Class
     class DailyStats {
         constructor() {
             this.cache = null;
             this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
             this.lastFetch = 0;
-            
+
             // DOM elements
             this.container = document.getElementById('daily-stats');
             this.moodEmoji = document.getElementById('mood-emoji');
@@ -1228,19 +1228,19 @@
             this.timeSpent = document.getElementById('time-spent');
             this.completionPercentage = document.getElementById('completion-percentage');
         }
-        
+
         async fetchStats() {
             const now = Date.now();
-            
+
             // Use cache if valid and recent
             if (this.cache && (now - this.lastFetch) < this.cacheTimeout) {
                 return this.cache;
             }
-            
+
             try {
                 const response = await fetch('/api/daily-stats');
                 const data = await response.json();
-                
+
                 if (data.success) {
                     this.cache = data.stats;
                     this.lastFetch = now;
@@ -1254,7 +1254,7 @@
                 return this.getDefaultStats();
             }
         }
-        
+
         getDefaultStats() {
             return {
                 finished_tasks: 0,
@@ -1266,13 +1266,13 @@
                 historical_context: null
             };
         }
-        
+
         async refreshStats() {
             if (!this.container) return;
-            
+
             // Add loading state
             this.container.classList.add('loading');
-            
+
             try {
                 const stats = await this.fetchStats();
                 this.updateDisplay(stats);
@@ -1283,34 +1283,34 @@
                 this.container.classList.remove('loading');
             }
         }
-        
+
         updateDisplay(stats) {
             if (!this.container) return;
-            
+
             // Update mood emoji
             if (this.moodEmoji) {
                 this.moodEmoji.textContent = stats.mood_emoji;
             }
-            
+
             // Update tasks count
             if (this.tasksCount) {
                 this.tasksCount.textContent = `${stats.finished_tasks}/${stats.total_sessions}`;
             }
-            
+
             // Update time spent
             if (this.timeSpent) {
                 this.timeSpent.textContent = stats.total_time_formatted;
             }
-            
+
             // Update completion percentage
             if (this.completionPercentage) {
                 const percentage = Math.round(stats.completion_percentage || 0);
                 this.completionPercentage.textContent = `${percentage}% completed`;
-                
+
                 // Update completion bar styling
                 const completionBar = this.completionPercentage.parentElement;
                 completionBar.className = 'completion-bar'; // Reset classes
-                
+
                 if (percentage >= 75) {
                     completionBar.classList.add('high-completion');
                 } else if (percentage >= 50) {
@@ -1320,47 +1320,47 @@
                 }
             }
         }
-        
+
         clearCache() {
             this.cache = null;
             this.lastFetch = 0;
         }
     }
-    
+
     const taskStats = new TaskStatistics();
     const dailyStats = new DailyStats();
-    
+
     // Initialize
     async function init() {
         tasks = await storage.loadTasks();
         renderTaskSlots();
         updateClockDisplay();
         attachAddTaskListener();
-        
+
         // Build autocomplete cache
         autocompleteCache = tasks.map(t => t.name);
-        
+
         // Load initial daily statistics
         await dailyStats.refreshStats();
     }
-    
+
     // Refresh statistics for task slots
     async function refreshTaskSlotStats() {
         const allStats = await taskStats.getAllStats();
-        
+
         // Update each task slot with statistics
         const taskSlots = document.querySelectorAll('.task-slot.filled');
         taskSlots.forEach(async (slotEl, index) => {
             const task = tasks[index];
             if (!task) return;
-            
+
             const stats = allStats.find(s => s.task_name === task.name);
             if (stats) {
                 updateTaskSlotStats(slotEl, stats);
             }
         });
     }
-    
+
     function updateTaskSlotStats(slotEl, stats) {
         let statsEl = slotEl.querySelector('.task-stats');
         if (!statsEl) {
@@ -1370,12 +1370,12 @@
             const taskContent = slotEl.querySelector('.task-content');
             taskContent.insertBefore(statsEl, taskContent.querySelector('.task-actions'));
         }
-        
+
         const successRate = stats.success_rate || 0;
         const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
         const attempts = stats.total_attempts || 0;
         const successes = stats.successful_runs || 0;
-        
+
         statsEl.innerHTML = `
             <div class="stats-line">
                 <span class="success-rate">✅ ${successes}/${attempts} sessions</span>
@@ -1383,16 +1383,16 @@
             </div>
         `;
     }
-    
+
     // Task slot rendering
     async function renderTaskSlots() {
         taskSlotsEl.innerHTML = '';
-        
+
         for (let i = 0; i < MAX_TASKS; i++) {
             const task = tasks[i];
             const slotEl = document.createElement('div');
             slotEl.className = task ? 'task-slot filled' : 'task-slot empty';
-            
+
             if (task) {
                 slotEl.innerHTML = `
                     <div class="task-content">
@@ -1410,7 +1410,7 @@
                             <button onclick="deleteTask(${task.id || i})" title="Delete Task">🗑️</button>
                         </div>
                     </div>`;
-                
+
                 // Load and update statistics for this task
                 const stats = await taskStats.getTaskStats(task.name);
                 if (stats) {
@@ -1423,39 +1423,39 @@
                         <span class="add-text">Add Task</span>
                     </div>`;
             }
-            
+
             taskSlotsEl.appendChild(slotEl);
         }
     }
-    
+
     // Task management functions
     async function addTask(slotIndex) {
         if (tasks.length >= MAX_TASKS) return;
-        
+
         currentEditingSlot = slotIndex;
         showTaskInput(slotIndex, '');
     }
-    
+
     async function editTask(slotIndex) {
         const task = tasks[slotIndex];
         if (!task) return;
-        
+
         currentEditingSlot = slotIndex;
         showTaskInput(slotIndex, task.name);
     }
-    
+
     async function deleteTask(id) {
         if (!confirm('Are you sure you want to delete this task?')) return;
-        
+
         await storage.deleteTask(id);
         renderTaskSlots();
     }
-    
+
     function showTaskInput(slotIndex, initialValue) {
         const slotEl = taskSlotsEl.children[slotIndex];
         slotEl.innerHTML = `
             <div class="task-input-container">
-                <input type="text" class="task-input" value="${initialValue}" 
+                <input type="text" class="task-input" value="${initialValue}"
                        placeholder="Enter task name..." maxlength="50">
                 <div class="autocomplete-dropdown"></div>
                 <div class="input-actions">
@@ -1463,29 +1463,29 @@
                     <button class="cancel-btn" onclick="cancelEdit()">❌ Cancel</button>
                 </div>
             </div>`;
-            
+
         const input = slotEl.querySelector('.task-input');
         input.focus();
         setupAutocomplete(input);
-        
+
         // Handle Enter key
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveTask(slotIndex);
             if (e.key === 'Escape') cancelEdit();
         });
     }
-    
+
     async function saveTask(slotIndex) {
         const input = taskSlotsEl.children[slotIndex].querySelector('.task-input');
         const name = input.value.trim();
-        
+
         if (!name) {
             cancelEdit();
             return;
         }
-        
+
         const existingTask = tasks[slotIndex];
-        
+
         if (existingTask) {
             // Update existing task
             await storage.updateTask(existingTask.id, name);
@@ -1497,45 +1497,45 @@
                 cancelEdit();
                 return;
             }
-            
+
             const newTask = await storage.saveTask(name);
             if (!autocompleteCache.includes(name)) {
                 autocompleteCache.push(name);
             }
         }
-        
+
         currentEditingSlot = -1;
         renderTaskSlots();
     }
-    
+
     function cancelEdit() {
         currentEditingSlot = -1;
         renderTaskSlots();
     }
-    
+
     // Autocomplete functionality
     function setupAutocomplete(inputElement) {
         const dropdown = inputElement.parentNode.querySelector('.autocomplete-dropdown');
         let debounceTimer;
-        
+
         inputElement.addEventListener('input', async (e) => {
             const query = e.target.value.trim();
-            
+
             if (query.length < 2) {
                 hideDropdown();
                 return;
             }
-            
+
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
                 const suggestions = await storage.getSuggestions(query);
                 showDropdown(dropdown, suggestions, inputElement);
             }, 300);
         });
-        
+
         inputElement.addEventListener('keydown', (e) => {
             const items = dropdown.querySelectorAll('.autocomplete-item');
-            
+
             if (e.key === 'Tab' && items.length > 0) {
                 e.preventDefault();
                 const nextIndex = (selectedSuggestionIndex + 1) % items.length;
@@ -1553,26 +1553,26 @@
                 hideDropdown();
             }
         });
-        
+
         function hideDropdown() {
             dropdown.style.display = 'none';
             selectedSuggestionIndex = -1;
         }
     }
-    
+
     function showDropdown(dropdown, suggestions, inputElement) {
         if (suggestions.length === 0) {
             dropdown.style.display = 'none';
             return;
         }
-        
-        dropdown.innerHTML = suggestions.map(suggestion => 
+
+        dropdown.innerHTML = suggestions.map(suggestion =>
             `<div class="autocomplete-item">${suggestion}</div>`
         ).join('');
-        
+
         dropdown.style.display = 'block';
         selectedSuggestionIndex = -1;
-        
+
         // Add click handlers
         dropdown.querySelectorAll('.autocomplete-item').forEach((item, index) => {
             item.addEventListener('click', () => {
@@ -1581,7 +1581,7 @@
             });
         });
     }
-    
+
     function selectSuggestion(items, index, inputElement) {
         items.forEach(item => item.classList.remove('selected'));
         if (index >= 0 && index < items.length) {
@@ -1589,12 +1589,12 @@
             selectedSuggestionIndex = index;
         }
     }
-    
+
     // Timer integration
     function runTask(taskName) {
         currentTask = taskName;
         taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${taskName}</div>`;
-        
+
         // Add edit handler for center task
         document.getElementById('task-name').addEventListener('click', function () {
             const newName = prompt('Edit task name:', currentTask);
@@ -1602,7 +1602,7 @@
                 const oldName = currentTask;
                 currentTask = newName.trim();
                 this.textContent = currentTask;
-                
+
                 // Update in task slots if it exists there
                 const taskIndex = tasks.findIndex(t => t.name === oldName);
                 if (taskIndex >= 0) {
@@ -1613,7 +1613,7 @@
             }
         });
     }
-    
+
     // Enhanced add task listener for center
     function attachAddTaskListener() {
         const addTaskEl = document.getElementById('add-task');
@@ -1623,7 +1623,7 @@
                 if (taskName && taskName.trim()) {
                     currentTask = taskName.trim();
                     taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
-                    
+
                     // Offer to save to slots if there's space
                     if (tasks.length < MAX_TASKS) {
                         setTimeout(() => {
@@ -1634,7 +1634,7 @@
                             }
                         }, 100);
                     }
-                    
+
                     document.getElementById('task-name').addEventListener('click', function () {
                         const newName = prompt('Edit task name:', currentTask);
                         if (newName && newName.trim()) {
@@ -1646,39 +1646,39 @@
             });
         }
     }
-    
+
     // Enhanced stop timer
     async function stopTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         isRunning = false;
         isPaused = false;
-        
+
         // End timer session (unsuccessful completion)
         if (currentSession && currentSession.status === 'active') {
             await currentSession.stop();
             console.log(`Session stopped: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
         }
-        
+
         const wasRunningTask = currentTask;
         currentTask = '';
         currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
-        
+
         // Reset UI
         taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
         attachAddTaskListener();
         updateClockDisplay();
         resetProgress();
-        
+
         // Clear stats cache to show updated data
         taskStats.clearCache();
         await refreshTaskSlotStats();
-        
+
         // Refresh daily statistics
         dailyStats.clearCache();
         await dailyStats.refreshStats();
-        
+
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
             setTimeout(() => {
@@ -1718,7 +1718,7 @@
         // Create new timer session
         const creationSource = tasks.find(t => t.name === currentTask) ? 'task_slot' : 'timer_center';
         currentSession = new TimerSession(currentTask, creationSource);
-        
+
         // Start session tracking
         const sessionStarted = await currentSession.start(totalSeconds);
         if (!sessionStarted) {
@@ -1753,21 +1753,21 @@
         timerInterval = null;
         isRunning = false;
         isPaused = false;
-        
+
         // Complete timer session (successful completion)
         if (currentSession && currentSession.status === 'active') {
             await currentSession.complete();
             console.log(`Session completed: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
         }
-        
+
         const wasRunningTask = currentTask;
-        
+
         // Check if this was a quest and handle quest completion
         let questCompleted = false;
         if (wasRunningTask && wasRunningTask.startsWith('🗡️ ')) {
             questCompleted = await handleQuestProgress(wasRunningTask, currentSession.actualDuration);
         }
-        
+
         if (questCompleted) {
             alert('🎉 QUEST COMPLETED! You are victorious! 🏆✨');
         } else {
@@ -1776,24 +1776,24 @@
         currentTask = '';
         currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
-        
+
         // Reset UI
         taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
         attachAddTaskListener();
         updateClockDisplay();
         resetProgress();
-        
+
         // Clear stats cache and refresh task slot stats
         taskStats.clearCache();
         await refreshTaskSlotStats();
-        
+
         // Refresh daily statistics
         dailyStats.clearCache();
         await dailyStats.refreshStats();
-        
+
         // Refresh quest display to show updated progress
         await loadQuests();
-        
+
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
             setTimeout(() => {
@@ -1813,41 +1813,41 @@
                 taskStats.getTaskStats(taskName),
                 fetch(`/api/timer/history?task=${encodeURIComponent(taskName)}&limit=10`).then(r => r.json())
             ]);
-            
+
             if (!stats) {
                 alert('No statistics available for this task yet.');
                 return;
             }
-            
+
             const modal = createStatsModal(taskName, stats, history.success ? history.sessions : []);
             document.body.appendChild(modal);
-            
+
             // Add close handlers
             modal.querySelector('.modal-close').addEventListener('click', () => {
                 document.body.removeChild(modal);
             });
-            
+
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     document.body.removeChild(modal);
                 }
             });
-            
+
         } catch (error) {
             console.error('Failed to load task statistics:', error);
             alert('Failed to load statistics. Please try again.');
         }
     }
-    
+
     function createStatsModal(taskName, stats, sessions) {
         const modal = document.createElement('div');
         modal.className = 'stats-modal';
-        
+
         const successRate = Math.round(stats.success_rate || 0);
         const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
         const avgSessionTime = stats.total_attempts > 0 ?
             taskStats.formatDuration(Math.round(stats.total_seconds_spent / stats.total_attempts)) : '0s';
-        
+
         modal.innerHTML = `
             <div class="stats-modal-content">
                 <div class="stats-modal-header">
@@ -1877,7 +1877,7 @@
                             <div class="stat-label">Avg Session</div>
                         </div>
                     </div>
-                    
+
                     <div class="recent-sessions">
                         <h3>Recent Sessions</h3>
                         <div class="session-list">
@@ -1895,7 +1895,7 @@
                             `).join('') : '<p>No sessions recorded yet.</p>'}
                         </div>
                     </div>
-                    
+
                     <div class="stats-actions">
                         <button onclick="exportTaskData('${taskName}')">📥 Export Data</button>
                         <button onclick="clearTaskHistory('${taskName}')">🗑️ Clear History</button>
@@ -1903,10 +1903,10 @@
                 </div>
             </div>
         `;
-        
+
         return modal;
     }
-    
+
     async function exportTaskData(taskName) {
         try {
             const response = await fetch(`/api/timer/export?format=json`);
@@ -1924,7 +1924,7 @@
             alert('Export failed. Please try again.');
         }
     }
-    
+
     async function clearTaskHistory(taskName) {
         if (confirm(`Are you sure you want to clear all history for "${taskName}"? This cannot be undone.`)) {
             try {
@@ -1969,32 +1969,36 @@
         progressPoint.setAttribute('cy', 10);
         progressArc.style.strokeDashoffset = 0;
     }
-    
+
     function resetToDefault() {
         totalSeconds = DEFAULT_SECONDS;
         updateClockDisplay();
     }
-    
+
     // Initialize the application
     init();
-    
+
     // Quest progress tracking
+    function editQuest(questId) {
+      window.location.href = `/edit_quest/${questId}`;
+    }
+
     async function handleQuestProgress(questTaskName, sessionDuration) {
       try {
         // Extract quest name from task name (remove "🗡️ " prefix)
         const questName = questTaskName.replace('🗡️ ', '');
-        
+
         // Get current quests to find the active one
         const response = await fetch('/api/quests');
         const data = await response.json();
         if (!data.success) return false;
-        
+
         const activeQuest = data.quests.find(q => q.short_name === questName && q.is_active);
         if (!activeQuest) return false;
-        
+
         // Handle progress based on quest type
         let questCompleted = false;
-        
+
         if (activeQuest.quest_type === 'stack') {
           // For stack quests, each completed session counts as one day
           // This is simplified - in a real app, you'd track daily progress
@@ -2007,7 +2011,7 @@
           // For complete quests, user needs to manually mark as done
           questCompleted = confirm(`Did you complete the quest objective: "${activeQuest.complete_result}"?`);
         }
-        
+
         if (questCompleted && activeQuest.reward_url) {
           // Show reward if quest is completed
           setTimeout(() => {
@@ -2016,26 +2020,26 @@
             }
           }, 1000);
         }
-        
+
         return questCompleted;
       } catch (error) {
         console.error('Error handling quest progress:', error);
         return false;
       }
     }
-    
+
     // Quest management functions
     async function addQuest() {
       window.location.href = '/add-quest';
     }
-    
+
     async function loadQuests() {
       try {
         const response = await fetch('/api/quests');
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
         if (data.success) {
           renderQuests(data.quests);
@@ -2050,7 +2054,7 @@
         showErrorMessage('Unable to load quests. Please check your connection and try again.');
       }
     }
-    
+
     // Error handling utility
     function showErrorMessage(message, duration = 5000) {
       // Create or update error notification
@@ -2075,10 +2079,10 @@
         `;
         document.body.appendChild(errorDiv);
       }
-      
+
       errorDiv.textContent = message;
       errorDiv.style.transform = 'translateX(0)';
-      
+
       // Auto-hide after duration
       setTimeout(() => {
         if (errorDiv) {
@@ -2087,25 +2091,25 @@
         }
       }, duration);
     }
-    
+
     function renderQuests(quests) {
       const container = document.getElementById('quest-slots');
       container.innerHTML = '';
-      
+
       // Sort quests by position (active quests first)
       const sortedQuests = [...quests].sort((a, b) => {
         if (a.is_active && !b.is_active) return -1;
         if (!a.is_active && b.is_active) return 1;
         return a.position - b.position;
       });
-      
+
       // Render existing quests
       sortedQuests.forEach(quest => {
         const questEl = document.createElement('div');
         questEl.className = quest.is_active ? 'quest-slot filled active' : 'quest-slot filled';
-        
+
         const questText = quest.is_active ? `🔥 ${quest.short_name}` : quest.short_name;
-        
+
         questEl.innerHTML = `
           <div class="quest-content">
             <div class="quest-text">${questText}</div>
@@ -2121,11 +2125,11 @@
         `;
         container.appendChild(questEl);
       });
-      
+
       // Ensure minimum 5 slots by adding empty ones
       const totalSlots = Math.max(5, quests.length);
       const emptySlots = totalSlots - quests.length;
-      
+
       for (let i = 0; i < emptySlots; i++) {
         const emptySlot = document.createElement('div');
         emptySlot.className = 'quest-slot empty';
@@ -2137,34 +2141,34 @@
         `;
         container.appendChild(emptySlot);
       }
-      
+
       // Setup scroll observer for infinite scroll
       setupQuestScroll();
     }
-    
+
     async function runQuest(questId) {
       try {
         // Get quest details
         const response = await fetch('/api/quests');
         const data = await response.json();
         if (!data.success) return;
-        
+
         const quest = data.quests.find(q => q.id === questId);
         if (!quest) {
           alert('Quest not found');
           return;
         }
-        
+
         // Activate the quest
         const activateResponse = await fetch(`/api/quests/${questId}/activate`, {
           method: 'POST'
         });
-        
+
         if (activateResponse.ok) {
           // Set quest as current task in timer
           currentTask = `🗡️ ${quest.short_name}`;
           taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
-          
+
           // Set timer based on quest type
           if (quest.quest_type === 'stack') {
             // For stack quests, use minimum time per day (convert minutes to seconds)
@@ -2176,10 +2180,10 @@
             // For complete quests, use default timer
             totalSeconds = DEFAULT_SECONDS;
           }
-          
+
           updateClockDisplay();
           alert(`🗡️ Quest "${quest.short_name}" is now active! Ready to start timer.`);
-          
+
           // Reload quests to show activation
           loadQuests();
         }
@@ -2188,13 +2192,13 @@
         alert('Error starting quest. Please try again.');
       }
     }
-    
+
     function editQuest(questId) {
       // For now, redirect to add quest page with edit mode
       // TODO: Implement proper edit functionality
       alert('Edit functionality coming soon! For now, you can delete and recreate the quest.');
     }
-    
+
     async function deleteQuest(questId) {
       if (confirm('Are you sure you want to delete this quest?')) {
         try {
@@ -2208,7 +2212,7 @@
         }
       }
     }
-    
+
     // Load quests on page load
     loadQuests();
 </script>
