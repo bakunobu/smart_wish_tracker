@@ -14,22 +14,59 @@
             background-color: #1a1a2e;
             font-family: Arial, sans-serif;
             padding: 20px;
+<<<<<<< HEAD
+=======
         }
         
         .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .top-row {
             display: flex;
             justify-content: center;
             align-items: flex-start;
             gap: 30px;
             flex-wrap: wrap;
+            width: 100%;
         }
         
         .timer-section {
             display: flex;
             flex-direction: column;
             align-items: center;
+>>>>>>> 6f532f7 (resolving conflict)
         }
-        
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .timer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .timer-container {
             text-align: center;
             background-color: #0f3460;
@@ -40,6 +77,8 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 487px;
+<<<<<<< HEAD
+=======
         }
         
         .task-panel {
@@ -55,39 +94,55 @@
             margin: 0 0 20px 0;
             font-size: 1.5rem;
             text-align: center;
+>>>>>>> 6f532f7 (resolving conflict)
         }
-        
+
+        .task-panel {
+            background-color: #0f3460;
+            padding: 30px;
+            border-radius: 20px;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .task-panel h3 {
+            color: white;
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
         .clock {
             font-size: 4rem;
             color: white;
             margin-bottom: 10px;
             cursor: pointer;
         }
-        
+
         .task-container {
             position: relative;
             margin: 10px 0;
         }
-        
+
         .task-name {
             font-size: 1.25rem;
             color: white;
             cursor: pointer;
         }
-        
+
         .add-task {
             font-size: 1.25rem;
             color: #4cc9f0;
             cursor: pointer;
         }
-        
+
         .controls {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
         }
-        
+
         button {
             padding: 10px 20px;
             font-size: 1rem;
@@ -96,29 +151,29 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         #start-btn {
             background-color: #4CAF50;
             color: white;
         }
-        
+
         #pause-btn {
             background-color: #FFC107;
             color: black;
         }
-        
+
         #stop-btn {
             background-color: #F44336;
             color: white;
         }
-        
+
         .progress-container {
             position: relative;
             width: 300px;
             height: 300px;
             margin: 0 auto 30px;
         }
-        
+
         .circle-content {
             position: absolute;
             top: 0;
@@ -131,7 +186,11 @@
             align-items: center;
             text-align: center;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .progress-circle {
             fill: none;
             stroke: rgba(76, 201, 240, 0.3);
@@ -139,7 +198,7 @@
             stroke-dasharray: 879.2;
             stroke-dashoffset: 0;
         }
-        
+
         .progress-arc {
             fill: none;
             stroke: #4cc9f0;
@@ -149,13 +208,17 @@
             transform: rotate(-90deg);
             transform-origin: center;
         }
-        
+
         .progress-point {
             fill: #f72585;
             r: 10;
             transition: transform 0.5s linear;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Task Panel Styles */
         .task-slots {
             display: flex;
@@ -163,7 +226,11 @@
             gap: 10px;
             flex: 1;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-slot {
             background: rgba(76, 201, 240, 0.1);
             border: 2px dashed #4cc9f0;
@@ -175,40 +242,68 @@
             align-items: center;
             justify-content: space-between;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-slot.filled {
             background: rgba(76, 201, 240, 0.2);
             border: 2px solid #4cc9f0;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-slot.empty {
             justify-content: center;
             cursor: pointer;
         }
+<<<<<<< HEAD
+
+        .task-slot.empty:hover {
+            background: rgba(76, 201, 240, 0.2);
+        }
+
+=======
         
         .task-slot.empty:hover {
             background: rgba(76, 201, 240, 0.2);
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-text {
             color: white;
             font-size: 1rem;
             flex: 1;
             text-align: left;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-actions {
             display: flex;
             gap: 5px;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-actions button {
             background: none;
             border: none;
@@ -218,11 +313,19 @@
             border-radius: 3px;
             transition: background 0.2s;
         }
+<<<<<<< HEAD
+
+        .task-actions button:hover {
+            background: rgba(76, 201, 240, 0.3);
+        }
+
+=======
         
         .task-actions button:hover {
             background: rgba(76, 201, 240, 0.3);
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .add-task-slot {
             display: flex;
             align-items: center;
@@ -231,17 +334,29 @@
             color: #4cc9f0;
             font-size: 1rem;
         }
+<<<<<<< HEAD
+
+        .add-icon {
+            font-size: 1.2rem;
+        }
+
+=======
         
         .add-icon {
             font-size: 1.2rem;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Input Styles */
         .task-input-container {
             position: relative;
             width: 100%;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .task-input {
             width: 100%;
             padding: 10px;
@@ -252,11 +367,19 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
+<<<<<<< HEAD
+
+        .task-input:focus {
+            outline: 2px solid #4cc9f0;
+        }
+
+=======
         
         .task-input:focus {
             outline: 2px solid #4cc9f0;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .autocomplete-dropdown {
             position: absolute;
             top: 100%;
@@ -270,55 +393,106 @@
             z-index: 1000;
             display: none;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .autocomplete-item {
             padding: 10px;
             cursor: pointer;
             color: white;
             border-bottom: 1px solid rgba(76, 201, 240, 0.2);
         }
+<<<<<<< HEAD
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+=======
         
         .autocomplete-item:last-child {
             border-bottom: none;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .autocomplete-item:hover,
         .autocomplete-item.selected {
             background: rgba(76, 201, 240, 0.3);
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .input-actions {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .input-actions button {
             padding: 8px 15px;
             font-size: 0.9rem;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .save-btn {
             background-color: #4CAF50;
             color: white;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .cancel-btn {
             background-color: #6c757d;
             color: white;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Task Statistics Styles */
         .task-stats {
             margin: 5px 0;
             font-size: 0.8em;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-line {
             display: flex;
             justify-content: space-between;
             color: #666;
         }
+<<<<<<< HEAD
+
+        .success-rate, .total-time {
+            font-weight: 500;
+        }
+
+        .success-rate {
+            color: #28a745;
+        }
+
+        .total-time {
+            color: #6f42c1;
+        }
+
+=======
         
         .success-rate, .total-time {
             font-weight: 500;
@@ -332,6 +506,7 @@
             color: #6f42c1;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Statistics Modal Styles */
         .stats-modal {
             position: fixed;
@@ -345,7 +520,11 @@
             align-items: center;
             z-index: 1000;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-modal-content {
             background: #2a2a2e;
             border-radius: 15px;
@@ -355,7 +534,11 @@
             overflow-y: auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-modal-header {
             display: flex;
             justify-content: space-between;
@@ -363,13 +546,21 @@
             padding: 20px;
             border-bottom: 1px solid #444;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-modal-header h2 {
             margin: 0;
             color: #fff;
             font-size: 1.5em;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .modal-close {
             background: none;
             border: none;
@@ -383,6 +574,17 @@
             align-items: center;
             justify-content: center;
         }
+<<<<<<< HEAD
+
+        .modal-close:hover {
+            color: #dc3545;
+        }
+
+        .stats-modal-body {
+            padding: 20px;
+        }
+
+=======
         
         .modal-close:hover {
             color: #dc3545;
@@ -392,13 +594,18 @@
             padding: 20px;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-overview {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stat-card {
             background: #3a3a3e;
             border-radius: 10px;
@@ -406,30 +613,50 @@
             text-align: center;
             border: 1px solid #444;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stat-value {
             font-size: 1.5em;
             font-weight: bold;
             color: #fff;
             margin-bottom: 5px;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stat-label {
             color: #888;
             font-size: 0.9em;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .recent-sessions h3 {
             color: #fff;
             margin-bottom: 15px;
             font-size: 1.2em;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .session-list {
             max-height: 200px;
             overflow-y: auto;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .session-item {
             display: flex;
             justify-content: space-between;
@@ -440,6 +667,17 @@
             border-radius: 8px;
             border-left: 4px solid #666;
         }
+<<<<<<< HEAD
+
+        .session-item.completed {
+            border-left-color: #28a745;
+        }
+
+        .session-item.stopped {
+            border-left-color: #dc3545;
+        }
+
+=======
         
         .session-item.completed {
             border-left-color: #28a745;
@@ -449,33 +687,54 @@
             border-left-color: #dc3545;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .session-info {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+<<<<<<< HEAD
+
+        .session-status {
+            font-size: 1.2em;
+        }
+
+=======
         
         .session-status {
             font-size: 1.2em;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .session-date, .session-time {
             color: #888;
             font-size: 0.9em;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .session-duration {
             font-weight: bold;
             color: #fff;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-actions {
             margin-top: 20px;
             display: flex;
             gap: 10px;
             justify-content: center;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-actions button {
             background: #6f42c1;
             color: white;
@@ -485,6 +744,17 @@
             cursor: pointer;
             font-size: 0.9em;
         }
+<<<<<<< HEAD
+
+        .stats-actions button:hover {
+            background: #5a2d91;
+        }
+
+        .stats-actions button:last-child {
+            background: #dc3545;
+        }
+
+=======
         
         .stats-actions button:hover {
             background: #5a2d91;
@@ -494,6 +764,7 @@
             background: #dc3545;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .stats-actions button:last-child:hover {
             background: #c82333;
         }
@@ -507,7 +778,11 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             border: 2px solid rgba(76, 201, 240, 0.1);
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .daily-stats-header {
             color: white;
             font-size: 0.9em;
@@ -515,7 +790,11 @@
             text-align: center;
             font-weight: 500;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .daily-stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -523,7 +802,11 @@
             margin-bottom: 15px;
             text-align: center;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .mood-indicator {
             font-size: 1.8em;
             display: flex;
@@ -531,31 +814,51 @@
             justify-content: center;
             transition: transform 0.3s ease;
         }
+<<<<<<< HEAD
+
+        .mood-indicator:hover {
+            transform: scale(1.1);
+        }
+
+=======
         
         .mood-indicator:hover {
             transform: scale(1.1);
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         .tasks-metric, .time-metric {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .metric-value {
             color: white;
             font-size: 1.1em;
             font-weight: bold;
             line-height: 1;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .metric-label {
             color: #4cc9f0;
             font-size: 0.8em;
             text-transform: lowercase;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .completion-bar {
             text-align: center;
             padding: 8px;
@@ -563,17 +866,36 @@
             border-radius: 8px;
             border: 1px solid rgba(76, 201, 240, 0.2);
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .completion-bar span {
             color: white;
             font-size: 0.85em;
             font-weight: 500;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Completion percentage color coding */
         .completion-bar.high-completion span {
             color: #4CAF50;
         }
+<<<<<<< HEAD
+
+        .completion-bar.medium-completion span {
+            color: #FFC107;
+        }
+
+        .completion-bar.low-completion span {
+            color: #F44336;
+        }
+
+=======
         
         .completion-bar.medium-completion span {
             color: #FFC107;
@@ -583,11 +905,16 @@
             color: #F44336;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         /* Loading state */
         .daily-stats-container.loading {
             opacity: 0.6;
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         .daily-stats-container.loading .metric-value {
             color: #888;
         }
@@ -597,102 +924,455 @@
                 flex-direction: column;
                 align-items: center;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
+            .top-row {
+                flex-direction: column;
+                align-items: center;
+            }
+<<<<<<< HEAD
+
+=======
+            
+>>>>>>> 6f532f7 (resolving conflict)
             .timer-container {
                 width: 280px;
                 margin-bottom: 20px;
                 min-height: auto;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             .task-panel {
                 width: 280px;
                 min-height: auto;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
+            .quest-block {
+                width: 280px;
+                max-width: 280px;
+                padding: 20px;
+            }
+<<<<<<< HEAD
+
+=======
+            
+>>>>>>> 6f532f7 (resolving conflict)
             .stats-modal-content {
                 width: 95%;
                 margin: 10px;
             }
+<<<<<<< HEAD
+
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+=======
             
             .stats-overview {
                 grid-template-columns: repeat(2, 1fr);
             }
             
+>>>>>>> 6f532f7 (resolving conflict)
             .daily-stats-container {
                 width: 280px;
                 padding: 15px;
             }
+<<<<<<< HEAD
+
+            .daily-stats-grid {
+                gap: 10px;
+            }
+
+=======
             
             .daily-stats-grid {
                 gap: 10px;
             }
             
+>>>>>>> 6f532f7 (resolving conflict)
             .mood-indicator {
                 font-size: 1.5em;
             }
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        /* Quest Block Styles */
+        .quest-block {
+          width: 100%;
+          max-width: 730px; /* Combined width of timer-section (380px) + task-panel (320px) + gap (30px) */
+          background-color: #0f3460;
+          border-radius: 20px;
+          padding: 30px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-block h3 {
+          color: white;
+          margin: 0 0 20px 0;
+          font-size: 1.5rem;
+          text-align: center;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slots-container {
+          max-height: 300px;
+          overflow-y: auto;
+          padding-right: 5px;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slots {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slot {
+          background: rgba(76, 201, 240, 0.1);
+          border: 2px dashed #4cc9f0;
+          border-radius: 10px;
+          padding: 20px;
+          transition: all 0.3s ease;
+          min-height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slot.filled {
+          background: rgba(76, 201, 240, 0.2);
+          border: 2px solid #4cc9f0;
+          justify-content: space-between;
+        }
+<<<<<<< HEAD
+
+        .quest-slot.empty {
+          cursor: pointer;
+        }
+
+        .quest-slot.empty:hover {
+          background: rgba(76, 201, 240, 0.2);
+        }
+
+=======
+        
+        .quest-slot.empty {
+          cursor: pointer;
+        }
+        
+        .quest-slot.empty:hover {
+          background: rgba(76, 201, 240, 0.2);
+        }
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slot.active {
+          background: rgba(247, 37, 133, 0.2);
+          border: 2px solid #f72585;
+          box-shadow: 0 0 20px rgba(247, 37, 133, 0.3);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-slot.active .quest-text {
+          color: #f72585;
+          font-weight: bold;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-text {
+          color: white;
+          font-size: 1.1rem;
+          flex: 1;
+          text-align: left;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-actions {
+          display: flex;
+          gap: 10px;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .quest-actions button {
+          background: none;
+          border: none;
+          font-size: 1.3rem;
+          cursor: pointer;
+          padding: 5px;
+          border-radius: 3px;
+          transition: background 0.2s;
+        }
+<<<<<<< HEAD
+
+        .quest-actions button:hover {
+          background: rgba(76, 201, 240, 0.3);
+        }
+
+=======
+        
+        .quest-actions button:hover {
+          background: rgba(76, 201, 240, 0.3);
+        }
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .add-quest-slot {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          color: #4cc9f0;
+          font-size: 1.1rem;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .progress-bar {
+          height: 10px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 5px;
+          overflow: hidden;
+          margin: 10px 0;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        .progress-fill {
+          height: 100%;
+          background: #4cc9f0;
+          width: 0%;
+          transition: width 0.3s ease;
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <div class="timer-section">
-            <div class="timer-container">
-                <div class="progress-container">
-                    <svg class="progress-ring" width="300" height="300">
-                        <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
-                        <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
-                        <circle class="progress-point" cx="150" cy="10" r="10"></circle>
-                    </svg>
+        <div class="top-row">
+            <div class="timer-section">
+                <div class="timer-container">
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="300" height="300">
+                            <circle class="progress-circle" cx="150" cy="150" r="140"></circle>
+                            <circle class="progress-arc" cx="150" cy="150" r="140"></circle>
+                            <circle class="progress-point" cx="150" cy="10" r="10"></circle>
+                        </svg>
+<<<<<<< HEAD
+
+=======
+                        
+>>>>>>> 6f532f7 (resolving conflict)
+                        <!-- Timer and task centered inside circle -->
+                        <div class="circle-content">
+                            <div class="clock" id="clock">00:15:00</div>
+                            <div class="task-container" id="task-container">
+                                <div class="add-task" id="add-task">+ Add Task</div>
+                            </div>
+                        </div>
+                    </div>
+<<<<<<< HEAD
+
+=======
                     
-                    <!-- Timer and task centered inside circle -->
-                    <div class="circle-content">
-                        <div class="clock" id="clock">00:15:00</div>
-                        <div class="task-container" id="task-container">
-                            <div class="add-task" id="add-task">+ Add Task</div>
-                        </div>
+>>>>>>> 6f532f7 (resolving conflict)
+                    <div class="controls">
+                        <button id="start-btn">Start</button>
+                        <button id="pause-btn">Pause</button>
+                        <button id="stop-btn">Stop</button>
                     </div>
-                </div>
-                
-                <div class="controls">
-                    <button id="start-btn">Start</button>
-                    <button id="pause-btn">Pause</button>
-                    <button id="stop-btn">Stop</button>
-                </div>
-                
-                <!-- Daily Statistics Block -->
-                <div class="daily-stats-container" id="daily-stats">
-                    <div class="daily-stats-header">📊 Daily Stats</div>
-                    <div class="daily-stats-grid">
-                        <div class="mood-indicator" id="mood-emoji">😊</div>
-                        <div class="tasks-metric">
-                            <div class="metric-value" id="tasks-count">0/0</div>
-                            <div class="metric-label">tasks</div>
+<<<<<<< HEAD
+
+=======
+                    
+>>>>>>> 6f532f7 (resolving conflict)
+                    <!-- Daily Statistics Block -->
+                    <div class="daily-stats-container" id="daily-stats">
+                        <div class="daily-stats-header">📊 Daily Stats</div>
+                        <div class="daily-stats-grid">
+                            <div class="mood-indicator" id="mood-emoji">😊</div>
+                            <div class="tasks-metric">
+                                <div class="metric-value" id="tasks-count">0/0</div>
+                                <div class="metric-label">tasks</div>
+                            </div>
+                            <div class="time-metric">
+                                <div class="metric-value" id="time-spent">0m</div>
+                                <div class="metric-label">spent</div>
+                            </div>
                         </div>
-                        <div class="time-metric">
-                            <div class="metric-value" id="time-spent">0m</div>
-                            <div class="metric-label">spent</div>
+                        <div class="completion-bar">
+                            <span id="completion-percentage">0% completed</span>
                         </div>
-                    </div>
-                    <div class="completion-bar">
-                        <span id="completion-percentage">0% completed</span>
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
+
+=======
+            
+>>>>>>> 6f532f7 (resolving conflict)
+            <div class="task-panel">
+                <h3>📋 Tasks</h3>
+                <div class="task-slots" id="task-slots">
+                    <!-- Task slots will be dynamically generated -->
+                </div>
+            </div>
         </div>
+<<<<<<< HEAD
+
+=======
         
-        <div class="task-panel">
-            <h3>📋 Tasks</h3>
-            <div class="task-slots" id="task-slots">
-                <!-- Task slots will be dynamically generated -->
+>>>>>>> 6f532f7 (resolving conflict)
+        <!-- Quest Block - Now properly inside main-container -->
+        <div class="quest-block">
+            <h3>🗡️ Quests</h3>
+            <div class="quest-slots-container">
+                <div class="quest-slots" id="quest-slots">
+                    <!-- Quest slots will be dynamically loaded here -->
+                </div>
             </div>
         </div>
     </div>
 
 <script>
+  // Initialize quest slots
+  document.addEventListener('DOMContentLoaded', function() {
+    loadQuests();
+  });
+<<<<<<< HEAD
+
+  function setupQuestScroll() {
+    const questContainer = document.querySelector('.quest-slots-container');
+    const questSlots = document.getElementById('quest-slots');
+
+=======
+  
+  function setupQuestScroll() {
+    const questContainer = document.querySelector('.quest-slots-container');
+    const questSlots = document.getElementById('quest-slots');
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    questContainer.addEventListener('scroll', function() {
+      if (questContainer.scrollTop + questContainer.clientHeight >=
+          questContainer.scrollHeight - 100) {
+        loadMoreQuests();
+      }
+    });
+  }
+<<<<<<< HEAD
+
+  function loadMoreQuests() {
+    // Add 5 more empty slots when reaching bottom
+    const questSlots = document.getElementById('quest-slots');
+
+    for (let i = 0; i < 5; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'quest-slot empty';
+
+      const addSlot = document.createElement('div');
+      addSlot.className = 'add-quest-slot';
+      addSlot.onclick = () => window.location.href = '/add-quest';
+
+      const plusIcon = document.createElement('span');
+      plusIcon.className = 'add-icon';
+      plusIcon.textContent = '➕';
+
+      const addText = document.createElement('span');
+      addText.className = 'add-text';
+      addText.textContent = 'Add Quest';
+
+=======
+  
+  function loadMoreQuests() {
+    // Add 5 more empty slots when reaching bottom
+    const questSlots = document.getElementById('quest-slots');
+    
+    for (let i = 0; i < 5; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'quest-slot empty';
+      
+      const addSlot = document.createElement('div');
+      addSlot.className = 'add-quest-slot';
+      addSlot.onclick = () => window.location.href = '/add-quest';
+      
+      const plusIcon = document.createElement('span');
+      plusIcon.className = 'add-icon';
+      plusIcon.textContent = '➕';
+      
+      const addText = document.createElement('span');
+      addText.className = 'add-text';
+      addText.textContent = 'Add Quest';
+      
+>>>>>>> 6f532f7 (resolving conflict)
+      addSlot.appendChild(plusIcon);
+      addSlot.appendChild(addText);
+      slot.appendChild(addSlot);
+      questSlots.appendChild(slot);
+    }
+  }
     // Constants
     const MAX_TASKS = 5;
     const STORAGE_KEY = 'smart_timer_tasks';
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // DOM elements
     const clockEl = document.getElementById('clock');
     const taskContainerEl = document.getElementById('task-container');
@@ -718,6 +1398,106 @@
     let currentEditingSlot = -1;
     let selectedSuggestionIndex = -1;
 
+<<<<<<< HEAD
+    // Task management state
+    let tasks = [];
+    let autocompleteCache = [];
+    let currentEditingSlot = -1;
+    let selectedSuggestionIndex = -1;
+
+    // Task Storage Class
+    class TaskStorage {
+        constructor() {
+            this.useDatabase = true;
+        }
+
+        async loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data.tasks));
+                    return data.tasks;
+                }
+            } catch (error) {
+                console.warn('Database unavailable, using localStorage:', error);
+                this.useDatabase = false;
+            }
+
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        async saveTask(name) {
+            const newTask = { name, position: tasks.length };
+
+            // Save to localStorage immediately
+            tasks.push(newTask);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+
+            if (this.useDatabase) {
+                try {
+                    const response = await fetch('/api/tasks', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            newTask.id = data.data.id;
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Database save failed:', error);
+                }
+            }
+
+            return newTask;
+        }
+
+        async updateTask(id, name) {
+            const taskIndex = tasks.findIndex(t => t.id === id);
+            if (taskIndex >= 0) {
+                tasks[taskIndex].name = name;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+
+                if (this.useDatabase) {
+                    try {
+                        await fetch(`/api/tasks/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name })
+                        });
+                    } catch (error) {
+                        console.warn('Database update failed:', error);
+                    }
+                }
+            }
+        }
+
+        async deleteTask(id) {
+            const taskIndex = tasks.findIndex(t => t.id === id);
+            if (taskIndex >= 0) {
+                tasks.splice(taskIndex, 1);
+                // Reorder positions
+                tasks.forEach((task, index) => {
+                    task.position = index;
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+
+                if (this.useDatabase) {
+                    try {
+                        await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+                    } catch (error) {
+                        console.warn('Database delete failed:', error);
+                    }
+                }
+            }
+        }
+
+=======
     // Task Storage Class
     class TaskStorage {
         constructor() {
@@ -810,6 +1590,7 @@
             }
         }
 
+>>>>>>> 6f532f7 (resolving conflict)
         async getSuggestions(query) {
             if (this.useDatabase) {
                 try {
@@ -820,16 +1601,28 @@
                     console.warn('Suggestions API failed:', error);
                 }
             }
+<<<<<<< HEAD
+
+            // Fallback to local cache
+            return autocompleteCache.filter(name =>
+=======
             
             // Fallback to local cache
             return autocompleteCache.filter(name => 
+>>>>>>> 6f532f7 (resolving conflict)
                 name.toLowerCase().includes(query.toLowerCase())
             ).slice(0, 5);
         }
     }
+<<<<<<< HEAD
+
+    const storage = new TaskStorage();
+
+=======
     
     const storage = new TaskStorage();
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Timer Session Management Class
     class TimerSession {
         constructor(taskName, creationSource = 'manual') {
@@ -843,17 +1636,29 @@
             this.status = 'inactive';
             this.dbId = null;
         }
+<<<<<<< HEAD
+
+        generateSessionId() {
+            return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+=======
         
         generateSessionId() {
             return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         async start(plannedSeconds) {
             try {
                 this.plannedDuration = plannedSeconds;
                 this.startTime = new Date();
                 this.status = 'active';
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const response = await fetch('/api/timer/start', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -864,7 +1669,11 @@
                         creation_source: this.creationSource
                     })
                 });
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const data = await response.json();
                 if (data.success) {
                     this.dbId = data.session_id;
@@ -879,13 +1688,21 @@
                 return true; // Continue offline
             }
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         async stop() {
             try {
                 this.endTime = new Date();
                 this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
                 this.status = 'stopped';
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const response = await fetch('/api/timer/stop', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
@@ -894,14 +1711,22 @@
                         actual_duration: this.actualDuration
                     })
                 });
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const data = await response.json();
                 if (data.success) {
                     console.log(`Timer session stopped: ${this.taskName}, ${this.actualDuration}s`);
                 } else {
                     console.error('Failed to stop session:', data.error);
                 }
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 return this.actualDuration;
             } catch (error) {
                 console.warn('Timer session stop failed:', error);
@@ -909,13 +1734,21 @@
                 return this.actualDuration;
             }
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         async complete() {
             try {
                 this.endTime = new Date();
                 this.actualDuration = Math.floor((this.endTime - this.startTime) / 1000);
                 this.status = 'completed';
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const response = await fetch('/api/timer/complete', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
@@ -924,14 +1757,22 @@
                         actual_duration: this.actualDuration
                     })
                 });
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 const data = await response.json();
                 if (data.success) {
                     console.log(`Timer session completed: ${this.taskName}, ${this.actualDuration}s`);
                 } else {
                     console.error('Failed to complete session:', data.error);
                 }
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 return this.actualDuration;
             } catch (error) {
                 console.warn('Timer session complete failed:', error);
@@ -940,27 +1781,46 @@
             }
         }
     }
+<<<<<<< HEAD
+
+    // Session management state
+    let currentSession = null;
+
+=======
     
     // Session management state
     let currentSession = null;
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Task Statistics Class
     class TaskStatistics {
         constructor() {
             this.statsCache = new Map();
             this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         async getTaskStats(taskName) {
             const cached = this.statsCache.get(taskName);
             if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
                 return cached.data;
             }
+<<<<<<< HEAD
+
+            try {
+                const response = await fetch(`/api/timer/stats?task=${encodeURIComponent(taskName)}`);
+                const data = await response.json();
+
+=======
             
             try {
                 const response = await fetch(`/api/timer/stats?task=${encodeURIComponent(taskName)}`);
                 const data = await response.json();
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 if (data.success) {
                     this.statsCache.set(taskName, {
                         data: data.stats,
@@ -971,15 +1831,26 @@
             } catch (error) {
                 console.warn('Stats API failed:', error);
             }
+<<<<<<< HEAD
+
+            return null;
+        }
+
+=======
             
             return null;
         }
         
+>>>>>>> 6f532f7 (resolving conflict)
         async getAllStats() {
             try {
                 const response = await fetch('/api/timer/stats');
                 const data = await response.json();
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 if (data.success) {
                     // Update cache for all tasks
                     data.stats.forEach(stat => {
@@ -993,6 +1864,20 @@
             } catch (error) {
                 console.warn('Stats API failed:', error);
             }
+<<<<<<< HEAD
+
+            return [];
+        }
+
+        clearCache() {
+            this.statsCache.clear();
+        }
+
+        formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+
+=======
             
             return [];
         }
@@ -1005,6 +1890,7 @@
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
             
+>>>>>>> 6f532f7 (resolving conflict)
             if (hours > 0) {
                 return `${hours}h ${minutes}m`;
             } else if (minutes > 0) {
@@ -1014,14 +1900,22 @@
             }
         }
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Daily Statistics Management Class
     class DailyStats {
         constructor() {
             this.cache = null;
             this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
             this.lastFetch = 0;
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             // DOM elements
             this.container = document.getElementById('daily-stats');
             this.moodEmoji = document.getElementById('mood-emoji');
@@ -1029,19 +1923,34 @@
             this.timeSpent = document.getElementById('time-spent');
             this.completionPercentage = document.getElementById('completion-percentage');
         }
+<<<<<<< HEAD
+
+        async fetchStats() {
+            const now = Date.now();
+
+=======
         
         async fetchStats() {
             const now = Date.now();
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Use cache if valid and recent
             if (this.cache && (now - this.lastFetch) < this.cacheTimeout) {
                 return this.cache;
             }
+<<<<<<< HEAD
+
+            try {
+                const response = await fetch('/api/daily-stats');
+                const data = await response.json();
+
+=======
             
             try {
                 const response = await fetch('/api/daily-stats');
                 const data = await response.json();
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 if (data.success) {
                     this.cache = data.stats;
                     this.lastFetch = now;
@@ -1055,7 +1964,11 @@
                 return this.getDefaultStats();
             }
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         getDefaultStats() {
             return {
                 finished_tasks: 0,
@@ -1067,6 +1980,15 @@
                 historical_context: null
             };
         }
+<<<<<<< HEAD
+
+        async refreshStats() {
+            if (!this.container) return;
+
+            // Add loading state
+            this.container.classList.add('loading');
+
+=======
         
         async refreshStats() {
             if (!this.container) return;
@@ -1074,6 +1996,7 @@
             // Add loading state
             this.container.classList.add('loading');
             
+>>>>>>> 6f532f7 (resolving conflict)
             try {
                 const stats = await this.fetchStats();
                 this.updateDisplay(stats);
@@ -1084,34 +2007,61 @@
                 this.container.classList.remove('loading');
             }
         }
+<<<<<<< HEAD
+
+        updateDisplay(stats) {
+            if (!this.container) return;
+
+=======
         
         updateDisplay(stats) {
             if (!this.container) return;
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Update mood emoji
             if (this.moodEmoji) {
                 this.moodEmoji.textContent = stats.mood_emoji;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Update tasks count
             if (this.tasksCount) {
                 this.tasksCount.textContent = `${stats.finished_tasks}/${stats.total_sessions}`;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Update time spent
             if (this.timeSpent) {
                 this.timeSpent.textContent = stats.total_time_formatted;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Update completion percentage
             if (this.completionPercentage) {
                 const percentage = Math.round(stats.completion_percentage || 0);
                 this.completionPercentage.textContent = `${percentage}% completed`;
+<<<<<<< HEAD
+
+                // Update completion bar styling
+                const completionBar = this.completionPercentage.parentElement;
+                completionBar.className = 'completion-bar'; // Reset classes
+
+=======
                 
                 // Update completion bar styling
                 const completionBar = this.completionPercentage.parentElement;
                 completionBar.className = 'completion-bar'; // Reset classes
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 if (percentage >= 75) {
                     completionBar.classList.add('high-completion');
                 } else if (percentage >= 50) {
@@ -1121,22 +2071,47 @@
                 }
             }
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         clearCache() {
             this.cache = null;
             this.lastFetch = 0;
         }
     }
+<<<<<<< HEAD
+
+    const taskStats = new TaskStatistics();
+    const dailyStats = new DailyStats();
+
+=======
     
     const taskStats = new TaskStatistics();
     const dailyStats = new DailyStats();
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Initialize
     async function init() {
         tasks = await storage.loadTasks();
         renderTaskSlots();
         updateClockDisplay();
         attachAddTaskListener();
+<<<<<<< HEAD
+
+        // Build autocomplete cache
+        autocompleteCache = tasks.map(t => t.name);
+
+        // Load initial daily statistics
+        await dailyStats.refreshStats();
+    }
+
+    // Refresh statistics for task slots
+    async function refreshTaskSlotStats() {
+        const allStats = await taskStats.getAllStats();
+
+=======
         
         // Build autocomplete cache
         autocompleteCache = tasks.map(t => t.name);
@@ -1149,19 +2124,28 @@
     async function refreshTaskSlotStats() {
         const allStats = await taskStats.getAllStats();
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Update each task slot with statistics
         const taskSlots = document.querySelectorAll('.task-slot.filled');
         taskSlots.forEach(async (slotEl, index) => {
             const task = tasks[index];
             if (!task) return;
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             const stats = allStats.find(s => s.task_name === task.name);
             if (stats) {
                 updateTaskSlotStats(slotEl, stats);
             }
         });
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     function updateTaskSlotStats(slotEl, stats) {
         let statsEl = slotEl.querySelector('.task-stats');
         if (!statsEl) {
@@ -1171,12 +2155,20 @@
             const taskContent = slotEl.querySelector('.task-content');
             taskContent.insertBefore(statsEl, taskContent.querySelector('.task-actions'));
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         const successRate = stats.success_rate || 0;
         const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
         const attempts = stats.total_attempts || 0;
         const successes = stats.successful_runs || 0;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         statsEl.innerHTML = `
             <div class="stats-line">
                 <span class="success-rate">✅ ${successes}/${attempts} sessions</span>
@@ -1184,16 +2176,28 @@
             </div>
         `;
     }
+<<<<<<< HEAD
+
+    // Task slot rendering
+    async function renderTaskSlots() {
+        taskSlotsEl.innerHTML = '';
+
+=======
     
     // Task slot rendering
     async function renderTaskSlots() {
         taskSlotsEl.innerHTML = '';
         
+>>>>>>> 6f532f7 (resolving conflict)
         for (let i = 0; i < MAX_TASKS; i++) {
             const task = tasks[i];
             const slotEl = document.createElement('div');
             slotEl.className = task ? 'task-slot filled' : 'task-slot empty';
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             if (task) {
                 slotEl.innerHTML = `
                     <div class="task-content">
@@ -1211,7 +2215,11 @@
                             <button onclick="deleteTask(${task.id || i})" title="Delete Task">🗑️</button>
                         </div>
                     </div>`;
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 // Load and update statistics for this task
                 const stats = await taskStats.getTaskStats(task.name);
                 if (stats) {
@@ -1224,6 +2232,36 @@
                         <span class="add-text">Add Task</span>
                     </div>`;
             }
+<<<<<<< HEAD
+
+            taskSlotsEl.appendChild(slotEl);
+        }
+    }
+
+    // Task management functions
+    async function addTask(slotIndex) {
+        if (tasks.length >= MAX_TASKS) return;
+
+        currentEditingSlot = slotIndex;
+        showTaskInput(slotIndex, '');
+    }
+
+    async function editTask(slotIndex) {
+        const task = tasks[slotIndex];
+        if (!task) return;
+
+        currentEditingSlot = slotIndex;
+        showTaskInput(slotIndex, task.name);
+    }
+
+    async function deleteTask(id) {
+        if (!confirm('Are you sure you want to delete this task?')) return;
+
+        await storage.deleteTask(id);
+        renderTaskSlots();
+    }
+
+=======
             
             taskSlotsEl.appendChild(slotEl);
         }
@@ -1252,11 +2290,16 @@
         renderTaskSlots();
     }
     
+>>>>>>> 6f532f7 (resolving conflict)
     function showTaskInput(slotIndex, initialValue) {
         const slotEl = taskSlotsEl.children[slotIndex];
         slotEl.innerHTML = `
             <div class="task-input-container">
+<<<<<<< HEAD
+                <input type="text" class="task-input" value="${initialValue}"
+=======
                 <input type="text" class="task-input" value="${initialValue}" 
+>>>>>>> 6f532f7 (resolving conflict)
                        placeholder="Enter task name..." maxlength="50">
                 <div class="autocomplete-dropdown"></div>
                 <div class="input-actions">
@@ -1264,29 +2307,51 @@
                     <button class="cancel-btn" onclick="cancelEdit()">❌ Cancel</button>
                 </div>
             </div>`;
+<<<<<<< HEAD
+
+        const input = slotEl.querySelector('.task-input');
+        input.focus();
+        setupAutocomplete(input);
+
+=======
             
         const input = slotEl.querySelector('.task-input');
         input.focus();
         setupAutocomplete(input);
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Handle Enter key
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveTask(slotIndex);
             if (e.key === 'Escape') cancelEdit();
         });
     }
+<<<<<<< HEAD
+
+    async function saveTask(slotIndex) {
+        const input = taskSlotsEl.children[slotIndex].querySelector('.task-input');
+        const name = input.value.trim();
+
+=======
     
     async function saveTask(slotIndex) {
         const input = taskSlotsEl.children[slotIndex].querySelector('.task-input');
         const name = input.value.trim();
         
+>>>>>>> 6f532f7 (resolving conflict)
         if (!name) {
             cancelEdit();
             return;
         }
+<<<<<<< HEAD
+
+        const existingTask = tasks[slotIndex];
+
+=======
         
         const existingTask = tasks[slotIndex];
         
+>>>>>>> 6f532f7 (resolving conflict)
         if (existingTask) {
             // Update existing task
             await storage.updateTask(existingTask.id, name);
@@ -1298,45 +2363,79 @@
                 cancelEdit();
                 return;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             const newTask = await storage.saveTask(name);
             if (!autocompleteCache.includes(name)) {
                 autocompleteCache.push(name);
             }
         }
+<<<<<<< HEAD
+
+        currentEditingSlot = -1;
+        renderTaskSlots();
+    }
+
+=======
         
         currentEditingSlot = -1;
         renderTaskSlots();
     }
     
+>>>>>>> 6f532f7 (resolving conflict)
     function cancelEdit() {
         currentEditingSlot = -1;
         renderTaskSlots();
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Autocomplete functionality
     function setupAutocomplete(inputElement) {
         const dropdown = inputElement.parentNode.querySelector('.autocomplete-dropdown');
         let debounceTimer;
+<<<<<<< HEAD
+
+        inputElement.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+
+=======
         
         inputElement.addEventListener('input', async (e) => {
             const query = e.target.value.trim();
             
+>>>>>>> 6f532f7 (resolving conflict)
             if (query.length < 2) {
                 hideDropdown();
                 return;
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(async () => {
                 const suggestions = await storage.getSuggestions(query);
                 showDropdown(dropdown, suggestions, inputElement);
             }, 300);
         });
+<<<<<<< HEAD
+
+        inputElement.addEventListener('keydown', (e) => {
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+
+=======
         
         inputElement.addEventListener('keydown', (e) => {
             const items = dropdown.querySelectorAll('.autocomplete-item');
             
+>>>>>>> 6f532f7 (resolving conflict)
             if (e.key === 'Tab' && items.length > 0) {
                 e.preventDefault();
                 const nextIndex = (selectedSuggestionIndex + 1) % items.length;
@@ -1354,18 +2453,36 @@
                 hideDropdown();
             }
         });
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         function hideDropdown() {
             dropdown.style.display = 'none';
             selectedSuggestionIndex = -1;
         }
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     function showDropdown(dropdown, suggestions, inputElement) {
         if (suggestions.length === 0) {
             dropdown.style.display = 'none';
             return;
         }
+<<<<<<< HEAD
+
+        dropdown.innerHTML = suggestions.map(suggestion =>
+            `<div class="autocomplete-item">${suggestion}</div>`
+        ).join('');
+
+        dropdown.style.display = 'block';
+        selectedSuggestionIndex = -1;
+
+=======
         
         dropdown.innerHTML = suggestions.map(suggestion => 
             `<div class="autocomplete-item">${suggestion}</div>`
@@ -1374,6 +2491,7 @@
         dropdown.style.display = 'block';
         selectedSuggestionIndex = -1;
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Add click handlers
         dropdown.querySelectorAll('.autocomplete-item').forEach((item, index) => {
             item.addEventListener('click', () => {
@@ -1382,7 +2500,11 @@
             });
         });
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     function selectSuggestion(items, index, inputElement) {
         items.forEach(item => item.classList.remove('selected'));
         if (index >= 0 && index < items.length) {
@@ -1390,12 +2512,20 @@
             selectedSuggestionIndex = index;
         }
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Timer integration
     function runTask(taskName) {
         currentTask = taskName;
         taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${taskName}</div>`;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Add edit handler for center task
         document.getElementById('task-name').addEventListener('click', function () {
             const newName = prompt('Edit task name:', currentTask);
@@ -1403,7 +2533,11 @@
                 const oldName = currentTask;
                 currentTask = newName.trim();
                 this.textContent = currentTask;
+<<<<<<< HEAD
+
+=======
                 
+>>>>>>> 6f532f7 (resolving conflict)
                 // Update in task slots if it exists there
                 const taskIndex = tasks.findIndex(t => t.name === oldName);
                 if (taskIndex >= 0) {
@@ -1414,7 +2548,11 @@
             }
         });
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Enhanced add task listener for center
     function attachAddTaskListener() {
         const addTaskEl = document.getElementById('add-task');
@@ -1424,7 +2562,11 @@
                 if (taskName && taskName.trim()) {
                     currentTask = taskName.trim();
                     taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
+<<<<<<< HEAD
+
+=======
                     
+>>>>>>> 6f532f7 (resolving conflict)
                     // Offer to save to slots if there's space
                     if (tasks.length < MAX_TASKS) {
                         setTimeout(() => {
@@ -1435,7 +2577,11 @@
                             }
                         }, 100);
                     }
+<<<<<<< HEAD
+
+=======
                     
+>>>>>>> 6f532f7 (resolving conflict)
                     document.getElementById('task-name').addEventListener('click', function () {
                         const newName = prompt('Edit task name:', currentTask);
                         if (newName && newName.trim()) {
@@ -1447,30 +2593,57 @@
             });
         }
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     // Enhanced stop timer
     async function stopTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         isRunning = false;
         isPaused = false;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         // End timer session (unsuccessful completion)
         if (currentSession && currentSession.status === 'active') {
             await currentSession.stop();
             console.log(`Session stopped: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
         }
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         const wasRunningTask = currentTask;
         currentTask = '';
         currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Reset UI
         taskContainerEl.innerHTML = '<div class="add-task" id="add-task">+ Add Task</div>';
         attachAddTaskListener();
         updateClockDisplay();
         resetProgress();
+<<<<<<< HEAD
+
+        // Clear stats cache to show updated data
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
+
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
+
+=======
         
         // Clear stats cache to show updated data
         taskStats.clearCache();
@@ -1480,6 +2653,7 @@
         dailyStats.clearCache();
         await dailyStats.refreshStats();
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
             setTimeout(() => {
@@ -1519,7 +2693,11 @@
         // Create new timer session
         const creationSource = tasks.find(t => t.name === currentTask) ? 'task_slot' : 'timer_center';
         currentSession = new TimerSession(currentTask, creationSource);
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Start session tracking
         const sessionStarted = await currentSession.start(totalSeconds);
         if (!sessionStarted) {
@@ -1554,16 +2732,40 @@
         timerInterval = null;
         isRunning = false;
         isPaused = false;
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         // Complete timer session (successful completion)
         if (currentSession && currentSession.status === 'active') {
             await currentSession.complete();
             console.log(`Session completed: ${currentSession.taskName}, duration: ${currentSession.actualDuration}s`);
         }
-        
-        alert('⏰ Timer completed! Great job! 🎉');
+<<<<<<< HEAD
+
+        const wasRunningTask = currentTask;
+
+=======
         
         const wasRunningTask = currentTask;
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        // Check if this was a quest and handle quest completion
+        let questCompleted = false;
+        if (wasRunningTask && wasRunningTask.startsWith('🗡️ ')) {
+            questCompleted = await handleQuestProgress(wasRunningTask, currentSession.actualDuration);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        if (questCompleted) {
+            alert('🎉 QUEST COMPLETED! You are victorious! 🏆✨');
+        } else {
+            alert('⏰ Timer completed! Great job! 🎉');
+        }
         currentTask = '';
         currentSession = null;
         totalSeconds = DEFAULT_SECONDS;
@@ -1573,6 +2775,20 @@
         attachAddTaskListener();
         updateClockDisplay();
         resetProgress();
+<<<<<<< HEAD
+
+        // Clear stats cache and refresh task slot stats
+        taskStats.clearCache();
+        await refreshTaskSlotStats();
+
+        // Refresh daily statistics
+        dailyStats.clearCache();
+        await dailyStats.refreshStats();
+
+        // Refresh quest display to show updated progress
+        await loadQuests();
+
+=======
         
         // Clear stats cache and refresh task slot stats
         taskStats.clearCache();
@@ -1582,6 +2798,10 @@
         dailyStats.clearCache();
         await dailyStats.refreshStats();
         
+        // Refresh quest display to show updated progress
+        await loadQuests();
+        
+>>>>>>> 6f532f7 (resolving conflict)
         // Offer to save if task not in slots
         if (wasRunningTask && tasks.length < MAX_TASKS && !tasks.find(t => t.name === wasRunningTask)) {
             setTimeout(() => {
@@ -1601,41 +2821,72 @@
                 taskStats.getTaskStats(taskName),
                 fetch(`/api/timer/history?task=${encodeURIComponent(taskName)}&limit=10`).then(r => r.json())
             ]);
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             if (!stats) {
                 alert('No statistics available for this task yet.');
                 return;
             }
+<<<<<<< HEAD
+
+            const modal = createStatsModal(taskName, stats, history.success ? history.sessions : []);
+            document.body.appendChild(modal);
+
+=======
             
             const modal = createStatsModal(taskName, stats, history.success ? history.sessions : []);
             document.body.appendChild(modal);
             
+>>>>>>> 6f532f7 (resolving conflict)
             // Add close handlers
             modal.querySelector('.modal-close').addEventListener('click', () => {
                 document.body.removeChild(modal);
             });
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     document.body.removeChild(modal);
                 }
             });
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> 6f532f7 (resolving conflict)
         } catch (error) {
             console.error('Failed to load task statistics:', error);
             alert('Failed to load statistics. Please try again.');
         }
     }
+<<<<<<< HEAD
+
+    function createStatsModal(taskName, stats, sessions) {
+        const modal = document.createElement('div');
+        modal.className = 'stats-modal';
+
+=======
     
     function createStatsModal(taskName, stats, sessions) {
         const modal = document.createElement('div');
         modal.className = 'stats-modal';
         
+>>>>>>> 6f532f7 (resolving conflict)
         const successRate = Math.round(stats.success_rate || 0);
         const totalTime = taskStats.formatDuration(stats.total_seconds_spent || 0);
         const avgSessionTime = stats.total_attempts > 0 ?
             taskStats.formatDuration(Math.round(stats.total_seconds_spent / stats.total_attempts)) : '0s';
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 6f532f7 (resolving conflict)
         modal.innerHTML = `
             <div class="stats-modal-content">
                 <div class="stats-modal-header">
@@ -1665,7 +2916,11 @@
                             <div class="stat-label">Avg Session</div>
                         </div>
                     </div>
+<<<<<<< HEAD
+
+=======
                     
+>>>>>>> 6f532f7 (resolving conflict)
                     <div class="recent-sessions">
                         <h3>Recent Sessions</h3>
                         <div class="session-list">
@@ -1683,7 +2938,11 @@
                             `).join('') : '<p>No sessions recorded yet.</p>'}
                         </div>
                     </div>
+<<<<<<< HEAD
+
+=======
                     
+>>>>>>> 6f532f7 (resolving conflict)
                     <div class="stats-actions">
                         <button onclick="exportTaskData('${taskName}')">📥 Export Data</button>
                         <button onclick="clearTaskHistory('${taskName}')">🗑️ Clear History</button>
@@ -1691,10 +2950,17 @@
                 </div>
             </div>
         `;
+<<<<<<< HEAD
+
+        return modal;
+    }
+
+=======
         
         return modal;
     }
     
+>>>>>>> 6f532f7 (resolving conflict)
     async function exportTaskData(taskName) {
         try {
             const response = await fetch(`/api/timer/export?format=json`);
@@ -1712,7 +2978,11 @@
             alert('Export failed. Please try again.');
         }
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     async function clearTaskHistory(taskName) {
         if (confirm(`Are you sure you want to clear all history for "${taskName}"? This cannot be undone.`)) {
             try {
@@ -1757,14 +3027,378 @@
         progressPoint.setAttribute('cy', 10);
         progressArc.style.strokeDashoffset = 0;
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> 6f532f7 (resolving conflict)
     function resetToDefault() {
         totalSeconds = DEFAULT_SECONDS;
         updateClockDisplay();
     }
+<<<<<<< HEAD
+
+    // Initialize the application
+    init();
+
+    // Quest progress tracking
+    function editQuest(questId) {
+      window.location.href = `/edit_quest/${questId}`;
+    }
+
+=======
     
     // Initialize the application
     init();
+    
+    // Quest progress tracking
+>>>>>>> 6f532f7 (resolving conflict)
+    async function handleQuestProgress(questTaskName, sessionDuration) {
+      try {
+        // Extract quest name from task name (remove "🗡️ " prefix)
+        const questName = questTaskName.replace('🗡️ ', '');
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        // Get current quests to find the active one
+        const response = await fetch('/api/quests');
+        const data = await response.json();
+        if (!data.success) return false;
+<<<<<<< HEAD
+
+        const activeQuest = data.quests.find(q => q.short_name === questName && q.is_active);
+        if (!activeQuest) return false;
+
+        // Handle progress based on quest type
+        let questCompleted = false;
+
+=======
+        
+        const activeQuest = data.quests.find(q => q.short_name === questName && q.is_active);
+        if (!activeQuest) return false;
+        
+        // Handle progress based on quest type
+        let questCompleted = false;
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        if (activeQuest.quest_type === 'stack') {
+          // For stack quests, each completed session counts as one day
+          // This is simplified - in a real app, you'd track daily progress
+          questCompleted = true; // Mark as completed for demo
+        } else if (activeQuest.quest_type === 'duration') {
+          // For duration quests, accumulate time
+          // This is simplified - you'd need to store progress in database
+          questCompleted = sessionDuration >= (activeQuest.duration_hours * 3600 * 0.1); // 10% threshold for demo
+        } else if (activeQuest.quest_type === 'complete') {
+          // For complete quests, user needs to manually mark as done
+          questCompleted = confirm(`Did you complete the quest objective: "${activeQuest.complete_result}"?`);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        if (questCompleted && activeQuest.reward_url) {
+          // Show reward if quest is completed
+          setTimeout(() => {
+            if (confirm(`🎁 Quest completed! Would you like to claim your reward?`)) {
+              window.open(activeQuest.reward_url, '_blank');
+            }
+          }, 1000);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        return questCompleted;
+      } catch (error) {
+        console.error('Error handling quest progress:', error);
+        return false;
+      }
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    // Quest management functions
+    async function addQuest() {
+      window.location.href = '/add-quest';
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    async function loadQuests() {
+      try {
+        const response = await fetch('/api/quests');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        const data = await response.json();
+        if (data.success) {
+          renderQuests(data.quests);
+        } else {
+          console.error('API returned error:', data.error);
+          renderQuests([]);
+          showErrorMessage('Failed to load quests: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error loading quests:', error);
+        renderQuests([]);
+        showErrorMessage('Unable to load quests. Please check your connection and try again.');
+      }
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    // Error handling utility
+    function showErrorMessage(message, duration = 5000) {
+      // Create or update error notification
+      let errorDiv = document.getElementById('error-notification');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'error-notification';
+        errorDiv.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #f72585;
+          color: white;
+          padding: 15px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          z-index: 10000;
+          max-width: 300px;
+          font-size: 14px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        `;
+        document.body.appendChild(errorDiv);
+      }
+<<<<<<< HEAD
+
+      errorDiv.textContent = message;
+      errorDiv.style.transform = 'translateX(0)';
+
+=======
+      
+      errorDiv.textContent = message;
+      errorDiv.style.transform = 'translateX(0)';
+      
+>>>>>>> 6f532f7 (resolving conflict)
+      // Auto-hide after duration
+      setTimeout(() => {
+        if (errorDiv) {
+          errorDiv.style.transform = 'translateX(100%)';
+          setTimeout(() => errorDiv.remove(), 300);
+        }
+      }, duration);
+    }
+<<<<<<< HEAD
+
+    function renderQuests(quests) {
+      const container = document.getElementById('quest-slots');
+      container.innerHTML = '';
+
+=======
+    
+    function renderQuests(quests) {
+      const container = document.getElementById('quest-slots');
+      container.innerHTML = '';
+      
+>>>>>>> 6f532f7 (resolving conflict)
+      // Sort quests by position (active quests first)
+      const sortedQuests = [...quests].sort((a, b) => {
+        if (a.is_active && !b.is_active) return -1;
+        if (!a.is_active && b.is_active) return 1;
+        return a.position - b.position;
+      });
+<<<<<<< HEAD
+
+=======
+      
+>>>>>>> 6f532f7 (resolving conflict)
+      // Render existing quests
+      sortedQuests.forEach(quest => {
+        const questEl = document.createElement('div');
+        questEl.className = quest.is_active ? 'quest-slot filled active' : 'quest-slot filled';
+<<<<<<< HEAD
+
+        const questText = quest.is_active ? `🔥 ${quest.short_name}` : quest.short_name;
+
+=======
+        
+        const questText = quest.is_active ? `🔥 ${quest.short_name}` : quest.short_name;
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        questEl.innerHTML = `
+          <div class="quest-content">
+            <div class="quest-text">${questText}</div>
+            <div class="progress-bar" style="display: ${quest.is_active ? 'block' : 'none'}">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="quest-actions">
+              <button title="Run Quest" onclick="runQuest(${quest.id})">🏃</button>
+              <button title="Edit Quest" onclick="editQuest(${quest.id})">✏️</button>
+              <button title="Delete Quest" onclick="deleteQuest(${quest.id})">🗑️</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(questEl);
+      });
+<<<<<<< HEAD
+
+      // Ensure minimum 5 slots by adding empty ones
+      const totalSlots = Math.max(5, quests.length);
+      const emptySlots = totalSlots - quests.length;
+
+=======
+      
+      // Ensure minimum 5 slots by adding empty ones
+      const totalSlots = Math.max(5, quests.length);
+      const emptySlots = totalSlots - quests.length;
+      
+>>>>>>> 6f532f7 (resolving conflict)
+      for (let i = 0; i < emptySlots; i++) {
+        const emptySlot = document.createElement('div');
+        emptySlot.className = 'quest-slot empty';
+        emptySlot.innerHTML = `
+          <div class="add-quest-slot" onclick="addQuest()">
+            <span class="add-icon">➕</span>
+            <span class="add-text">Add Quest</span>
+          </div>
+        `;
+        container.appendChild(emptySlot);
+      }
+<<<<<<< HEAD
+
+      // Setup scroll observer for infinite scroll
+      setupQuestScroll();
+    }
+
+=======
+      
+      // Setup scroll observer for infinite scroll
+      setupQuestScroll();
+    }
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    async function runQuest(questId) {
+      try {
+        // Get quest details
+        const response = await fetch('/api/quests');
+        const data = await response.json();
+        if (!data.success) return;
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        const quest = data.quests.find(q => q.id === questId);
+        if (!quest) {
+          alert('Quest not found');
+          return;
+        }
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        // Activate the quest
+        const activateResponse = await fetch(`/api/quests/${questId}/activate`, {
+          method: 'POST'
+        });
+<<<<<<< HEAD
+
+=======
+        
+>>>>>>> 6f532f7 (resolving conflict)
+        if (activateResponse.ok) {
+          // Set quest as current task in timer
+          currentTask = `🗡️ ${quest.short_name}`;
+          taskContainerEl.innerHTML = `<div class="task-name" id="task-name">${currentTask}</div>`;
+<<<<<<< HEAD
+
+=======
+          
+>>>>>>> 6f532f7 (resolving conflict)
+          // Set timer based on quest type
+          if (quest.quest_type === 'stack') {
+            // For stack quests, use minimum time per day (convert minutes to seconds)
+            totalSeconds = quest.stack_min_time_per_day * 60;
+          } else if (quest.quest_type === 'duration') {
+            // For duration quests, use a portion of total hours (e.g., 25 minutes)
+            totalSeconds = Math.min(quest.duration_hours * 3600, 1500); // Max 25 minutes per session
+          } else {
+            // For complete quests, use default timer
+            totalSeconds = DEFAULT_SECONDS;
+          }
+<<<<<<< HEAD
+
+          updateClockDisplay();
+          alert(`🗡️ Quest "${quest.short_name}" is now active! Ready to start timer.`);
+
+=======
+          
+          updateClockDisplay();
+          alert(`🗡️ Quest "${quest.short_name}" is now active! Ready to start timer.`);
+          
+>>>>>>> 6f532f7 (resolving conflict)
+          // Reload quests to show activation
+          loadQuests();
+        }
+      } catch (error) {
+        console.error('Error running quest:', error);
+        alert('Error starting quest. Please try again.');
+      }
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    function editQuest(questId) {
+      // For now, redirect to add quest page with edit mode
+      // TODO: Implement proper edit functionality
+      alert('Edit functionality coming soon! For now, you can delete and recreate the quest.');
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    async function deleteQuest(questId) {
+      if (confirm('Are you sure you want to delete this quest?')) {
+        try {
+          const response = await fetch(`/api/quests/${questId}`, { method: 'DELETE' });
+          const data = await response.json();
+          if (data.success) {
+            loadQuests();
+          }
+        } catch (error) {
+          console.error('Error deleting quest:', error);
+        }
+      }
+    }
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 6f532f7 (resolving conflict)
+    // Load quests on page load
+    loadQuests();
 </script>
 </body>
 </html>
